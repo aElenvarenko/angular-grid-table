@@ -1,0 +1,17 @@
+{
+	"name": "angular-grid-table",
+	"version": "0.0.1",
+	"author": "Alex Elenvarenko <alexelenvarenko@gmail.com>",
+	"description": "AngularJS grid table",
+	"keywords": [
+		"AngularJS",
+		"grid",
+		"table"
+	],
+	"license": "MIT",
+	"main": "",
+	"scripts": {},
+	"devDependencies": {
+		"gulp": "^3.8.11"
+	}
+}
