@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="demo">
+<head>
+	<meta charset="utf-8"/>
+	<title>AngularJS grid table demo</title>
+	<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.css"/>
+	<link rel="stylesheet" type="text/css" href="../dist/angular-grid-table.css"/>
+	<script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+	<script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script type="text/javascript" src="../dist/angular-grid-table.js"></script>
+</head>
+<body>
+	<div ng-controller="demoCtrl">
+		<div class="container">
+			<div grid-table="" ng-model="data" columns="{{columnsVar}}"></div>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-lg-4">Columns var</label>
+					<div class="col-lg-8">
+						<input ng-model="columnsVar" type="text" class="form-control"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var app = angular.module('demo', ['gridTable']);
+		app.controller('demoCtrl', [
+			'$scope',
+			function ($scope) {
+				$scope.columnsVar = 'columns';
+				$scope.columns = [];
+				$scope.data = [];
+			}
+		]);
+	</script>
+</body>
+</html>
