@@ -1,0 +1,3 @@
+<tr ng-click="$grid.selectItem(item)" ng-class="{'active': $grid.isSelectedItem(item)}" ng-repeat="item in $grid.getItems()" ng-init="itemsIndex = $index + 1">
+	<td ng-repeat="column in $grid.getShowColumns()">{{column.columnType == 'numbers' ? itemsIndex : ''}}{{item[column.name]}}</td>
+</tr>

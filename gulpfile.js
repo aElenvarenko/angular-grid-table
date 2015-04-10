@@ -50,7 +50,7 @@ gulp.task('build-scripts', function (cb) {
 });
 
 gulp.task('scripts', function () {
-	return gulp.src(['src/js/common.js', 'src/js/services/*.js', 'src/js/directives/*.js', 'src/js/templates.js'])
+	return gulp.src(['src/js/common.js', 'src/js/controllers/*.js', 'src/js/services/*.js', 'src/js/directives/*.js', 'src/js/templates.js'])
 		.pipe(plumber({
 			errorHandler: handleError
 		}))
