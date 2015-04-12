@@ -8,13 +8,14 @@
 .grid-table-wrapper .grid-table-table thead > tr > th,
 .grid-table-wrapper .grid-table-table thead > tr > td,
 .grid-table-wrapper .grid-table-table tbody > tr > th,
-.grid-table-wrapper .grid-table-table tbody > tr > td {
+.grid-table-wrapper .grid-table-table tbody > tr > td,
+.grid-table-wrapper .grid-table-table tfoot > tr > th,
+.grid-table-wrapper .grid-table-table tfoot > tr > td {
   padding: 6px;
 }
 .grid-table-wrapper .grid-table-table thead > tr > th,
 .grid-table-wrapper .grid-table-table tbody > tr > th {
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;

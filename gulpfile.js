@@ -42,7 +42,9 @@ gulp.task('clean', function () {
 	return gulp.src('dist', {
 			read: false
 		})
-		.pipe(clean());
+		.pipe(clean({
+			force: true
+		}));
 });
 
 gulp.task('build-scripts', function (cb) {
@@ -75,7 +77,9 @@ gulp.task('clean-templates', function () {
 	return gulp.src('src/js/templates.js', {
 			read: false
 		})
-		.pipe(clean());
+		.pipe(clean({
+			force: true
+		}));
 });
 
 gulp.task('templates', ['clean-templates'], function () {
@@ -101,7 +105,9 @@ gulp.task('clean-css', function () {
 	return gulp.src('src/css/*.css', {
 			read: false
 		})
-		.pipe(clean());
+		.pipe(clean({
+			force: true
+		}));
 });
 
 gulp.task('less', ['clean-css'], function () {

@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-10T14:38:58.564Z
+ * @version: 0.0.1 - 2015-04-11T15:10:48.898Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -85,7 +85,6 @@ grid.controller('gridTableCtrl', [
 						label: '#',
 						columnType: 'numbers'
 					});
-					this.columnsCount++;
 				}
 				if (angular.isArray(columns) && columns.length > 0) {
 					for (var i in columns) {
@@ -100,7 +99,7 @@ grid.controller('gridTableCtrl', [
 						this.columns.push(column);
 					}
 				}
-				this.columnsCount += this.columns.length;
+				this.columnsCount = this.columns.length;
 			},
 			/**
 			 * Columns setter function
@@ -120,7 +119,6 @@ grid.controller('gridTableCtrl', [
 						label: '#',
 						columnType: 'numbers'
 					});
-					this.columnsCount++;
 				}
 				for (var prop in item) {
 					if (prop !== '$$hashKey') {
@@ -131,7 +129,7 @@ grid.controller('gridTableCtrl', [
 						});
 					}
 				}
-				this.columnsCount += this.columns.length;
+				this.columnsCount = this.columns.length;
 			},
 			/**
 			 * Columns getter function
@@ -203,6 +201,7 @@ grid.controller('gridTableCtrl', [
 					return;
 				}
 				this.items = items;
+				this.itemsCount = this.items.length || 0;
 			},
 			/**
 			 * Items getter function
@@ -317,7 +316,7 @@ grid.controller('gridTableCtrl', [
 		};
 		/**
 		 * Render template function
-		 * @param {Object} elemen
+		 * @param {Object} element
 		 * @param {Object} attrs
 		 * @return {Object}
 		 */
@@ -454,15 +453,23 @@ grid.controller('gridTableCtrl', [
 		/**
 		 * Items getter function
 		 */
-		ctrl.getItems = function () {};
+		ctrl.getItems = function () {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::getItems');
+			}
+			return $scope.$grid.getItems();
+		};
 		/**
 		 * Sort setter function
+		 * @param {Object} sort
 		 */
-		ctrl.setSort = function () {};
+		ctrl.setSort = function (sort) {};
 		/**
 		 * Sort getter function
 		 */
-		ctrl.getSort = function () {};
+		ctrl.getSort = function () {
+			return $scope.$grid.sort;
+		};
 		/**
 		 * Filter setter function
 		 */
@@ -471,9 +478,21 @@ grid.controller('gridTableCtrl', [
 		 * Filter getter function
 		 */
 		ctrl.getFilter = function () {};
+		/**
+		 * View by setter function
+		 */
 		ctrl.setViewBy = function () {};
+		/**
+		 * View by getter function
+		 */
 		ctrl.getViewBy = function () {};
+		/**
+		 * Pager setter function
+		 */
 		ctrl.setPager = function () {};
+		/**
+		 * Pager getter function
+		 */
 		ctrl.getPager = function () {};
 	}
 ]);
@@ -612,7 +631,7 @@ grid.directive('gridTable', [
 grid.run(["$templateCache", function($templateCache) {
 $templateCache.put("grid-table-column.html","<td></td>");
 $templateCache.put("grid-table-columns.html","<col ng-repeat=\"column in $grid.getShowColumns()\" class=\"{{\'grid-table-column-\' + column.columnType}}\">");
-$templateCache.put("grid-table-footer.html","<tr><td></td></tr>");
+$templateCache.put("grid-table-footer.html","<tr><td colspan=\"{{$grid.columnsCount}}\">Total: {{$grid.itemsCount}}</td></tr>");
 $templateCache.put("grid-table-header.html","<tr><th ng-repeat=\"column in $grid.getShowColumns()\">{{column.label}}</th></tr>");
 $templateCache.put("grid-table-items.html","<tr ng-click=\"$grid.selectItem(item)\" ng-class=\"{\'active\': $grid.isSelectedItem(item)}\" ng-repeat=\"item in $grid.getItems()\" ng-init=\"itemsIndex = $index + 1\"><td ng-repeat=\"column in $grid.getShowColumns()\">{{column.columnType == \'numbers\' ? itemsIndex : \'\'}}{{item[column.name]}}</td></tr>");
 $templateCache.put("grid-table.html","<table class=\"grid-table-table\"></table>");

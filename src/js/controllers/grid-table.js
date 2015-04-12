@@ -74,7 +74,6 @@ grid.controller('gridTableCtrl', [
 						label: '#',
 						columnType: 'numbers'
 					});
-					this.columnsCount++;
 				}
 				if (angular.isArray(columns) && columns.length > 0) {
 					for (var i in columns) {
@@ -89,7 +88,7 @@ grid.controller('gridTableCtrl', [
 						this.columns.push(column);
 					}
 				}
-				this.columnsCount += this.columns.length;
+				this.columnsCount = this.columns.length;
 			},
 			/**
 			 * Columns setter function
@@ -109,7 +108,6 @@ grid.controller('gridTableCtrl', [
 						label: '#',
 						columnType: 'numbers'
 					});
-					this.columnsCount++;
 				}
 				for (var prop in item) {
 					if (prop !== '$$hashKey') {
@@ -120,7 +118,7 @@ grid.controller('gridTableCtrl', [
 						});
 					}
 				}
-				this.columnsCount += this.columns.length;
+				this.columnsCount = this.columns.length;
 			},
 			/**
 			 * Columns getter function
@@ -192,6 +190,7 @@ grid.controller('gridTableCtrl', [
 					return;
 				}
 				this.items = items;
+				this.itemsCount = this.items.length || 0;
 			},
 			/**
 			 * Items getter function
@@ -306,7 +305,7 @@ grid.controller('gridTableCtrl', [
 		};
 		/**
 		 * Render template function
-		 * @param {Object} elemen
+		 * @param {Object} element
 		 * @param {Object} attrs
 		 * @return {Object}
 		 */
@@ -433,6 +432,7 @@ grid.controller('gridTableCtrl', [
 		};
 		/**
 		 * Items setter function
+		 * @param {Array} items
 		 */
 		ctrl.setItems = function (items) {
 			if ($scope.$grid.debug) {
@@ -442,27 +442,93 @@ grid.controller('gridTableCtrl', [
 		};
 		/**
 		 * Items getter function
+		 * @return {Array}
 		 */
-		ctrl.getItems = function () {};
+		ctrl.getItems = function () {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::getItems');
+			}
+			return $scope.$grid.getItems();
+		};
 		/**
 		 * Sort setter function
+		 * @param {Object} sort
 		 */
-		ctrl.setSort = function () {};
+		ctrl.setSort = function (sort) {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::setSort');
+			}
+			$scope.$grid.sort = sort;
+		};
 		/**
 		 * Sort getter function
+		 * @return {Object}
 		 */
-		ctrl.getSort = function () {};
+		ctrl.getSort = function () {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::getSort');
+			}
+			return $scope.$grid.sort;
+		};
 		/**
 		 * Filter setter function
+		 * @param {Object} filter
 		 */
-		ctrl.setFilter = function () {};
+		ctrl.setFilter = function (filter) {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::setFilter');
+			}
+			$scope.$grid.filter = filter;
+		};
 		/**
 		 * Filter getter function
+		 * @return {Object}
 		 */
-		ctrl.getFilter = function () {};
-		ctrl.setViewBy = function () {};
-		ctrl.getViewBy = function () {};
-		ctrl.setPager = function () {};
-		ctrl.getPager = function () {};
+		ctrl.getFilter = function () {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::getFilter');
+			}
+			return $scope.$grid.filter;
+		};
+		/**
+		 * View by setter function
+		 * @param {Number} viewBy
+		 */
+		ctrl.setViewBy = function (viewBy) {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::setViewBy');
+			}
+			$scope.$grid.viewBy = viewBy;
+		};
+		/**
+		 * View by getter function
+		 * @return {Number}
+		 */
+		ctrl.getViewBy = function () {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::getViewBy');
+			}
+			return $scope.$grid.viewBy;
+		};
+		/**
+		 * Pager setter function
+		 * @param {Object} pager
+		 */
+		ctrl.setPager = function (pager) {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::setPager');
+			}
+			$scope.$grid.pager = pager;
+		};
+		/**
+		 * Pager getter function
+		 * @return {Object}
+		 */
+		ctrl.getPager = function () {
+			if ($scope.$grid.debug) {
+				console.log('gridTableCtrl::getPager');
+			}
+			return $scope.$grid.pager;
+		};
 	}
 ]);
