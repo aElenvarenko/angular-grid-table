@@ -13,7 +13,7 @@
 		"dist/angular-grid-table.js",
 		"dist/angular-grid-table.min.js",
 		"dist/angular-grid-table.css",
-		"dist/angular-grid-table.min.css",
+		"dist/angular-grid-table.min.css"
 	],
 	"ignore": [
 		"**/.*",
