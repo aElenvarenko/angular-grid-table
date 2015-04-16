@@ -9,7 +9,7 @@
 		"table"
 	],
 	"license": "MIT",
-	"main": "",
+	"main": "gulpfile.js",
 	"scripts": {},
 	"devDependencies": {
 		"gulp": "^3.8.11",
