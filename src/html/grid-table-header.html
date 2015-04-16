@@ -1,3 +1,27 @@
-<tr>
-	<th ng-repeat="column in $grid.getShowColumns()">{{column.label}}</th>
+<tr class="grid-table-headers">
+	<th ng-class="{'sorted': column.name === $grid.getSortColumn()}" ng-repeat="column in $grid.getShowColumns()">
+		<span ng-if="column.columnType === 'data'">
+			<a ng-click="$grid.setSortBy(column.name, null, $event)" href="#">
+				{{column.label}}
+				<i>{{column.name === $grid.getSortColumn() ? ($grid.getSortDir() === 'asc' ? $grid.text.asc : $grid.text.desc) : ''}}</i>
+			</a>
+		</span>
+		<span ng-if="column.columnType === 'numbers'">{{$grid.text.numbers}}</span>
+		<span ng-if="column.columnType === 'actions'">{{$grid.text.actions}}</span>
+	</th>
+</tr>
+<tr class="grid-table-filter">
+	<td ng-repeat="column in $grid.getShowColumns()">
+		<span ng-if="column.columnType === 'data'">
+			<span ng-if="$grid.filters[column.name]">
+				<select ng-change="$grid.setFilterBy()" ng-model="$grid.filter[column.name]">
+					<option value=""></option>
+					<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
+				</select>
+			</span>
+			<span ng-if="!$grid.filters[column.name]">
+				<input ng-change="$grid.setFilterBy()" ng-model="$grid.filter[column.name]"/>
+			</span>
+		</span>
+	</td>
 </tr>

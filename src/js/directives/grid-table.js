@@ -12,7 +12,8 @@ grid.directive('gridTable', [
 			controllerAs: '$gridCtrl',
 			compile: function () {
 				return function (scope, element, attrs, ctrls) {
-					var $grid = ctrls[0];
+					var $grid = ctrls[0],
+						ngModel = ctrls[1];
 					$grid.init(element, attrs);
 					element = $grid.renderTpl(element, attrs);
 					$grid.compileTpl(scope, element);
@@ -45,6 +46,14 @@ grid.directive('gridTable', [
 						}
 						$grid.setItems(newValue);
 					});
+					if (attrs.loading) {
+						scope.$watch(attrs.loading, function (newValue, oldValue) {
+							if (angular.equals(newValue, oldValue)) {
+								return;
+							}
+							$grid.setLoading(newValue);
+						});
+					}
 				};
 			}
 		};

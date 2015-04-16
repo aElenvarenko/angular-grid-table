@@ -1,3 +1,14 @@
-<tr ng-click="$grid.selectItem(item)" ng-class="{'active': $grid.isSelectedItem(item)}" ng-repeat="item in $grid.getItems()" ng-init="itemsIndex = $index + 1">
-	<td ng-repeat="column in $grid.getShowColumns()">{{column.columnType == 'numbers' ? itemsIndex : ''}}{{item[column.name]}}</td>
+<tr ng-click="$grid.selectItem(item)" ng-class="{'active': $grid.isSelectedItem(item)}" ng-repeat="item in $grid.getItems()" ng-init="itemsIndex = $index + 1" class="grid-table-item">
+	<td ng-repeat="column in $grid.getShowColumns()">
+		{{column.columnType == 'numbers' ? itemsIndex : ''}}{{item[column.name]}}
+		<span ng-if="column.columnType == 'actions' && $grid.itemActions">
+			<span ng-click="$grid.callItemAction(action.fn, item, $event)" ng-repeat="action in $grid.itemActions" href="#">
+				{{action.text}}
+				<span grid-table-item-action="" html="action.html"></span>
+			</span>
+		</span>
+	</td>
+</tr>
+<tr>
+	<td ng-show="$grid.itemsCount <= 0" colspan="{{$grid.columnsCount}}">{{$grid.text.empty}}</td>
 </tr>

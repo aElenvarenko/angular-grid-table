@@ -14,7 +14,22 @@
 <body>
 	<div ng-controller="demoCtrl">
 		<div class="container">
-			<div grid-table="" ng-model="data" columns="{{columnsVar}}" row-numbers="true"></div>
+			<div
+				 grid-table=""
+				 loading="loading"
+				 template="{toolbar}{header}{items}{footer}"
+				 ng-model="data"
+				 columns="{{columnsVar}}"
+				 filters="filters"
+				 actions="actions"
+				 row-numbers="true"
+				 on-page="selectPage"
+				 on-view-by="viewBy"
+				 on-sort="sort"
+				 on-filter="filter"
+				 on-select="selectItem"
+				 on-update="update">
+			</div>
 			<hr/>
 			<form class="form-horizontal">
 				<div class="form-group">
@@ -23,6 +38,7 @@
 						<input ng-model="columnsVar" type="text" class="form-control"/>
 					</div>
 				</div>
+				<button ng-click="loading = !loading" class="btn btn-primary">Set loading {{loading}}</button>
 			</form>
 		</div>
 	</div>
@@ -34,12 +50,64 @@
 				$scope.columnsVar = 'columns';
 				$scope.columns = [
 					{name: 'id', label: 'ID', type: 'integer'},
-					{name: 'title', label: 'Title', type: 'string'}
+					{name: 'title', label: 'Title', type: 'string'},
+					{name: 'desc', label: 'Description', type: 'string'},
+					{name: 'type', label: 'Type', type: 'integer'}
 				];
-				$scope.data = [
-					{id: 1, title: 'Title 1'},
-					{id: 2, title: 'Title 2'}
+				$scope.data = [];
+				$scope.filters = {
+					type: {
+						value: 'id',
+						label: 'code',
+						values: [
+							{id: 1, code: '1'},
+							{id: 2, code: '2'},
+							{id: 3, code: '3'}
+						]
+					}
+				};
+				$scope.actions = [
+					{
+						/*text: 'Delete',*/
+						html: '<button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>',
+						fn: function (item) {
+							console.log(item);
+						}
+					},
+					{
+						/*text: 'Delete',*/
+						html: '<span class="glyphicon glyphicon-edit"></span>',
+						fn: function (item) {
+							console.log(item);
+						}
+					}
 				];
+				for (var i = 1; i <= 1000; i++) {
+					$scope.data.push({
+						id: i,
+						title: 'Title ' + i,
+						desc: 'Description ' + i,
+						type: i <= 100 ? 1 : ( i <= 200 ? 2 : '')
+					});
+				}
+				$scope.selectPage = function (page) {
+					console.log(page);
+				};
+				$scope.viewBy = function (viewBy) {
+					console.log(viewBy);
+				};
+				$scope.sort = function (sort) {
+					console.log(sort);
+				};
+				$scope.filter = function (filter) {
+					console.log(filter);
+				};
+				$scope.selectItem = function (item) {
+					console.log(item);
+				};
+				$scope.update = function (items, columns, pager, viewBy, sort, filter) {
+					console.log(items, columns, pager, viewBy, sort, filter);
+				};
 			}
 		]);
 	</script>

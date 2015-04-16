@@ -25,10 +25,12 @@ var config = {
 };
 
 gulp.task('default', ['build']);
-gulp.task('build', ['clean', 'build-scripts', 'build-styles']);
+gulp.task('build', function (cb) {
+	return sequence('clean', 'build-scripts', 'build-styles', cb);
+});
 
 gulp.task('watch', ['webserver'], function () {
-	return gulp.watch(['src/**/*.{js,less,html}'], ['build']);
+	gulp.watch(['src/**/*.{js,less,html}'], ['build']);
 });
 
 gulp.task('webserver', function () {
@@ -42,9 +44,7 @@ gulp.task('clean', function () {
 	return gulp.src('dist', {
 			read: false
 		})
-		.pipe(clean({
-			force: true
-		}));
+		.pipe(clean());
 });
 
 gulp.task('build-scripts', function (cb) {
@@ -52,7 +52,7 @@ gulp.task('build-scripts', function (cb) {
 });
 
 gulp.task('scripts', function () {
-	return gulp.src(['src/js/common.js', 'src/js/controllers/*.js', 'src/js/services/*.js', 'src/js/directives/*.js', 'src/js/templates.js'])
+	return gulp.src(['src/js/common.js', 'src/js/controllers/*.js', 'src/js/services/*.js', 'src/js/filters/*.js', 'src/js/directives/*.js', 'src/js/templates.js'])
 		.pipe(plumber({
 			errorHandler: handleError
 		}))
@@ -77,9 +77,7 @@ gulp.task('clean-templates', function () {
 	return gulp.src('src/js/templates.js', {
 			read: false
 		})
-		.pipe(clean({
-			force: true
-		}));
+		.pipe(clean());
 });
 
 gulp.task('templates', ['clean-templates'], function () {
@@ -105,9 +103,7 @@ gulp.task('clean-css', function () {
 	return gulp.src('src/css/*.css', {
 			read: false
 		})
-		.pipe(clean({
-			force: true
-		}));
+		.pipe(clean());
 });
 
 gulp.task('less', ['clean-css'], function () {
