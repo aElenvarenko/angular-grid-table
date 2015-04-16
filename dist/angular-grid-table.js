@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T11:31:13.341Z
+ * @version: 0.0.1 - 2015-04-16T11:38:09.848Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1003,7 +1003,8 @@ grid.directive('gridTableColumn', [
  * Directive gridTableColumns
  */
 grid.directive('gridTableColumns', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
@@ -1029,7 +1030,8 @@ grid.directive('gridTableFooter', [
  * Directive gridTableHeader
  */
 grid.directive('gridTableHeader', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
@@ -1061,7 +1063,8 @@ grid.directive('gridTableItemAction', [
  * Directive gridTableItems
  */
 grid.directive('gridTableItems', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
@@ -1075,7 +1078,8 @@ grid.directive('gridTableItems', [
  * Directive gridTableTaoolbar
  */
 grid.directive('gridTableToolbar', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',

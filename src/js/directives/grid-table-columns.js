@@ -2,7 +2,8 @@
  * Directive gridTableColumns
  */
 grid.directive('gridTableColumns', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',

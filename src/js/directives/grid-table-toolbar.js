@@ -2,7 +2,8 @@
  * Directive gridTableTaoolbar
  */
 grid.directive('gridTableToolbar', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',

@@ -2,7 +2,8 @@
  * Directive gridTableHeader
  */
 grid.directive('gridTableHeader', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
