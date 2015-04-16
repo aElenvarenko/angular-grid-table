@@ -57,6 +57,14 @@ grid.directive('gridTable', [
 							$grid.setLoading(newValue);
 						});
 					}
+					if (attrs.params) {
+						scope.$watchCollection(attrs.params, function (newValue, oldValue) {
+							if (angular.equals(newValue, oldValue)) {
+								return;
+							}
+							$grid.setParams(newValue);
+						});
+					}
 				};
 			}
 		};

@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T13:04:08.938Z
+ * @version: 0.0.1 - 2015-04-16T13:20:09.851Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -269,12 +269,12 @@ grid.controller('gridTableCtrl', [
 					if (this.filter) {
 						items = $filter('filter')(items, this.filter);
 					}
+					this.pager.total = items.length;
+					if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
+						this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
+					}
+					this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				}
-				this.pager.total = items.length;
-				if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
-					this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
-				}
-				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
 				this.itemsCount = this.items.length || 0;
 				this.triggerEvent('onItemsUpdate');
@@ -487,6 +487,17 @@ grid.controller('gridTableCtrl', [
 			 */
 			setParams: function (params) {
 				this.params = params;
+				if (this.params.viewBy) {
+					this.viewBy = this.params.viewBy;
+				}
+				if (this.params.pager) {
+					this.pager.current = this.params.pager.current;
+					this.pager.total = this.params.pager.total;
+				}
+				if (this.params.sort) {
+					this.sort.column = this.params.sort.column;
+					this.sort.dir = this.params.sort.dir;
+				}
 			},
 			/**
 			 * Get params function
@@ -841,6 +852,34 @@ grid.controller('gridTableCtrl', [
 			return $scope.$grid.getItems();
 		};
 		/**
+		 * Pager setter function
+		 * @param {Object} pager
+		 */
+		ctrl.setPager = function (pager) {
+			$scope.$grid.pager = pager;
+		};
+		/**
+		 * Pager getter function
+		 * @return {Object}
+		 */
+		ctrl.getPager = function () {
+			return $scope.$grid.pager;
+		};
+		/**
+		 * View by setter function
+		 * @param {Number} viewBy
+		 */
+		ctrl.setViewBy = function (viewBy) {
+			$scope.$grid.viewBy = viewBy;
+		};
+		/**
+		 * View by getter function
+		 * @return {Number}
+		 */
+		ctrl.getViewBy = function () {
+			return $scope.$grid.viewBy;
+		};
+		/**
 		 * Sort setter function
 		 * @param {Object} sort
 		 */
@@ -869,32 +908,18 @@ grid.controller('gridTableCtrl', [
 			return $scope.$grid.filter;
 		};
 		/**
-		 * View by setter function
-		 * @param {Number} viewBy
+		 * Params setter function
+		 * @param {Object} params
 		 */
-		ctrl.setViewBy = function (viewBy) {
-			$scope.$grid.viewBy = viewBy;
+		ctrl.setParams = function (params) {
+			$scope.$grid.setParams(params);
 		};
 		/**
-		 * View by getter function
-		 * @return {Number}
-		 */
-		ctrl.getViewBy = function () {
-			return $scope.$grid.viewBy;
-		};
-		/**
-		 * Pager setter function
-		 * @param {Object} pager
-		 */
-		ctrl.setPager = function (pager) {
-			$scope.$grid.pager = pager;
-		};
-		/**
-		 * Pager getter function
+		 * Params getter function
 		 * @return {Object}
 		 */
-		ctrl.getPager = function () {
-			return $scope.$grid.pager;
+		ctrl.getParams = function () {
+			return $scope.$grid.params;
 		};
 	}
 ]);
@@ -1196,6 +1221,14 @@ grid.directive('gridTable', [
 								return;
 							}
 							$grid.setLoading(newValue);
+						});
+					}
+					if (attrs.params) {
+						scope.$watchCollection(attrs.params, function (newValue, oldValue) {
+							if (angular.equals(newValue, oldValue)) {
+								return;
+							}
+							$grid.setParams(newValue);
 						});
 					}
 				};
