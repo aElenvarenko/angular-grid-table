@@ -28,6 +28,7 @@
 				 on-sort="sort"
 				 on-filter="filter"
 				 on-select="selectItem"
+				 on-params="params"
 				 on-update="update">
 			</div>
 			<hr/>
@@ -66,22 +67,7 @@
 						]
 					}
 				};
-				$scope.actions = [
-					{
-						/*text: 'Delete',*/
-						html: '<button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>',
-						fn: function (item) {
-							console.log(item);
-						}
-					},
-					{
-						/*text: 'Delete',*/
-						html: '<span class="glyphicon glyphicon-edit"></span>',
-						fn: function (item) {
-							console.log(item);
-						}
-					}
-				];
+
 				for (var i = 1; i <= 1000; i++) {
 					$scope.data.push({
 						id: i,
@@ -91,22 +77,25 @@
 					});
 				}
 				$scope.selectPage = function (page) {
-					console.log(page);
+					// console.log(page);
 				};
 				$scope.viewBy = function (viewBy) {
-					console.log(viewBy);
+					// console.log(viewBy);
 				};
 				$scope.sort = function (sort) {
-					console.log(sort);
+					// console.log(sort);
 				};
 				$scope.filter = function (filter) {
-					console.log(filter);
+					// console.log(filter);
 				};
 				$scope.selectItem = function (item) {
-					console.log(item);
+					// console.log(item);
+				};
+				$scope.params = function (params) {
+					console.log(params);
 				};
 				$scope.update = function (items, columns, pager, viewBy, sort, filter) {
-					console.log(items, columns, pager, viewBy, sort, filter);
+					// console.log(items, columns, pager, viewBy, sort, filter);
 				};
 			}
 		]);

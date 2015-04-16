@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T11:48:06.707Z
+ * @version: 0.0.1 - 2015-04-16T13:04:08.938Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -28,6 +28,7 @@ grid.controller('gridTableCtrl', [
 	function ($scope, $compile, $parse, $filter, $interval, fPager) {
 		var ctrl = this;
 		$scope.$grid = {
+			/**/
 			defaults: {
 				template: '{toolbar}{header}{items}{footer}',
 				sorted: false,
@@ -54,28 +55,53 @@ grid.controller('gridTableCtrl', [
 					total: 'Total: '
 				}
 			},
+			/* Enable or disable debug mode */
 			debug: false,
+			/*  */
+			remote: false,
+			/* Loading status */
 			loading: false,
+			/*  */
 			ngModelVar: '',
+			/*  */
 			columns: [],
+			/*  */
 			columnsCount: 0,
+			/*  */
 			hiddenColumns: [],
+			/*  */
 			items: [],
+			/*  */
 			itemsCount: 0,
-			itemActions: {},
+			/*  */
+			itemActions: null,
+			/* Show or hide row numbers */
 			rowNumbers: false,
+			/* Enable or disable multi items select */
 			multiSelect: false,
+			/*  */
 			selected: null,
+			/*  */
 			sorted: false,
+			/*  */
 			multiSort: false,
+			/*  */
 			sort: {},
+			/*  */
 			filtered: false,
+			/*  */
 			filters: null,
+			/*  */
 			filter: {},
+			/*  */
 			filterTimeoutId: null,
+			/*  */
 			filterTimeout: 500,
+			/*  */
 			viewBy: 10,
+			/*  */
 			viewByList: [10, 25, 50],
+			/*  */
 			pager: {
 				current: 0,
 				total: 0,
@@ -83,9 +109,13 @@ grid.controller('gridTableCtrl', [
 				offset: 0,
 				items: []
 			},
+			/*  */
 			params: {},
+			/*  */
 			paramsVars: {},
+			/*  */
 			errors: null,
+			/*  */
 			events: {
 				onColumnsUpdate: null,
 				onItemsUpdate: null,
@@ -94,9 +124,11 @@ grid.controller('gridTableCtrl', [
 				onSelect: null,
 				onSort: null,
 				onFilter: null,
+				onParams: null,
 				onUpdate: null,
 				onError: null
 			},
+			/*  */
 			text: {},
 			/**
 			 * Build columns function
@@ -221,20 +253,22 @@ grid.controller('gridTableCtrl', [
 					this.items = [];
 					return;
 				}
-				if (this.sort.column && this.sort.dir) {
-					var sort = this.sort;
-					items = items.sort(function (a, b) {
-						var v1 = a[sort.column],
-							v2 = b[sort.column];
-						if (sort.dir === 'asc') {
-							return (v1 < v2) ? -1 : (v1 > v2) ? 1 : 0;
-						} else {
-							return (v1 < v2) ? 1 : (v1 > v2) ? -1 : 0;
-						}
-					});
-				}
-				if (this.filter) {
-					items = $filter('filter')(items, this.filter);
+				if (!this.remote) {
+					if (this.sort.column && this.sort.dir) {
+						var sort = this.sort;
+						items = items.sort(function (a, b) {
+							var v1 = a[sort.column],
+								v2 = b[sort.column];
+							if (sort.dir === 'asc') {
+								return (v1 < v2) ? -1 : (v1 > v2) ? 1 : 0;
+							} else {
+								return (v1 < v2) ? 1 : (v1 > v2) ? -1 : 0;
+							}
+						});
+					}
+					if (this.filter) {
+						items = $filter('filter')(items, this.filter);
+					}
 				}
 				this.pager.total = items.length;
 				if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
@@ -321,6 +355,7 @@ grid.controller('gridTableCtrl', [
 				this.pager.current = index;
 				this.pager.limit = this.viewBy;
 				this.pager.offset = this.pager.current * this.pager.limit;
+				this.updateParams();
 				this.triggerEvent('onPage');
 				this.update();
 			},
@@ -342,6 +377,7 @@ grid.controller('gridTableCtrl', [
 					return;
 				}
 				this.viewBy = count;
+				this.updateParams();
 				this.triggerEvent('onViewBy');
 				this.update();
 			},
@@ -384,6 +420,7 @@ grid.controller('gridTableCtrl', [
 						dir: dir ? dir : 'asc'
 					};
 				}
+				this.updateParams();
 				this.triggerEvent('onSort');
 				this.update();
 			},
@@ -427,6 +464,7 @@ grid.controller('gridTableCtrl', [
 					
 				} else {
 					this.filterTimeoutId = $interval(function () {
+						self.updateParams();
 						self.triggerEvent('onFilter');
 						self.update();
 					}, this.filterTimeout);
@@ -456,6 +494,19 @@ grid.controller('gridTableCtrl', [
 			 */
 			getParams: function () {
 				return this.params;
+			},
+			/**
+			 * Update params function
+			 */
+			updateParams: function () {
+				this.params = {};
+				if (this.sort.column) {
+					this.params.sort = (this.sort.dir == 'asc' ? '' : '-') + (this.sort.column ? this.sort.column : '');
+				}
+				this.params.page = this.pager.current + 1;
+				this.params.perPage = this.viewBy;
+				this.params = angular.extend(this.params, this.filter);
+				this.triggerEvent('onParams');
 			},
 			/**
 			 * Sync data function
@@ -562,6 +613,14 @@ grid.controller('gridTableCtrl', [
 				}
 			},
 			/**
+			 * Params event function
+			 */
+			onParams: function () {
+				if (this.events['onParams'] !== null && angular.isFunction(this.events['onParams'])) {
+					this.events['onParams'](this.params);
+				}
+			},
+			/**
 			 * Update event function
 			 */
 			onUpdate: function () {
@@ -587,6 +646,9 @@ grid.controller('gridTableCtrl', [
 			}
 			if (attrs.debug) {
 				$scope.$grid.debug = attrs.debug;
+			}
+			if (attrs.remote) {
+				$scope.$grid.remote = $parse(attrs.remote)($scope);
 			}
 			if (attrs.ngModel) {
 				$scope.$grid.ngModelVar = attrs.ngModel;
@@ -644,7 +706,6 @@ grid.controller('gridTableCtrl', [
 					}
 				}
 			}
-			// element.addClass('grid-table-wrapper');
 			return element;
 		};
 		/**
