@@ -485,6 +485,7 @@ grid.controller('gridTableCtrl', [
 					this.sort.column = this.params.sort.column;
 					this.sort.dir = this.params.sort.dir;
 				}
+				this.update();
 			},
 			/**
 			 * Get params function
