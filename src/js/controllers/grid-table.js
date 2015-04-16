@@ -256,8 +256,8 @@ grid.controller('gridTableCtrl', [
 					if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
 						this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
 					}
-					this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				}
+				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
 				this.itemsCount = this.items.length || 0;
 				this.triggerEvent('onItemsUpdate');

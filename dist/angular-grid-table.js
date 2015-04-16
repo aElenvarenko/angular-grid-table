@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T13:20:09.851Z
+ * @version: 0.0.1 - 2015-04-16T13:31:34.325Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -273,8 +273,8 @@ grid.controller('gridTableCtrl', [
 					if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
 						this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
 					}
-					this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				}
+				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
 				this.itemsCount = this.items.length || 0;
 				this.triggerEvent('onItemsUpdate');
