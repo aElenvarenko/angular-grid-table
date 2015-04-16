@@ -6,7 +6,9 @@ grid.directive('gridTableColumns', [
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-columns.html'
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-columns.html';
+			}
 		};
 	}
 ]);

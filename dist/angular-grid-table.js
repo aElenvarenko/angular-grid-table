@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T10:47:24.628Z
+ * @version: 0.0.1 - 2015-04-16T11:31:13.341Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -9,6 +9,12 @@
 (function () {
 	'use strict';
 var grid = angular.module('gridTable', []);
+/**
+ * Constant gridTableConfig
+ */
+grid.constant('gridTableConfig', {
+	tplUrl: ''
+});
 /**
  * Controller gridTableCtrl
  */
@@ -1001,7 +1007,9 @@ grid.directive('gridTableColumns', [
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-columns.html'
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-columns.html';
+			}
 		};
 	}
 ]);
@@ -1025,7 +1033,9 @@ grid.directive('gridTableHeader', [
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-header.html'
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-header.html';
+			}
 		};
 	}
 ]);
@@ -1055,16 +1065,23 @@ grid.directive('gridTableItems', [
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-items.html'
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-items.html';
+			}
 		};
 	}
 ]);
+/**
+ * Directive gridTableTaoolbar
+ */
 grid.directive('gridTableToolbar', [
 	function () {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-toolbar.html',
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-toolbar.html';
+			},
 			compile: function () {
 				return function (scope, element, attrs, ctrls) {};
 			}
@@ -1076,11 +1093,14 @@ grid.directive('gridTableToolbar', [
  */
 grid.directive('gridTable', [
 	'$parse',
-	function ($parse) {
+	'gridTableConfig',
+	function ($parse, config) {
 		return {
 			restrict: 'EA',
 			require: ['^gridTable', '^ngModel'],
-			templateUrl: 'grid-table.html',
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table.html';
+			},
 			controller: 'gridTableCtrl',
 			controllerAs: '$gridCtrl',
 			compile: function () {

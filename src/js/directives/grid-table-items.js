@@ -6,7 +6,9 @@ grid.directive('gridTableItems', [
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-items.html'
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-items.html';
+			}
 		};
 	}
 ]);

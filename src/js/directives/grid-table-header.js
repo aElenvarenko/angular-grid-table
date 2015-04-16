@@ -6,7 +6,9 @@ grid.directive('gridTableHeader', [
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-header.html'
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-header.html';
+			}
 		};
 	}
 ]);

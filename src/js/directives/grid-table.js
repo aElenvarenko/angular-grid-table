@@ -3,11 +3,14 @@
  */
 grid.directive('gridTable', [
 	'$parse',
-	function ($parse) {
+	'gridTableConfig',
+	function ($parse, config) {
 		return {
 			restrict: 'EA',
 			require: ['^gridTable', '^ngModel'],
-			templateUrl: 'grid-table.html',
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table.html';
+			},
 			controller: 'gridTableCtrl',
 			controllerAs: '$gridCtrl',
 			compile: function () {
