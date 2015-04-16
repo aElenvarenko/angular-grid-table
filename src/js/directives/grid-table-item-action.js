@@ -8,10 +8,8 @@ grid.directive('gridTableItemAction', [
 			scope: {
 				html: '=html'
 			},
-			compile: function () {
-				return function (scope, element, attrs, ctrls) {
-					element.append(scope.html);
-				}
+			link: function (scope, element) {
+				element.append(scope.html);
 			}
 		};
 	}

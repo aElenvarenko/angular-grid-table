@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T11:38:09.848Z
+ * @version: 0.0.1 - 2015-04-16T11:48:06.707Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -988,18 +988,6 @@ grid.filter('gridTableFormater', [
 	function () {}
 ]);
 /**
- * Directive gridTableColumn
- */
-grid.directive('gridTableColumn', [
-	function () {
-		return {
-			restrict: 'EA',
-			require: '^gridTable',
-			templateUrl: 'grid-table-column.html'
-		};
-	}
-]);
-/**
  * Directive gridTableColumns
  */
 grid.directive('gridTableColumns', [
@@ -1018,11 +1006,14 @@ grid.directive('gridTableColumns', [
  * Directive gridTableFooter
  */
 grid.directive('gridTableFooter', [
-	function () {
+	'gridTableConfig',
+	function (config) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
-			templateUrl: 'grid-table-footer.html'
+			templateUrl: function () {
+				return config.tplUrl + 'grid-table-footer.html';
+			}
 		};
 	}
 ]);
@@ -1051,10 +1042,8 @@ grid.directive('gridTableItemAction', [
 			scope: {
 				html: '=html'
 			},
-			compile: function () {
-				return function (scope, element, attrs, ctrls) {
-					element.append(scope.html);
-				}
+			link: function (scope, element) {
+				element.append(scope.html);
 			}
 		};
 	}
@@ -1075,7 +1064,7 @@ grid.directive('gridTableItems', [
 	}
 ]);
 /**
- * Directive gridTableTaoolbar
+ * Directive gridTableToolbar
  */
 grid.directive('gridTableToolbar', [
 	'gridTableConfig',
@@ -1085,9 +1074,6 @@ grid.directive('gridTableToolbar', [
 			require: '^gridTable',
 			templateUrl: function () {
 				return config.tplUrl + 'grid-table-toolbar.html';
-			},
-			compile: function () {
-				return function (scope, element, attrs, ctrls) {};
 			}
 		};
 	}
@@ -1157,7 +1143,6 @@ grid.directive('gridTable', [
 	}
 ]);
 grid.run(["$templateCache", function($templateCache) {
-$templateCache.put("grid-table-column.html","<td></td>");
 $templateCache.put("grid-table-columns.html","<col ng-repeat=\"column in $grid.getShowColumns()\" class=\"{{\'grid-table-column-\' + column.columnType}}\">");
 $templateCache.put("grid-table-footer.html","<tr><td colspan=\"{{$grid.columnsCount}}\">Total: {{$grid.itemsCount}}</td></tr>");
 $templateCache.put("grid-table-header.html","<tr class=\"grid-table-headers\"><th ng-class=\"{\'sorted\': column.name === $grid.getSortColumn()}\" ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType === \'data\'\"><a ng-click=\"$grid.setSortBy(column.name, null, $event)\" href=\"#\">{{column.label}} <i>{{column.name === $grid.getSortColumn() ? ($grid.getSortDir() === \'asc\' ? $grid.text.asc : $grid.text.desc) : \'\'}}</i></a></span> <span ng-if=\"column.columnType === \'numbers\'\">{{$grid.text.numbers}}</span> <span ng-if=\"column.columnType === \'actions\'\">{{$grid.text.actions}}</span></th></tr><tr class=\"grid-table-filter\"><td ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType === \'data\'\"><span ng-if=\"$grid.filters[column.name]\"><select ng-change=\"$grid.setFilterBy()\" ng-model=\"$grid.filter[column.name]\"><option value=\"\"></option><option ng-repeat=\"val in $grid.filters[column.name].values\" value=\"{{val[$grid.filters[column.name].value]}}\">{{val[$grid.filters[column.name].label]}}</option></select></span> <span ng-if=\"!$grid.filters[column.name]\"><input ng-change=\"$grid.setFilterBy()\" ng-model=\"$grid.filter[column.name]\"></span></span></td></tr>");
