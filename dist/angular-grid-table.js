@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T10:02:33.101Z
+ * @version: 0.0.1 - 2015-04-16T10:47:24.628Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -58,7 +58,6 @@ grid.controller('gridTableCtrl', [
 			itemsCount: 0,
 			itemActions: {},
 			rowNumbers: false,
-			itemActions: null,
 			multiSelect: false,
 			selected: null,
 			sorted: false,
@@ -574,22 +573,6 @@ grid.controller('gridTableCtrl', [
 			}
 		};
 		/**
-		 * 
-		 */
-		$scope.$watchCollection('$grid.sort', function (newValue, oldValue) {
-			if (angular.equals(newValue, oldValue)) {
-				return;
-			}
-		});
-		/**
-		 * 
-		 */
-		$scope.$watchCollection('$grid.filter', function (newValue, oldValue) {
-			if (angular.equals(newValue, oldValue)) {
-				return;
-			}
-		});
-		/**
 		 * Init function
 		 */
 		ctrl.init = function (element, attrs) {
@@ -672,6 +655,11 @@ grid.controller('gridTableCtrl', [
 			element.find('.grid-table-wrapper').append(toolbar);
 			return element;
 		};
+		/**
+		 * Render table function
+		 * @param {Object} element
+		 * @return {Object}
+		 */
 		ctrl.renderTable = function (element) {
 			if (element.find('table').length > 0) {
 				return element;
@@ -683,7 +671,7 @@ grid.controller('gridTableCtrl', [
 			});
 			element.find('.grid-table-wrapper').append(table);
 			return element;
-		}
+		};
 		/**
 		 * Render header function
 		 * @param {Object} element
