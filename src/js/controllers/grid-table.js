@@ -258,7 +258,11 @@ grid.controller('gridTableCtrl', [
 					}
 				}
 				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
-				this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
+				if (!this.remote) {
+					this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
+				} else {
+					this.items = items;
+				}
 				this.itemsCount = this.items.length || 0;
 				this.triggerEvent('onItemsUpdate');
 			},

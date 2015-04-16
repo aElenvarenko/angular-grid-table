@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T13:31:34.325Z
+ * @version: 0.0.1 - 2015-04-16T13:40:01.584Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -275,7 +275,11 @@ grid.controller('gridTableCtrl', [
 					}
 				}
 				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
-				this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
+				if (!this.remote) {
+					this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
+				} else {
+					this.items = items;
+				}
 				this.itemsCount = this.items.length || 0;
 				this.triggerEvent('onItemsUpdate');
 			},
