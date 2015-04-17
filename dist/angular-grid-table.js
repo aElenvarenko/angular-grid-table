@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-17T07:12:33.410Z
+ * @version: 0.0.1 - 2015-04-17T07:23:37.327Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -28,7 +28,7 @@ grid.controller('gridTableCtrl', [
 	function ($scope, $compile, $parse, $filter, $interval, fPager) {
 		var ctrl = this;
 		$scope.$grid = {
-			/**/
+			/*  */
 			defaults: {
 				template: '{toolbar}{header}{items}{footer}',
 				sorted: false,

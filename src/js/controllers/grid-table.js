@@ -11,7 +11,7 @@ grid.controller('gridTableCtrl', [
 	function ($scope, $compile, $parse, $filter, $interval, fPager) {
 		var ctrl = this;
 		$scope.$grid = {
-			/**/
+			/*  */
 			defaults: {
 				template: '{toolbar}{header}{items}{footer}',
 				sorted: false,
