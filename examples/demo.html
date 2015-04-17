@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="demo">
+<head>
+	<meta charset="utf-8"/>
+	<title>AngularJS grid table demo</title>
+	<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.css"/>
+	<link rel="stylesheet" type="text/css" href="../dist/angular-grid-table.css"/>
+	<script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+	<script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script type="text/javascript" src="../dist/angular-grid-table.js"></script>
+</head>
+<body>
+	<div ng-controller="demoCtrl">
+		<div class="container">
+			<div
+				 grid-table=""
+				 loading="loading"
+				 template="{toolbar}{header}{items}{footer}"
+				 ng-model="data"
+				 columns="{{columnsVar}}"
+				 filters="filters"
+				 actions="actions"
+				 row-numbers="true"
+				 on-page="selectPage"
+				 on-view-by="viewBy"
+				 on-sort="sort"
+				 on-filter="filter"
+				 on-select="selectItem"
+				 on-params="params"
+				 on-update="update">
+			</div>
+			<hr/>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-lg-4">Columns var</label>
+					<div class="col-lg-8">
+						<input ng-model="columnsVar" type="text" class="form-control"/>
+					</div>
+				</div>
+				<button ng-click="loading = !loading" class="btn btn-primary">Set loading {{loading}}</button>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var app = angular.module('demo', ['gridTable']);
+		app.controller('demoCtrl', [
+			'$scope',
+			function ($scope) {
+				$scope.columnsVar = 'columns';
+				$scope.columns = [
+					{name: 'id', label: 'ID', type: 'integer'},
+					{name: 'title', label: 'Title', type: 'string'},
+					{name: 'desc', label: 'Description', type: 'string'},
+					{name: 'type', label: 'Type', type: 'integer'}
+				];
+				$scope.data = [];
+				$scope.filters = {
+					type: {
+						value: 'id',
+						label: 'code',
+						values: [
+							{id: 1, code: '1'},
+							{id: 2, code: '2'},
+							{id: 3, code: '3'}
+						]
+					}
+				};
+
+				for (var i = 1; i <= 1000; i++) {
+					$scope.data.push({
+						id: i,
+						title: 'Title ' + i,
+						desc: 'Description ' + i,
+						type: i <= 100 ? 1 : ( i <= 200 ? 2 : '')
+					});
+				}
+				$scope.selectPage = function (page) {
+					// console.log(page);
+				};
+				$scope.viewBy = function (viewBy) {
+					// console.log(viewBy);
+				};
+				$scope.sort = function (sort) {
+					// console.log(sort);
+				};
+				$scope.filter = function (filter) {
+					// console.log(filter);
+				};
+				$scope.selectItem = function (item) {
+					// console.log(item);
+				};
+				$scope.params = function (params) {
+					console.log(params);
+				};
+				$scope.update = function (items, columns, pager, viewBy, sort, filter) {
+					// console.log(items, columns, pager, viewBy, sort, filter);
+				};
+			}
+		]);
+	</script>
+</body>
+</html>

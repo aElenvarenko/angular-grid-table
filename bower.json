@@ -9,6 +9,12 @@
 		"table"
 	],
 	"license": "MIT",
+	"main": [
+		"dist/angular-grid-table.js",
+		"dist/angular-grid-table.min.js",
+		"dist/angular-grid-table.css",
+		"dist/angular-grid-table.min.css"
+	],
 	"ignore": [
 		"**/.*",
 		"node_modules",
@@ -16,6 +22,7 @@
 		"test",
 		"tests"
 	],
+	"dependencies": {},
 	"devDependencies": {
 		"jquery": "~1.11",
 		"angular": "~1.3",
