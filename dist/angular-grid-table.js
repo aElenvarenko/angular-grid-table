@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-16T13:58:53.133Z
+ * @version: 0.0.1 - 2015-04-17T07:12:33.410Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -490,17 +490,16 @@ grid.controller('gridTableCtrl', [
 			 * @param {Object} params
 			 */
 			setParams: function (params) {
-				this.params = params;
-				if (this.params.viewBy) {
-					this.viewBy = this.params.viewBy;
+				if (params.viewBy) {
+					this.viewBy = params.viewBy;
 				}
-				if (this.params.pager) {
-					this.pager.current = this.params.pager.current;
-					this.pager.total = this.params.pager.total;
+				if (params.pager) {
+					this.pager.current = params.pager.current;
+					this.pager.total = params.pager.total;
 				}
-				if (this.params.sort) {
-					this.sort.column = this.params.sort.column;
-					this.sort.dir = this.params.sort.dir;
+				if (params.sort) {
+					this.sort.column = params.sort.column;
+					this.sort.dir = params.sort.dir;
 				}
 				this.update();
 			},
@@ -528,13 +527,17 @@ grid.controller('gridTableCtrl', [
 			 * Sync data function
 			 */
 			update: function () {
-				this.loading = true;
+				if (this.remote) {
+					this.loading = true;
+				}
 				if (this.filterTimeoutId) {
 					$interval.cancel(this.filterTimeoutId);
 					this.filterTimeoutId = null;
 				}
 				this.setItems($parse($scope.$grid.ngModelVar)($scope));
-				this.loading = false;
+				if (this.remote) {
+					this.loading = false;
+				}
 			},
 			/**
 			 * Add event listener function
@@ -576,80 +579,80 @@ grid.controller('gridTableCtrl', [
 			 * Columns update event function
 			 */
 			onColumnsUpdate: function () {
-				if (this.events['onColumnsUpdate'] !== null && angular.isFunction(this.events['onColumnsUpdate'])) {
-					this.events['onColumnsUpdate'](this.columns);
+				if (this.events.onColumnsUpdate !== null && angular.isFunction(this.events.onColumnsUpdate)) {
+					this.events.onColumnsUpdate(this.columns);
 				}
 			},
 			/**
 			 * Items update event function
 			 */
 			onItemsUpdate: function () {
-				if (this.events['onItemsUpdate'] !== null && angular.isFunction(this.events['onItemsUpdate'])) {
-					this.events['onItemsUpdate'](this.items);
+				if (this.events.onItemsUpdate !== null && angular.isFunction(this.events.onItemsUpdate)) {
+					this.events.onItemsUpdate(this.items);
 				}
 			},
 			/**
 			 * Item select event function
 			 */
 			onSelect: function () {
-				if (this.events['onSelect'] !== null && angular.isFunction(this.events['onSelect'])) {
-					this.events['onSelect'](this.selected);
+				if (this.events.onSelect !== null && angular.isFunction(this.events.onSelect)) {
+					this.events.onSelect(this.selected);
 				}
 			},
 			/**
 			 * View by event function
 			 */
 			onViewBy: function () {
-				if (this.events['onViewBy'] !== null && angular.isFunction(this.events['onViewBy'])) {
-					this.events['onViewBy'](this.viewBy);
+				if (this.events.onViewBy !== null && angular.isFunction(this.events.onViewBy)) {
+					this.events.onViewBy(this.viewBy);
 				}
 			},
 			/**
 			 * Page event function
 			 */
 			onPage: function () {
-				if (this.events['onPage'] !== null && angular.isFunction(this.events['onPage'])) {
-					this.events['onPage'](this.pager);
+				if (this.events.onPage !== null && angular.isFunction(this.events.onPage)) {
+					this.events.onPage(this.pager);
 				}
 			},
 			/**
 			 * Sort event function
 			 */
 			onSort: function () {
-				if (this.events['onSort'] !== null && angular.isFunction(this.events['onSort'])) {
-					this.events['onSort'](this.sort);
+				if (this.events.onSort !== null && angular.isFunction(this.events.onSort)) {
+					this.events.onSort(this.sort);
 				}
 			},
 			/**
 			 * Filter event function
 			 */
 			onFilter: function () {
-				if (this.events['onFilter'] !== null && angular.isFunction(this.events['onFilter'])) {
-					this.events['onFilter'](this.filter);
+				if (this.events.onFilter !== null && angular.isFunction(this.events.onFilter)) {
+					this.events.onFilter(this.filter);
 				}
 			},
 			/**
 			 * Params event function
 			 */
 			onParams: function () {
-				if (this.events['onParams'] !== null && angular.isFunction(this.events['onParams'])) {
-					this.events['onParams'](this.params);
+				if (this.events.onParams !== null && angular.isFunction(this.events.onParams)) {
+					this.events.onParams(this.params);
 				}
 			},
 			/**
 			 * Update event function
 			 */
 			onUpdate: function () {
-				if (this.events['onUpdate'] !== null && angular.isFunction(this.events['onUpdate'])) {
-					this.events['onUpdate'](this.items, this.columns, this.pager, this.viewBy, this.sort, this.filter);
+				if (this.events.onUpdate !== null && angular.isFunction(this.events.onUpdate)) {
+					this.events.onUpdate(this.items, this.columns, this.pager, this.viewBy, this.sort, this.filter);
 				}	
 			},
 			/**
 			 * Error event function
 			 */
 			onError: function () {
-				if (this.events['onError'] !== null && angular.isFunction(this.events['onError'])) {
-					this.events['onError'](this.errors);
+				if (this.events.onError !== null && angular.isFunction(this.events.onError)) {
+					this.events.onError(this.errors);
 				}
 			}
 		};
