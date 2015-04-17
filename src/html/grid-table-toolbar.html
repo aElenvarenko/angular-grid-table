@@ -4,7 +4,7 @@
 	</ul>
 </div>
 <div class="grid-table-view-by">
-	<span class="view-by-label">View by: </span>
+	<span class="view-by-label">{{$grid.text.viewBy}}</span>
 	<ul class="view-by">
 		<li ng-click="$grid.setViewBy(item, $event)" ng-class="{'active': item == $grid.viewBy}" ng-repeat="item in $grid.viewByList"><a href="#">{{item}}</a></li>
 	</ul>
