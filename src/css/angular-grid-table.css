@@ -3,6 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+.grid-table-wrapper .grid-table-toolbar {
+  margin: 5px 0;
+}
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager {
   float: left;
 }
