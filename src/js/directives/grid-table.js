@@ -15,8 +15,7 @@ grid.directive('gridTable', [
 			controllerAs: '$gridCtrl',
 			compile: function () {
 				return function (scope, element, attrs, ctrls) {
-					var $grid = ctrls[0],
-						ngModel = ctrls[1];
+					var $grid = ctrls[0];
 					$grid.init(element, attrs);
 					element = $grid.renderTpl(element, attrs);
 					$grid.compileTpl(scope, element);

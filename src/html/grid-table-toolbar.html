@@ -1,12 +1,23 @@
 <div class="grid-table-pager">
 	<ul class="pager">
-		<li ng-click="$grid.setPage(page.index, $event)" ng-class="{'active': page.index == $grid.getPage()}" ng-disabled="page.disable" ng-repeat="page in $grid.pager.items"><a href="#">{{page.label}}</a></li>
+		<li
+			ng-repeat="page in $grid.pager.items"
+			ng-click="$grid.setPage(page.index, $event)"
+			ng-class="{'active': page.index == $grid.getPage()}"
+			ng-disabled="page.disable">
+			<a href="#">{{page.label}}</a>
+		</li>
 	</ul>
 </div>
 <div class="grid-table-view-by">
 	<span class="view-by-label">{{$grid.text.viewBy}}</span>
 	<ul class="view-by">
-		<li ng-click="$grid.setViewBy(item, $event)" ng-class="{'active': item == $grid.viewBy}" ng-repeat="item in $grid.viewByList"><a href="#">{{item}}</a></li>
+		<li
+			ng-repeat="item in $grid.viewByList"
+			ng-click="$grid.setViewBy(item, $event)"
+			ng-class="{'active': item == $grid.viewBy}">
+			<a href="#">{{item}}</a>
+		</li>
 	</ul>
 </div>
 <div class="grid-table-clear"></div>

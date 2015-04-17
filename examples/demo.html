@@ -23,6 +23,8 @@
 				 filters="filters"
 				 actions="actions"
 				 row-numbers="true"
+				 on-columns-update=""
+				 on-items-update=""
 				 on-page="selectPage"
 				 on-view-by="viewBy"
 				 on-sort="sort"
@@ -53,7 +55,9 @@
 					{name: 'id', label: 'ID', type: 'integer'},
 					{name: 'title', label: 'Title', type: 'string'},
 					{name: 'desc', label: 'Description', type: 'string'},
-					{name: 'type', label: 'Type', type: 'integer'}
+					{name: 'type', label: 'Type', type: 'integer'},
+					{name: 'date', label: 'Date', type: 'date'},
+					{name: 'datetime', label: 'Date time', type: 'datetime'}
 				];
 				$scope.data = [];
 				$scope.filters = {
@@ -69,34 +73,16 @@
 				};
 
 				for (var i = 1; i <= 1000; i++) {
+					var date = new Date();
 					$scope.data.push({
 						id: i,
 						title: 'Title ' + i,
 						desc: 'Description ' + i,
-						type: i <= 100 ? 1 : ( i <= 200 ? 2 : '')
+						type: i <= 100 ? 1 : ( i <= 200 ? 2 : ''),
+						date: '2015-04-17',
+						datetime: '2015-04-17 16:25:30'
 					});
 				}
-				$scope.selectPage = function (page) {
-					// console.log(page);
-				};
-				$scope.viewBy = function (viewBy) {
-					// console.log(viewBy);
-				};
-				$scope.sort = function (sort) {
-					// console.log(sort);
-				};
-				$scope.filter = function (filter) {
-					// console.log(filter);
-				};
-				$scope.selectItem = function (item) {
-					// console.log(item);
-				};
-				$scope.params = function (params) {
-					console.log(params);
-				};
-				$scope.update = function (items, columns, pager, viewBy, sort, filter) {
-					// console.log(items, columns, pager, viewBy, sort, filter);
-				};
 			}
 		]);
 	</script>
