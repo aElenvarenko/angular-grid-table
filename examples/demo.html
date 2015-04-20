@@ -56,8 +56,10 @@
 					{name: 'title', label: 'Title', type: 'string'},
 					{name: 'desc', label: 'Description', type: 'string'},
 					{name: 'type', label: 'Type', type: 'integer'},
-					{name: 'date', label: 'Date', type: 'date'},
-					{name: 'datetime', label: 'Date time', type: 'datetime'}
+					{name: 'price', label: 'Price', type: 'currency'},
+					{name: 'active', label: 'Active', type: 'boolean'},
+					{name: 'date', label: 'Date', type: 'date', format: 'dd.mm.yyyy'},
+					{name: 'datetime', label: 'Date time', type: 'datetime', format: 'dd.mm.yyyy h:i:s'}
 				];
 				$scope.data = [];
 				$scope.filters = {
@@ -79,6 +81,8 @@
 						title: 'Title ' + i,
 						desc: 'Description ' + i,
 						type: i <= 100 ? 1 : ( i <= 200 ? 2 : ''),
+						price: i * 10,
+						active: i % 2 ? true : false,
 						date: '2015-04-17',
 						datetime: '2015-04-17 16:25:30'
 					});

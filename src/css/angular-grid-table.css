@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: 14px;
 }
 .grid-table-wrapper .grid-table-toolbar {
   margin: 5px 0;
@@ -89,6 +90,7 @@
   background: #e6e6e6;
 }
 .grid-table-wrapper .grid-table-table {
+  margin: 5px 0;
   width: 100%;
 }
 .grid-table-wrapper .grid-table-table thead > tr > th,

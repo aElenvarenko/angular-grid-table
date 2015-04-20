@@ -109,6 +109,10 @@ grid.controller('gridTableCtrl', [
 			events: {
 				/* On columns update event callback */
 				onColumnsUpdate: null,
+				/* On item click event callback */
+				onItemClick: null,
+				/* On item dbl click callback */
+				onItemDblClick: null,
 				/* On items update event callback */
 				onItemsUpdate: null,
 				/* On current page update event callback */
@@ -251,6 +255,9 @@ grid.controller('gridTableCtrl', [
 			 * @param {Array} items
 			 */
 			setItems: function (items) {
+				if (!this.remote) {
+					this.loading = true;
+				}
 				if (!items) {
 					this.items = [];
 					return;
@@ -272,9 +279,9 @@ grid.controller('gridTableCtrl', [
 						items = $filter('filter')(items, this.filter);
 					}
 					this.pager.total = items.length;
-					if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
-						this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
-					}
+				}
+				if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
+					this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
 				}
 				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				if (!this.remote) {
@@ -284,6 +291,9 @@ grid.controller('gridTableCtrl', [
 				}
 				this.itemsCount = this.items.length || 0;
 				this.triggerEvent('onItemsUpdate');
+				if (!this.remote) {
+					this.loading = false;
+				}
 			},
 			/**
 			 * Items getter function
@@ -529,17 +539,11 @@ grid.controller('gridTableCtrl', [
 			 * Sync data function
 			 */
 			update: function () {
-				if (this.remote) {
-					this.loading = true;
-				}
 				if (this.filterTimeoutId) {
 					$interval.cancel(this.filterTimeoutId);
 					this.filterTimeoutId = null;
 				}
 				this.setItems($parse($scope.$grid.ngModelVar)($scope));
-				if (this.remote) {
-					this.loading = false;
-				}
 			},
 			/**
 			 * Add event listener function
@@ -592,6 +596,14 @@ grid.controller('gridTableCtrl', [
 				if (this.events.onItemsUpdate !== null && angular.isFunction(this.events.onItemsUpdate)) {
 					this.events.onItemsUpdate(this.items);
 				}
+			},
+			/**/
+			onItemClick: function () {
+				
+			},
+			/**/
+			onItemDblClick: function () {
+				
 			},
 			/**
 			 * Item select event function
@@ -755,7 +767,7 @@ grid.controller('gridTableCtrl', [
 			var table = angular.element(document.createElement('table'));
 			table.addClass('grid-table-table');
 			table.attr({
-				'ng-class': "{'loading': $grid.loading}"
+				'ng-class': "{'loading': $grid.loading !== false}"
 			});
 			element.find('.grid-table-wrapper').append(table);
 			return element;

@@ -6,7 +6,8 @@
 	class="grid-table-item">
 	<td
 		ng-repeat="column in $grid.getShowColumns()">
-		{{column.columnType == 'numbers' ? itemsIndex : ''}}{{item[column.name]}}
+		{{column.columnType == 'numbers' ? itemsIndex : ''}}
+		{{item[column.name] | gridTableFormatter:column.type}}
 		<span ng-if="column.columnType == 'actions' && $grid.itemActions">
 			<span
 				  ng-repeat="action in $grid.itemActions"
