@@ -4,6 +4,15 @@ var grid = angular.module('gridTable', []);
  */
 grid.constant('gridTableConfig', {
 	tplUrl: '',
+	text: {
+		viewBy: 'View by: ',
+		numbers: '#',
+		actions: 'Actions',
+		asc: '⇣',
+		desc: '⇡',
+		empty: 'Empty',
+		total: 'Total: '
+	},
 	formatters: {
 		boolean: {
 			'true': 'Yes',

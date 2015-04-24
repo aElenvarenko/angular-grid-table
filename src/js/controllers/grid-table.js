@@ -597,13 +597,21 @@ grid.controller('gridTableCtrl', [
 					this.events.onItemsUpdate(this.items);
 				}
 			},
-			/**/
+			/**
+			 * Item click event function
+			 */
 			onItemClick: function () {
-				
+				if (this.events.onItemClick !== null && angular.isFunction(this.events.onItemClick)) {
+					this.events.onItemClick(this.selected);
+				}
 			},
-			/**/
+			/**
+			 * Item dbl click function
+			 */
 			onItemDblClick: function () {
-				
+				if (this.events.onItemDblClick !== null && angular.isFunction(this.events.onItemDblClick)) {
+					this.events.onItemDblClick(this.selected);
+				}
 			},
 			/**
 			 * Item select event function
