@@ -11,7 +11,7 @@ grid.controller('gridTableCtrl', [
 	function ($scope, $compile, $parse, $filter, $interval, fPager) {
 		var ctrl = this;
 		$scope.$grid = {
-			/*  */
+			/* Defaults */
 			defaults: {
 				template: '{toolbar}{header}{items}{footer}',
 				sorted: false,
@@ -40,78 +40,99 @@ grid.controller('gridTableCtrl', [
 			},
 			/* Enable or disable debug mode */
 			debug: false,
-			/*  */
+			/* Remote actions */
 			remote: false,
 			/* Loading status */
 			loading: false,
-			/*  */
+			/* ngModel variable */
 			ngModelVar: '',
-			/*  */
+			/* Columns */
 			columns: [],
-			/*  */
+			/* Columns count */
 			columnsCount: 0,
-			/*  */
+			/* Hidden columns */
 			hiddenColumns: [],
-			/*  */
+			/* Items */
 			items: [],
-			/*  */
+			/* Items count */
 			itemsCount: 0,
-			/*  */
+			/* Items actions */
 			itemActions: null,
 			/* Show or hide row numbers */
 			rowNumbers: false,
+			/* Enable or disable select item */
+			selectable: false,
 			/* Enable or disable multi items select */
 			multiSelect: false,
-			/*  */
+			/* Selectted item or items */
 			selected: null,
-			/*  */
+			/* Enable or disable sorting */
 			sorted: false,
-			/*  */
+			/* Enable or disable multi sorting */
 			multiSort: false,
-			/*  */
+			/* Sort */
 			sort: {},
-			/*  */
+			/* Enable or disable filtering */
 			filtered: false,
-			/*  */
+			/* Custom filters */
 			filters: null,
-			/*  */
+			/* Filter */
 			filter: {},
-			/*  */
+			/* Filter timeout id */
 			filterTimeoutId: null,
-			/*  */
+			/* Filter timeout in miliseconds */
 			filterTimeout: 500,
-			/*  */
+			/* View by count */
 			viewBy: 10,
-			/*  */
+			/* View by list */
 			viewByList: [10, 25, 50],
-			/*  */
+			/* Pager */
 			pager: {
+				/* Current page */
 				current: 0,
+				/* Total items count */
 				total: 0,
+				/* Items limit */
 				limit: 0,
+				/* Items offset */
 				offset: 0,
+				/* Pager items */
 				items: []
 			},
-			/*  */
+			/* Request params */
 			params: {},
-			/*  */
+			/* Request params variables */
 			paramsVars: {},
-			/*  */
+			/* Errors */
 			errors: null,
-			/*  */
+			/* Events */
 			events: {
+				/* On columns update event callback */
 				onColumnsUpdate: null,
+				/* On item click event callback */
+				onItemClick: null,
+				/* On item dbl click callback */
+				onItemDblClick: null,
+				/* On items update event callback */
 				onItemsUpdate: null,
-				onViewBy: null,
+				/* On current page update event callback */
 				onPage: null,
-				onSelect: null,
+				/* On view by update event callback */
+				onViewBy: null,
+				/* On sort update event callback */
 				onSort: null,
+				/* On filter update event callback */
 				onFilter: null,
+				/* On select update event callback */
+				onSelect: null,
+				/* On params update event callback */
 				onParams: null,
+				/* On update event callback */
 				onUpdate: null,
+				/* On error update event callback */
 				onError: null
 			},
-			/*  */
+			/* Text */
 			text: {},
 			/**
 			 * Build columns function
@@ -119,7 +140,9 @@ grid.controller('gridTableCtrl', [
 			 * @param {Object} item
 			 */
 			buildColumns: function (columns, item) {
-				var column;
+				var column,
+					i,
+					prop;
 				this.columns = [];
 				this.columnsCount = 0;
 				if (this.rowNumbers) {
@@ -129,13 +152,13 @@ grid.controller('gridTableCtrl', [
 				}
 				if (columns) {
 					if (angular.isArray(columns) && columns.length > 0) {
-						for (var i in columns) {
+						for (i in columns) {
 							column = columns[i];
 							column.columnType = 'data';
 							this.columns.push(column);
 						}
 					} else {
-						for(var prop in columns) {
+						for(prop in columns) {
 							column = columns[prop];
 							column.columnType = 'data';
 							this.columns.push(column);
@@ -143,7 +166,7 @@ grid.controller('gridTableCtrl', [
 					}
 				}
 				if (item) {
-					for (var prop in item) {
+					for (prop in item) {
 						if (prop !== '$$hashKey') {
 							this.columns.push({
 								name: prop,
@@ -232,6 +255,9 @@ grid.controller('gridTableCtrl', [
 			 * @param {Array} items
 			 */
 			setItems: function (items) {
+				if (!this.remote) {
+					this.loading = true;
+				}
 				if (!items) {
 					this.items = [];
 					return;
@@ -253,9 +279,9 @@ grid.controller('gridTableCtrl', [
 						items = $filter('filter')(items, this.filter);
 					}
 					this.pager.total = items.length;
-					if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
-						this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
-					}
+				}
+				if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
+					this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
 				}
 				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
 				if (!this.remote) {
@@ -265,6 +291,9 @@ grid.controller('gridTableCtrl', [
 				}
 				this.itemsCount = this.items.length || 0;
 				this.triggerEvent('onItemsUpdate');
+				if (!this.remote) {
+					this.loading = false;
+				}
 			},
 			/**
 			 * Items getter function
@@ -460,7 +489,7 @@ grid.controller('gridTableCtrl', [
 			/**
 			 * Get filter column function
 			 */
-			getFilterColumn: function (column) {
+			getFilterColumn: function (/*column*/) {
 			},
 			/**
 			 * Get filter column value function
@@ -510,17 +539,11 @@ grid.controller('gridTableCtrl', [
 			 * Sync data function
 			 */
 			update: function () {
-				if (this.remote) {
-					this.loading = true;
-				}
 				if (this.filterTimeoutId) {
 					$interval.cancel(this.filterTimeoutId);
 					this.filterTimeoutId = null;
 				}
 				this.setItems($parse($scope.$grid.ngModelVar)($scope));
-				if (this.remote) {
-					this.loading = false;
-				}
 			},
 			/**
 			 * Add event listener function
@@ -572,6 +595,22 @@ grid.controller('gridTableCtrl', [
 			onItemsUpdate: function () {
 				if (this.events.onItemsUpdate !== null && angular.isFunction(this.events.onItemsUpdate)) {
 					this.events.onItemsUpdate(this.items);
+				}
+			},
+			/**
+			 * Item click event function
+			 */
+			onItemClick: function () {
+				if (this.events.onItemClick !== null && angular.isFunction(this.events.onItemClick)) {
+					this.events.onItemClick(this.selected);
+				}
+			},
+			/**
+			 * Item dbl click function
+			 */
+			onItemDblClick: function () {
+				if (this.events.onItemDblClick !== null && angular.isFunction(this.events.onItemDblClick)) {
+					this.events.onItemDblClick(this.selected);
 				}
 			},
 			/**
@@ -736,7 +775,7 @@ grid.controller('gridTableCtrl', [
 			var table = angular.element(document.createElement('table'));
 			table.addClass('grid-table-table');
 			table.attr({
-				'ng-class': "{'loading': $grid.loading}"
+				'ng-class': "{'loading': $grid.loading !== false}"
 			});
 			element.find('.grid-table-wrapper').append(table);
 			return element;
@@ -799,6 +838,46 @@ grid.controller('gridTableCtrl', [
 		 */
 		ctrl.compileTpl = function (scope, element) {
 			$compile(element.contents())(scope);
+		};
+		/**
+		 * Setter function
+		 * @param {String} key
+		 * @param {Object} value
+		 */
+		ctrl.set = function (key, value) {
+			var setter = 'set',
+				fnName = setter + key.substr(0, 1).toUpperCase() + key.substr(1);
+			if (ctrl[key]) {
+				if (angular.isFunction(ctrl[key])) {
+					ctrl[key](value);
+				} else {
+					ctrl[key] = value;
+				}
+			} else if (ctrl[fnName]) {
+				if (angular.isFunction(ctrl[fnName])) {
+					ctrl[fnName](value);
+				}
+			}
+		};
+		/**
+		 * Getter function
+		 * @param {String} key
+		 * @return {Object}
+		 */
+		ctrl.get = function (key) {
+			var getter = 'get',
+				fnName = getter + key.substr(0, 1).toUpperCase() + key.substr(1);
+			if (ctrl[key]) {
+				if (angular.isFunction(ctrl[key])) {
+					return ctrl[key];
+				} else {
+					return ctrl[key];
+				}
+			} else if (ctrl[fnName]) {
+				if (angular.isFunction(ctrl[fnName])) {
+					return ctrl[fnName]();
+				}
+			}
 		};
 		/**
 		 * Set loading status function

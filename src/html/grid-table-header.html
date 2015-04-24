@@ -1,5 +1,7 @@
 <tr class="grid-table-headers">
-	<th ng-class="{'sorted': column.name === $grid.getSortColumn()}" ng-repeat="column in $grid.getShowColumns()">
+	<th
+		ng-repeat="column in $grid.getShowColumns()"
+		ng-class="{'sorted': column.name === $grid.getSortColumn()}">
 		<span ng-if="column.columnType === 'data'">
 			<a ng-click="$grid.setSortBy(column.name, null, $event)" href="#">
 				{{column.label}}
@@ -14,13 +16,17 @@
 	<td ng-repeat="column in $grid.getShowColumns()">
 		<span ng-if="column.columnType === 'data'">
 			<span ng-if="$grid.filters[column.name]">
-				<select ng-change="$grid.setFilterBy()" ng-model="$grid.filter[column.name]">
+				<select
+						ng-model="$grid.filter[column.name]"
+						ng-change="$grid.setFilterBy()">
 					<option value=""></option>
 					<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
 				</select>
 			</span>
 			<span ng-if="!$grid.filters[column.name]">
-				<input ng-change="$grid.setFilterBy()" ng-model="$grid.filter[column.name]"/>
+				<input
+					   ng-model="$grid.filter[column.name]"
+					   ng-change="$grid.setFilterBy()"/>
 			</span>
 		</span>
 	</td>

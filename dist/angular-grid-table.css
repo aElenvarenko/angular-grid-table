@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-20T07:42:43.278Z
+ * @version: 0.0.1 - 2015-04-20T10:22:31.010Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -10,6 +10,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: 14px;
 }
 .grid-table-wrapper .grid-table-toolbar {
   margin: 5px 0;
@@ -97,6 +98,7 @@
   background: #e6e6e6;
 }
 .grid-table-wrapper .grid-table-table {
+  margin: 5px 0;
   width: 100%;
 }
 .grid-table-wrapper .grid-table-table thead > tr > th,
@@ -154,11 +156,11 @@
 .grid-table-wrapper .grid-table-table .grid-table-header .grid-table-filter td span select option {
   padding: 2px 6px;
 }
-.grid-table-wrapper .grid-table-table .grid-table-items .grid-table-item {
-  cursor: pointer;
-}
 .grid-table-wrapper .grid-table-table .grid-table-items .grid-table-item:hover {
   background: #e6e6e6;
+}
+.grid-table-wrapper .grid-table-table .grid-table-items .grid-table-item.selectable {
+  cursor: pointer;
 }
 .grid-table-wrapper .grid-table-table .grid-table-items .grid-table-item.active {
   background: #e0e0e0;

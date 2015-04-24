@@ -1,8 +1,18 @@
-<tr ng-click="$grid.selectItem(item)" ng-class="{'active': $grid.isSelectedItem(item)}" ng-repeat="item in $grid.getItems()" ng-init="itemsIndex = $index + 1" class="grid-table-item">
-	<td ng-repeat="column in $grid.getShowColumns()">
-		{{column.columnType == 'numbers' ? itemsIndex : ''}}{{item[column.name]}}
+<tr
+	ng-init="itemsIndex = $index + 1"
+	ng-repeat="item in $grid.getItems()"
+	ng-click="$grid.selectable ? $grid.selectItem(item) : return"
+	ng-class="{'selectable': $grid.selectable, 'active': $grid.isSelectedItem(item)}"
+	class="grid-table-item">
+	<td
+		ng-repeat="column in $grid.getShowColumns()">
+		{{column.columnType == 'numbers' ? itemsIndex : ''}}
+		{{item[column.name] | gridTableFormatter:column.type}}
 		<span ng-if="column.columnType == 'actions' && $grid.itemActions">
-			<span ng-click="$grid.callItemAction(action.fn, item, $event)" ng-repeat="action in $grid.itemActions" href="#">
+			<span
+				  ng-repeat="action in $grid.itemActions"
+				  ng-click="$grid.callItemAction(action.fn, item, $event)"
+				  href="#">
 				{{action.text}}
 				<span grid-table-item-action="" html="action.html"></span>
 			</span>
