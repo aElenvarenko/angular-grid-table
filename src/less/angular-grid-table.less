@@ -1,5 +1,3 @@
-@fontSize: 14px;
-
 .reset() {
 	margin: 0;
 	padding: 0;
@@ -25,9 +23,8 @@
 }
 
 .grid-table-wrapper {
-	* {
+	thead, tbody, tfoot, tr, th, td {
 		.reset();
-		font-size: @fontSize;
 	}
 	.grid-table-toolbar {
 		margin: 5px 0;

@@ -1,16 +1,20 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-20T10:22:31.010Z
+ * @version: 0.0.1 - 2015-04-30T06:25:29.119Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
 
 
-.grid-table-wrapper * {
+.grid-table-wrapper thead,
+.grid-table-wrapper tbody,
+.grid-table-wrapper tfoot,
+.grid-table-wrapper tr,
+.grid-table-wrapper th,
+.grid-table-wrapper td {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 14px;
 }
 .grid-table-wrapper .grid-table-toolbar {
   margin: 5px 0;

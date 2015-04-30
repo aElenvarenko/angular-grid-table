@@ -29,7 +29,7 @@
 				 on-view-by="viewBy"
 				 on-sort="sort"
 				 on-filter="filter"
-				 on-select="selectItem"
+				 on-select="onSelect"
 				 on-params="params"
 				 on-update="update">
 			</div>
@@ -47,12 +47,18 @@
 	</div>
 	<script type="text/javascript">
 		var app = angular.module('demo', ['gridTable']);
+		app.config([
+			function () {
+				
+			}
+		]);
 		app.controller('demoCtrl', [
 			'$scope',
 			function ($scope) {
 				$scope.columnsVar = 'columns';
 				$scope.columns = [
 					{name: 'id', label: 'ID', type: 'integer'},
+					{name: 'category.name', label: 'Category', type: 'string'},
 					{name: 'title', label: 'Title', type: 'string'},
 					{name: 'desc', label: 'Description', type: 'string'},
 					{name: 'type', label: 'Type', type: 'integer'},
@@ -62,6 +68,7 @@
 					{name: 'datetime', label: 'Date time', type: 'datetime', format: 'dd.mm.yyyy h:i:s'}
 				];
 				$scope.data = [];
+				
 				$scope.filters = {
 					type: {
 						value: 'id',
@@ -71,22 +78,52 @@
 							{id: 2, code: '2'},
 							{id: 3, code: '3'}
 						]
+					},
+					active: {
+						value: 'id',
+						label: 'label',
+						values: [
+							{id: 1, label: 'Yes'},
+							{id: 0, label: 'No'}
+						]
 					}
 				};
+				
+				$scope.actions = [
+					{
+						html: '<button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>',
+						fn: function (item, event) {
+							console.log(item);
+						}
+					},
+					{
+						html: '<button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove"></span></button>',
+						fn: function (item, event) {
+							$scope.data.splice($scope.data.indexOf(item), 1);
+						}
+					}
+				];
 
 				for (var i = 1; i <= 1000; i++) {
 					var date = new Date();
 					$scope.data.push({
 						id: i,
+						category: {
+							name: 'Category ' + (i <= 100 ? 1 : ( i <= 200 ? 2 : ''))
+						},
 						title: 'Title ' + i,
 						desc: 'Description ' + i,
 						type: i <= 100 ? 1 : ( i <= 200 ? 2 : ''),
 						price: i * 10,
-						active: i % 2 ? true : false,
+						active: i % 2 ? 1 : 0,
 						date: '2015-04-17',
 						datetime: '2015-04-17 16:25:30'
 					});
 				}
+				
+				$scope.onSelect = function (item) {
+					console.log(item);
+				};
 			}
 		]);
 	</script>

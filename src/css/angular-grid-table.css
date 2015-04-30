@@ -1,8 +1,12 @@
-.grid-table-wrapper * {
+.grid-table-wrapper thead,
+.grid-table-wrapper tbody,
+.grid-table-wrapper tfoot,
+.grid-table-wrapper tr,
+.grid-table-wrapper th,
+.grid-table-wrapper td {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 14px;
 }
 .grid-table-wrapper .grid-table-toolbar {
   margin: 5px 0;

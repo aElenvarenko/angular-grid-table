@@ -4,10 +4,10 @@
 	"author": "Alex Elenvarenko <alexelenvarenko@gmail.com>",
 	"description": "AngularJS grid table",
 	"keywords": [
-    "AngularJS",
-    "grid",
-    "table"
-  ],
+		"AngularJS",
+		"grid",
+		"table"
+	],
 	"license": "MIT",
 	"main": "gulpfile.js",
 	"scripts": {},

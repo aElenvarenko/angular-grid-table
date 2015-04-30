@@ -27,7 +27,7 @@ grid.controller('gridTableCtrl', [
 				filtered: false,
 				filterTimeout: 500,
 				multiSelect: false,
-				viewByList: [10, 25, 50],
+				viewByList: [10, 25, 50, 100],
 				text: {
 					viewBy: 'View by: ',
 					numbers: '#',
@@ -61,7 +61,7 @@ grid.controller('gridTableCtrl', [
 			/* Show or hide row numbers */
 			rowNumbers: false,
 			/* Enable or disable select item */
-			selectable: false,
+			selectable: true,
 			/* Enable or disable multi items select */
 			multiSelect: false,
 			/* Selectted item or items */
@@ -85,7 +85,7 @@ grid.controller('gridTableCtrl', [
 			/* View by count */
 			viewBy: 10,
 			/* View by list */
-			viewByList: [10, 25, 50],
+			viewByList: [10, 25, 50, 100],
 			/* Pager */
 			pager: {
 				/* Current page */
@@ -358,6 +358,15 @@ grid.controller('gridTableCtrl', [
 				event.preventDefault();
 				event.stopPropagation();
 				fn(item);
+			},
+			/**
+			 * Get item value function
+			 * @param {Object} item
+			 * @param {String} key
+			 * @return {Object}
+			 */
+			getValue: function (item, key) {
+				return $parse(key)(item);
 			},
 			/**
 			 * Set current page function

@@ -15,7 +15,7 @@ grid.filter('gridTableFormatter', [
 			},
 			formatters = {
 				'boolean': function (input) {
-					return (input == 1 || input == 'true' || input == true) ? config.formatters.boolean['true'] : config.formatters.boolean['false'];
+					return (input == 1 || input == 'true' || input === true) ? config.formatters.boolean['true'] : config.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;
@@ -25,7 +25,9 @@ grid.filter('gridTableFormatter', [
 				},
 				'currency': function (input) {
 					input += '';
-					if (input.indexOf('.') === -1) input += '.00';
+					if (input.indexOf('.') === -1) {
+						input += '.00';
+					}
 					return input;
 				},
 				'date': function (input) {
@@ -43,16 +45,17 @@ grid.filter('gridTableFormatter', [
 						input = input.replace(exp, '$3.$2.$1 $4');
 					}
 					return input;
-					return input;
 				},
 				'html': function (input) {
 					return input;
 				}
 			};
 		return function (input, type, format) {
-			if (input === undefined || input === null) return input;
+			if (input === undefined || input === null) {
+				return input;
+			}
 			if (formatters[type] && angular.isFunction(formatters[type])) {
-				input = formatters[type](input);
+				input = formatters[type](input, format);
 			}
 			return input;
 		};

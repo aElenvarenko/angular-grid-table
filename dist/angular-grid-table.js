@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-20T10:22:30.910Z
+ * @version: 0.0.1 - 2015-04-30T06:25:28.980Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -68,7 +68,7 @@ grid.controller('gridTableCtrl', [
 				filtered: false,
 				filterTimeout: 500,
 				multiSelect: false,
-				viewByList: [10, 25, 50],
+				viewByList: [10, 25, 50, 100],
 				text: {
 					viewBy: 'View by: ',
 					numbers: '#',
@@ -102,7 +102,7 @@ grid.controller('gridTableCtrl', [
 			/* Show or hide row numbers */
 			rowNumbers: false,
 			/* Enable or disable select item */
-			selectable: false,
+			selectable: true,
 			/* Enable or disable multi items select */
 			multiSelect: false,
 			/* Selectted item or items */
@@ -126,7 +126,7 @@ grid.controller('gridTableCtrl', [
 			/* View by count */
 			viewBy: 10,
 			/* View by list */
-			viewByList: [10, 25, 50],
+			viewByList: [10, 25, 50, 100],
 			/* Pager */
 			pager: {
 				/* Current page */
@@ -399,6 +399,15 @@ grid.controller('gridTableCtrl', [
 				event.preventDefault();
 				event.stopPropagation();
 				fn(item);
+			},
+			/**
+			 * Get item value function
+			 * @param {Object} item
+			 * @param {String} key
+			 * @return {Object}
+			 */
+			getValue: function (item, key) {
+				return $parse(key)(item);
 			},
 			/**
 			 * Set current page function
@@ -1171,9 +1180,37 @@ grid.factory('gridTableRemote', [
  */
 grid.factory('gridTableSettings', [
 	function () {
-		var defaults = {};
+		var defaults = {
+			template: '{toolbar}{header}{items}{footer}',
+				sorted: false,
+				multiSort: false,
+				sortParams: {
+					asc: 'asc',
+					desc: 'desc'
+				},
+				pageParams: {
+					page: 'page',
+					perPage: 'per-page'
+				},
+				filtered: false,
+				filterTimeout: 500,
+				multiSelect: false,
+				viewByList: [10, 25, 50],
+				text: {
+					viewBy: 'View by: ',
+					numbers: '#',
+					actions: 'Actions',
+					asc: '⇣',
+					desc: '⇡',
+					empty: 'Empty',
+					total: 'Total: '
+				}
+		};
 		return {
-			create: function (settings) {
+			get: function () {
+				return defaults;
+			},
+			extend: function (settings) {
 				return angular.extend(defaults, settings);
 			}
 		};
@@ -1196,7 +1233,7 @@ grid.filter('gridTableFormatter', [
 			},
 			formatters = {
 				'boolean': function (input) {
-					return (input == 1 || input == 'true' || input == true) ? config.formatters.boolean['true'] : config.formatters.boolean['false'];
+					return (input == 1 || input == 'true' || input === true) ? config.formatters.boolean['true'] : config.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;
@@ -1206,7 +1243,9 @@ grid.filter('gridTableFormatter', [
 				},
 				'currency': function (input) {
 					input += '';
-					if (input.indexOf('.') === -1) input += '.00';
+					if (input.indexOf('.') === -1) {
+						input += '.00';
+					}
 					return input;
 				},
 				'date': function (input) {
@@ -1224,16 +1263,17 @@ grid.filter('gridTableFormatter', [
 						input = input.replace(exp, '$3.$2.$1 $4');
 					}
 					return input;
-					return input;
 				},
 				'html': function (input) {
 					return input;
 				}
 			};
 		return function (input, type, format) {
-			if (input === undefined || input === null) return input;
+			if (input === undefined || input === null) {
+				return input;
+			}
 			if (formatters[type] && angular.isFunction(formatters[type])) {
-				input = formatters[type](input);
+				input = formatters[type](input, format);
 			}
 			return input;
 		};
@@ -1404,8 +1444,8 @@ grid.directive('gridTable', [
 grid.run(["$templateCache", function($templateCache) {
 $templateCache.put("grid-table-columns.html","<col ng-repeat=\"column in $grid.getShowColumns()\" class=\"{{\'grid-table-column-\' + column.columnType}}\">");
 $templateCache.put("grid-table-footer.html","<tr><td colspan=\"{{$grid.columnsCount}}\">{{$grid.text.total}}{{$grid.itemsCount}}</td></tr>");
-$templateCache.put("grid-table-header.html","<tr class=\"grid-table-headers\"><th ng-repeat=\"column in $grid.getShowColumns()\" ng-class=\"{\'sorted\': column.name === $grid.getSortColumn()}\"><span ng-if=\"column.columnType === \'data\'\"><a ng-click=\"$grid.setSortBy(column.name, null, $event)\" href=\"#\">{{column.label}} <i>{{column.name === $grid.getSortColumn() ? ($grid.getSortDir() === \'asc\' ? $grid.text.asc : $grid.text.desc) : \'\'}}</i></a></span> <span ng-if=\"column.columnType === \'numbers\'\">{{$grid.text.numbers}}</span> <span ng-if=\"column.columnType === \'actions\'\">{{$grid.text.actions}}</span></th></tr><tr class=\"grid-table-filter\"><td ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType === \'data\'\"><span ng-if=\"$grid.filters[column.name]\"><select ng-model=\"$grid.filter[column.name]\" ng-change=\"$grid.setFilterBy()\"><option value=\"\"></option><option ng-repeat=\"val in $grid.filters[column.name].values\" value=\"{{val[$grid.filters[column.name].value]}}\">{{val[$grid.filters[column.name].label]}}</option></select></span> <span ng-if=\"!$grid.filters[column.name]\"><input ng-model=\"$grid.filter[column.name]\" ng-change=\"$grid.setFilterBy()\"></span></span></td></tr>");
-$templateCache.put("grid-table-items.html","<tr ng-init=\"itemsIndex = $index + 1\" ng-repeat=\"item in $grid.getItems()\" ng-click=\"$grid.selectable ? $grid.selectItem(item) : return\" ng-class=\"{\'selectable\': $grid.selectable, \'active\': $grid.isSelectedItem(item)}\" class=\"grid-table-item\"><td ng-repeat=\"column in $grid.getShowColumns()\">{{column.columnType == \'numbers\' ? itemsIndex : \'\'}} {{item[column.name] | gridTableFormatter:column.type}} <span ng-if=\"column.columnType == \'actions\' && $grid.itemActions\"><span ng-repeat=\"action in $grid.itemActions\" ng-click=\"$grid.callItemAction(action.fn, item, $event)\" href=\"#\">{{action.text}} <span grid-table-item-action=\"\" html=\"action.html\"></span></span></span></td></tr><tr><td ng-show=\"$grid.itemsCount <= 0\" colspan=\"{{$grid.columnsCount}}\">{{$grid.text.empty}}</td></tr>");
+$templateCache.put("grid-table-header.html","<tr class=\"grid-table-headers\"><th ng-repeat=\"column in $grid.getShowColumns()\" ng-class=\"{\'sorted\': column.name === $grid.getSortColumn()}\"><span ng-if=\"column.columnType === \'data\'\"><a ng-click=\"$grid.setSortBy(column.name, null, $event)\" href=\"#\">{{column.label}} <i>{{column.name === $grid.getSortColumn() ? ($grid.getSortDir() === \'asc\' ? $grid.text.asc : $grid.text.desc) : \'\'}}</i></a></span> <span ng-if=\"column.columnType === \'checkbox\'\">{{$grid.text.checkbox}}</span> <span ng-if=\"column.columnType === \'numbers\'\">{{$grid.text.numbers}}</span> <span ng-if=\"column.columnType === \'actions\'\">{{$grid.text.actions}}</span></th></tr><tr class=\"grid-table-filter\"><td ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType === \'data\'\"><span ng-if=\"$grid.filters[column.name]\"><select ng-model=\"$grid.filter[column.name]\" ng-change=\"$grid.setFilterBy()\"><option value=\"\"></option><option ng-repeat=\"val in $grid.filters[column.name].values\" value=\"{{val[$grid.filters[column.name].value]}}\">{{val[$grid.filters[column.name].label]}}</option></select></span> <span ng-if=\"!$grid.filters[column.name]\"><input ng-model=\"$grid.filter[column.name]\" ng-change=\"$grid.setFilterBy()\"></span></span></td></tr>");
+$templateCache.put("grid-table-items.html","<tr ng-init=\"itemsIndex = $index + 1\" ng-repeat=\"item in $grid.getItems()\" ng-click=\"$grid.selectable ? $grid.selectItem(item) : return\" ng-class=\"{\'selectable\': $grid.selectable, \'active\': $grid.isSelectedItem(item)}\" class=\"grid-table-item\"><td ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType == \'checkbox\'\"><input ng-click=\"$grid.selectItem(item)\" ng-checked=\"$grid.isSelected(item)\" type=\"checkbox\"></span> {{column.columnType == \'numbers\' ? itemsIndex : \'\'}} {{$grid.getValue(item, column.name) | gridTableFormatter:column.type}} <span ng-if=\"column.columnType == \'actions\' && $grid.itemActions\"><span ng-repeat=\"action in $grid.itemActions\" ng-click=\"$grid.callItemAction(action.fn, item, $event)\">{{action.text}} <span grid-table-item-action=\"\" html=\"action.html\"></span></span></span></td></tr><tr><td ng-show=\"$grid.itemsCount <= 0\" colspan=\"{{$grid.columnsCount}}\">{{$grid.text.empty}}</td></tr>");
 $templateCache.put("grid-table-toolbar.html","<div class=\"grid-table-pager\"><ul class=\"pager\"><li ng-repeat=\"page in $grid.pager.items\" ng-click=\"$grid.setPage(page.index, $event)\" ng-class=\"{\'active\': page.index == $grid.getPage()}\" ng-disabled=\"page.disable\"><a href=\"#\">{{page.label}}</a></li></ul></div><div class=\"grid-table-view-by\"><span class=\"view-by-label\">{{$grid.text.viewBy}}</span><ul class=\"view-by\"><li ng-repeat=\"item in $grid.viewByList\" ng-click=\"$grid.setViewBy(item, $event)\" ng-class=\"{\'active\': item == $grid.viewBy}\"><a href=\"#\">{{item}}</a></li></ul></div><div class=\"grid-table-clear\"></div>");
 $templateCache.put("grid-table.html","<div class=\"grid-table-wrapper\"></div>");
 }]);
