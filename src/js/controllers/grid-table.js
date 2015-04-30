@@ -703,14 +703,14 @@ grid.controller('gridTableCtrl', [
 			if (attrs.ngModel) {
 				$scope.$grid.ngModelVar = attrs.ngModel;
 			}
+			if (attrs.rowNumbers) {
+				$scope.$grid.rowNumbers = attrs.rowNumbers;
+			}
 			if (attrs.filters) {
 				$scope.$grid.filters = $parse(attrs.filters)($scope);
 			}
 			if (attrs.actions) {
 				$scope.$grid.itemActions = $parse(attrs.actions)($scope);
-			}
-			if (attrs.rowNumbers) {
-				$scope.$grid.rowNumbers = attrs.rowNumbers;
 			}
 			if (attrs.text) {
 				var text = $parse(attrs.text)($scope);

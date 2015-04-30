@@ -4,8 +4,7 @@
 	ng-click="$grid.selectable ? $grid.selectItem(item) : return"
 	ng-class="{'selectable': $grid.selectable, 'active': $grid.isSelectedItem(item)}"
 	class="grid-table-item">
-	<td
-		ng-repeat="column in $grid.getShowColumns()">
+	<td ng-repeat="column in $grid.getShowColumns()">
 		<span ng-if="column.columnType == 'checkbox'">
 			<input ng-click="$grid.selectItem(item)" ng-checked="$grid.isSelected(item)" type="checkbox"/>
 		</span>

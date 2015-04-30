@@ -5,7 +5,7 @@ grid.factory('gridTableRemote', [
 	'$q',
 	'$http',
 	'$parse',
-	function () {
+	function ($q, $http, $parse) {
 		var settings = {
 			url: '',
 			method: 'get',

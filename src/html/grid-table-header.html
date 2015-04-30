@@ -17,12 +17,22 @@
 	<td ng-repeat="column in $grid.getShowColumns()">
 		<span ng-if="column.columnType === 'data'">
 			<span ng-if="$grid.filters[column.name]">
-				<select
+				<span ng-if="$grid.filters[column.name].name">
+					<select
+						ng-model="$grid.filter[$grid.filters[column.name].name]"
+						ng-change="$grid.setFilterBy()">
+						<option value=""></option>
+						<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
+					</select>
+				</span>
+				<span ng-if="!$grid.filters[column.name].name">
+					<select
 						ng-model="$grid.filter[column.name]"
 						ng-change="$grid.setFilterBy()">
-					<option value=""></option>
-					<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
-				</select>
+						<option value=""></option>
+						<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
+					</select>
+				</span>
 			</span>
 			<span ng-if="!$grid.filters[column.name]">
 				<input
