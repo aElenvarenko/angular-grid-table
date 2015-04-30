@@ -39,7 +39,7 @@ grid.filter('gridTableFormatter', [
 					return input;
 				},
 				'datetime': function (input) {
-					var exp = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})\s(([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}))/;
+					var exp = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})\s(([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}))(.*)/;
 					input += '';
 					if (exp.test(input)) {
 						input = input.replace(exp, '$3.$2.$1 $4');

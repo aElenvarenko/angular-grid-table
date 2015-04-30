@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-30T06:25:28.980Z
+ * @version: 0.0.1 - 2015-04-30T08:47:12.689Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1257,7 +1257,7 @@ grid.filter('gridTableFormatter', [
 					return input;
 				},
 				'datetime': function (input) {
-					var exp = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})\s(([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}))/;
+					var exp = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})\s(([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}))(.*)/;
 					input += '';
 					if (exp.test(input)) {
 						input = input.replace(exp, '$3.$2.$1 $4');
