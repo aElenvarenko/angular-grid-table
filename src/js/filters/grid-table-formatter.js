@@ -4,16 +4,7 @@
 grid.filter('gridTableFormatter', [
 	'gridTableConfig',
 	function (config) {
-		var types = {
-				'boolean': '',
-				'integer': '',
-				'string': '',
-				'currency': '',
-				'date': '',
-				'datetime': '',
-				'html': ''
-			},
-			formatters = {
+		var formatters = {
 				'boolean': function (input) {
 					return (input == 1 || input == 'true' || input === true) ? config.formatters.boolean['true'] : config.formatters.boolean['false'];
 				},

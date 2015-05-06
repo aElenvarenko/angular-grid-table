@@ -7,7 +7,7 @@ grid.directive('gridTable', [
 	function ($parse, config) {
 		return {
 			restrict: 'EA',
-			require: ['^gridTable', '^ngModel'],
+			require: ['^gridTable', 'ngModel'],
 			templateUrl: function () {
 				return config.tplUrl + 'grid-table.html';
 			},
@@ -22,7 +22,7 @@ grid.directive('gridTable', [
 					element = $grid.renderTpl(element, attrs);
 					/* Compile element */
 					$grid.compileTpl(scope, element);
-					
+					/* Can select items */
 					if (attrs.selectable) {
 						scope.$watch(attrs.selectable, function (newValue, oldValue) {
 							if (angular.equals(newValue, oldValue)) {
@@ -31,7 +31,7 @@ grid.directive('gridTable', [
 							$grid.set('selectable', $parse(attrs.selectable)(scope));
 						});
 					}
-					
+					/* Columns */
 					if (attrs.columns) {
 						$grid.setColumns($parse(attrs.columns)(scope));
 						scope.$watchCollection(attrs.columns, function (newValue, oldValue) {
@@ -54,6 +54,7 @@ grid.directive('gridTable', [
 							}
 						});
 					}
+					/* ngModel */
 					$grid.setItems($parse(attrs.ngModel)(scope));
 					scope.$watchCollection(attrs.ngModel, function (newValue, oldValue) {
 						if (angular.equals(newValue, oldValue)) {
@@ -61,6 +62,7 @@ grid.directive('gridTable', [
 						}
 						$grid.setItems(newValue);
 					});
+					/* Loading */
 					if (attrs.loading) {
 						scope.$watch(attrs.loading, function (newValue, oldValue) {
 							if (angular.equals(newValue, oldValue)) {
@@ -69,6 +71,7 @@ grid.directive('gridTable', [
 							$grid.setLoading(newValue);
 						});
 					}
+					/* Params */
 					if (attrs.params) {
 						scope.$watchCollection(attrs.params, function (newValue, oldValue) {
 							if (angular.equals(newValue, oldValue)) {

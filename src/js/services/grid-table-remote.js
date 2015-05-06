@@ -5,7 +5,7 @@ grid.factory('gridTableRemote', [
 	'$q',
 	'$http',
 	'$parse',
-	function ($q, $http, $parse) {
+	function ($q, $http/*, $parse*/) {
 		var settings = {
 			url: '',
 			method: 'get',
@@ -17,7 +17,7 @@ grid.factory('gridTableRemote', [
 			 * Set
 			 * @param {Array|Object} items
 			 */
-			set: function (items) {
+			set: function (/*items*/) {
 				// TODO add save method
 			},
 			/**
@@ -26,7 +26,7 @@ grid.factory('gridTableRemote', [
 			 * @return {Object}
 			 */
 			get: function (data) {
-				return $q(function (resolve, reject) {
+				return $q(function (resolve/*, reject*/) {
 					$http({
 						url: settings.url,
 						method: settings.method.toUpperCase,
@@ -42,7 +42,7 @@ grid.factory('gridTableRemote', [
 			 * Sync
 			 * @param {Array|Object} items
 			 */
-			sync: function (items) {
+			sync: function (/*items*/) {
 				// TODO add sync editing method
 			}
 		};

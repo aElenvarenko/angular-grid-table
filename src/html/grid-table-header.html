@@ -30,7 +30,7 @@
 					<select
 						ng-model="$grid.filter[column.name]"
 						ng-change="$grid.setFilterBy()"
-						id="{{$grid.genId(column.name)}}">
+						id="{{$grid.genId($grid.filters[column.name].name)}}">
 						<option value=""></option>
 						<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
 					</select>

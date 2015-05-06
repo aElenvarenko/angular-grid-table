@@ -7,37 +7,11 @@ grid.controller('gridTableCtrl', [
 	'$parse',
 	'$filter',
 	'$interval',
+	'gridTableSettings',
 	'gridTablePager',
-	function ($scope, $compile, $parse, $filter, $interval, fPager) {
+	function ($scope, $compile, $parse, $filter, $interval, fSettings, fPager) {
 		var ctrl = this;
 		$scope.$grid = {
-			/* Defaults */
-			defaults: {
-				template: '{toolbar}{header}{items}{footer}',
-				sorted: false,
-				multiSort: false,
-				sortParams: {
-					asc: 'asc',
-					desc: 'desc'
-				},
-				pageParams: {
-					page: 'page',
-					perPage: 'per-page'
-				},
-				filtered: false,
-				filterTimeout: 500,
-				multiSelect: false,
-				viewByList: [10, 25, 50],
-				text: {
-					viewBy: 'View by: ',
-					numbers: '#',
-					actions: 'Actions',
-					asc: '⇣',
-					desc: '⇡',
-					empty: 'Empty',
-					total: 'Total: '
-				}
-			},
 			/* Enable or disable debug mode */
 			debug: false,
 			/* Remote data store */
@@ -143,6 +117,15 @@ grid.controller('gridTableCtrl', [
 				return name.replace(/\.|\_/g, '-');
 			},
 			/**
+			 * Get item value function
+			 * @param {Object} item
+			 * @param {String} key
+			 * @return {Object}
+			 */
+			getValue: function (item, key) {
+				return $parse(key)(item);
+			},
+			/**
 			 * Build columns function
 			 * @param {Array|Object} columns
 			 * @param {Object} item
@@ -215,7 +198,7 @@ grid.controller('gridTableCtrl', [
 			},
 			/**
 			 * Columns getter function
-			 * @returns {Array}
+			 * @return {Array}
 			 */
 			getColumns: function () {
 				return this.columns || [];
@@ -299,10 +282,10 @@ grid.controller('gridTableCtrl', [
 					this.items = items;
 				}
 				this.itemsCount = this.items.length || 0;
-				this.triggerEvent('onItemsUpdate');
 				if (!this.remote) {
 					this.loading = false;
 				}
+				this.triggerEvent('onItemsUpdate');
 			},
 			/**
 			 * Items getter function
@@ -388,15 +371,6 @@ grid.controller('gridTableCtrl', [
 				event.preventDefault();
 				event.stopPropagation();
 				fn(item);
-			},
-			/**
-			 * Get item value function
-			 * @param {Object} item
-			 * @param {String} key
-			 * @return {Object}
-			 */
-			getValue: function (item, key) {
-				return $parse(key)(item);
 			},
 			/**
 			 * Set current page function
@@ -609,7 +583,9 @@ grid.controller('gridTableCtrl', [
 				if (!event) {
 					return;
 				}
-				this[event](params);
+				if (angular.isFunction(this[event])) {
+					this[event](params);
+				}
 			},
 			/**
 			 * Remove event listener function
@@ -627,6 +603,9 @@ grid.controller('gridTableCtrl', [
 			 * Columns update event function
 			 */
 			onColumnsUpdate: function () {
+				if (this.debug) {
+					console.info('grid-table: columns update event handler');
+				}
 				if (this.events.onColumnsUpdate !== null && angular.isFunction(this.events.onColumnsUpdate)) {
 					this.events.onColumnsUpdate(this.columns);
 				}
@@ -635,6 +614,9 @@ grid.controller('gridTableCtrl', [
 			 * Items update event function
 			 */
 			onItemsUpdate: function () {
+				if (this.debug) {
+					console.info('grid-table: items update event handler');
+				}
 				if (this.events.onItemsUpdate !== null && angular.isFunction(this.events.onItemsUpdate)) {
 					this.events.onItemsUpdate(this.items);
 				}
@@ -665,6 +647,9 @@ grid.controller('gridTableCtrl', [
 			 * Item select event function
 			 */
 			onSelect: function () {
+				if (this.debug) {
+					console.info('grid-table: item select event handler');
+				}
 				if (this.events.onSelect !== null && angular.isFunction(this.events.onSelect)) {
 					this.events.onSelect(this.selected);
 				}
@@ -673,6 +658,9 @@ grid.controller('gridTableCtrl', [
 			 * View by event function
 			 */
 			onViewBy: function () {
+				if (this.debug) {
+					console.info('grid-table: view by count event handler');
+				}
 				if (this.events.onViewBy !== null && angular.isFunction(this.events.onViewBy)) {
 					this.events.onViewBy(this.viewBy);
 				}
@@ -681,6 +669,9 @@ grid.controller('gridTableCtrl', [
 			 * Page event function
 			 */
 			onPage: function () {
+				if (this.debug) {
+					console.info('grid-table: page update event handler');
+				}
 				if (this.events.onPage !== null && angular.isFunction(this.events.onPage)) {
 					this.events.onPage(this.pager);
 				}
@@ -689,6 +680,9 @@ grid.controller('gridTableCtrl', [
 			 * Sort event function
 			 */
 			onSort: function () {
+				if (this.debug) {
+					console.info('grid-table: sort update event handler');
+				}
 				if (this.events.onSort !== null && angular.isFunction(this.events.onSort)) {
 					this.events.onSort(this.sort);
 				}
@@ -697,6 +691,9 @@ grid.controller('gridTableCtrl', [
 			 * Filter event function
 			 */
 			onFilter: function () {
+				if (this.debug) {
+					console.info('grid-table: filter update handler');
+				}
 				if (this.events.onFilter !== null && angular.isFunction(this.events.onFilter)) {
 					this.events.onFilter(this.filter);
 				}
@@ -705,6 +702,9 @@ grid.controller('gridTableCtrl', [
 			 * Params event function
 			 */
 			onParams: function () {
+				if (this.debug) {
+					console.info('grid-table: params update event handler');
+				}
 				if (this.events.onParams !== null && angular.isFunction(this.events.onParams)) {
 					this.events.onParams(this.params);
 				}
@@ -713,6 +713,9 @@ grid.controller('gridTableCtrl', [
 			 * Update event function
 			 */
 			onUpdate: function () {
+				if (this.debug) {
+					console.info('grid-table: update event handler');
+				}
 				if (this.events.onUpdate !== null && angular.isFunction(this.events.onUpdate)) {
 					this.events.onUpdate(this.items, this.columns, this.pager, this.viewBy, this.sort, this.filter);
 				}	
@@ -721,6 +724,9 @@ grid.controller('gridTableCtrl', [
 			 * Error event function
 			 */
 			onError: function () {
+				if (this.debug) {
+					console.info('grid-table: error event handler');
+				}
 				if (this.events.onError !== null && angular.isFunction(this.events.onError)) {
 					this.events.onError(this.errors);
 				}
@@ -730,6 +736,7 @@ grid.controller('gridTableCtrl', [
 		 * Init function
 		 */
 		ctrl.init = function (element, attrs) {
+			var defaults = fSettings.get();
 			if (attrs.settings) {
 				
 			}
@@ -756,9 +763,9 @@ grid.controller('gridTableCtrl', [
 			}
 			if (attrs.text) {
 				var text = $parse(attrs.text)($scope);
-				$scope.$grid.text = angular.extend($scope.$grid.defaults.text, text);
+				$scope.$grid.text = angular.extend(defaults.text, text);
 			} else {
-				$scope.$grid.text = $scope.$grid.defaults.text;
+				$scope.$grid.text = defaults.text;
 			}
 			for (var eventName in $scope.$grid.events) {
 				if (attrs[eventName] && $scope.$grid.events[eventName] === null) {
@@ -788,14 +795,14 @@ grid.controller('gridTableCtrl', [
 		 * @return {Object}
 		 */
 		ctrl.renderTpl = function (element, attrs) {
-			var template = attrs.template || $scope.$grid.defaults.template,
+			var template = attrs.template, // || $scope.$grid.defaults.template,
 				matches = template.match(/\{[a-z\:]+\}/g),
 				i,
 				fn,
 				params;
 			if (matches && matches.length > 0) {
 				for (i in matches) {
-					fn = matches[i].replace(/\{|\}/g, ''),
+					fn = matches[i].replace(/\{|\}/g, '');
 					params = null;
 					if (fn.indexOf(':') !== -1) {
 						params = fn.split(':');
