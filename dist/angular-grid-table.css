@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-04-30T11:32:26.538Z
+ * @version: 0.0.1 - 2015-05-06T07:59:04.369Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -112,6 +112,10 @@
 .grid-table-wrapper .grid-table-table tfoot > tr > th,
 .grid-table-wrapper .grid-table-table tfoot > tr > td {
   padding: 6px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .grid-table-wrapper .grid-table-table thead > tr > th,
 .grid-table-wrapper .grid-table-table tbody > tr > th {
@@ -153,11 +157,11 @@
 .grid-table-wrapper .grid-table-table .grid-table-header .grid-table-filter td {
   padding: 2px;
 }
-.grid-table-wrapper .grid-table-table .grid-table-header .grid-table-filter td span input {
+.grid-table-wrapper .grid-table-table .grid-table-header .grid-table-filter td input {
   padding: 2px 6px;
   width: 100%;
 }
-.grid-table-wrapper .grid-table-table .grid-table-header .grid-table-filter td span select option {
+.grid-table-wrapper .grid-table-table .grid-table-header .grid-table-filter td select option {
   padding: 2px 6px;
 }
 .grid-table-wrapper .grid-table-table .grid-table-items .grid-table-item:hover {

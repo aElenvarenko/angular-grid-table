@@ -16,6 +16,8 @@
 		<div class="container">
 			<div
 				 grid-table=""
+				 debug="true"
+				 selectable="grid.selectable"
 				 loading="loading"
 				 template="{toolbar}{header}{items}{footer}"
 				 ng-model="data"
@@ -41,6 +43,7 @@
 						<input ng-model="columnsVar" type="text" class="form-control"/>
 					</div>
 				</div>
+				<button ng-click="grid.selectable = !grid.selectable" class="btn btn-primary">Set selectable {{grid.selectable}}</button>
 				<button ng-click="loading = !loading" class="btn btn-primary">Set loading {{loading}}</button>
 			</form>
 		</div>
@@ -55,6 +58,9 @@
 		app.controller('demoCtrl', [
 			'$scope',
 			function ($scope) {
+				$scope.grid = {
+					selectable: false
+				};
 				$scope.columnsVar = 'columns';
 				$scope.columns = [
 					{name: 'id', label: 'ID', type: 'integer'},

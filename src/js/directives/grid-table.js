@@ -16,9 +16,22 @@ grid.directive('gridTable', [
 			compile: function () {
 				return function (scope, element, attrs, ctrls) {
 					var $grid = ctrls[0];
+					/* Init grid by element and attrs */
 					$grid.init(element, attrs);
+					/* Render element html */
 					element = $grid.renderTpl(element, attrs);
+					/* Compile element */
 					$grid.compileTpl(scope, element);
+					
+					if (attrs.selectable) {
+						scope.$watch(attrs.selectable, function (newValue, oldValue) {
+							if (angular.equals(newValue, oldValue)) {
+								return;
+							}
+							$grid.set('selectable', $parse(attrs.selectable)(scope));
+						});
+					}
+					
 					if (attrs.columns) {
 						$grid.setColumns($parse(attrs.columns)(scope));
 						scope.$watchCollection(attrs.columns, function (newValue, oldValue) {

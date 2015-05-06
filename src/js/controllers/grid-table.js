@@ -27,7 +27,7 @@ grid.controller('gridTableCtrl', [
 				filtered: false,
 				filterTimeout: 500,
 				multiSelect: false,
-				viewByList: [10, 25, 50, 100],
+				viewByList: [10, 25, 50],
 				text: {
 					viewBy: 'View by: ',
 					numbers: '#',
@@ -40,7 +40,7 @@ grid.controller('gridTableCtrl', [
 			},
 			/* Enable or disable debug mode */
 			debug: false,
-			/* Remote actions */
+			/* Remote data store */
 			remote: false,
 			/* Loading status */
 			loading: false,
@@ -85,7 +85,7 @@ grid.controller('gridTableCtrl', [
 			/* View by count */
 			viewBy: 10,
 			/* View by list */
-			viewByList: [10, 25, 50, 100],
+			viewByList: [10, 25, 50],
 			/* Pager */
 			pager: {
 				/* Current page */
@@ -134,6 +134,14 @@ grid.controller('gridTableCtrl', [
 			},
 			/* Text */
 			text: {},
+			/**
+			 * Generate id function
+			 * @param {String} name
+			 * @return {String}
+			 */
+			genId: function (name) {
+				return name.replace(/\.|\_/g, '-');
+			},
 			/**
 			 * Build columns function
 			 * @param {Array|Object} columns
@@ -217,7 +225,7 @@ grid.controller('gridTableCtrl', [
 			 * @param {String} name
 			 * @return {Boolean}
 			 */
-			isHiddenColumns: function (name) {
+			isColumnHidden: function (name) {
 				return this.hiddenColumns.indexOf(name) !== -1;
 			},
 			/**
@@ -230,7 +238,7 @@ grid.controller('gridTableCtrl', [
 				if (!name) {
 					this.hiddenColumns = [];
 				} else {
-					if (!this.isHiddenColumns(name)) {
+					if (!this.isColumnHidden(name)) {
 						this.hiddenColumns.push(name);
 					} else {
 						this.hiddenColumns.splice(this.hiddenColumns.indexOf(name), 1);
@@ -242,9 +250,10 @@ grid.controller('gridTableCtrl', [
 			 * @return {Array}
 			 */
 			getShowColumns: function () {
-				var columns = [];
-				for (var i in this.columns) {
-					if (!this.isHiddenColumns(this.columns[i].name) || this.columns[i].columnType !== 'data') {
+				var columns = [],
+					i;
+				for (i in this.columns) {
+					if (!this.isColumnHidden(this.columns[i].name) || this.columns[i].columnType !== 'data') {
 						columns.push(this.columns[i]);
 					}
 				}
@@ -303,11 +312,32 @@ grid.controller('gridTableCtrl', [
 				return this.items || [];
 			},
 			/**
+			 * Item click event handler function
+			 * @param {Object} item
+			 * @param {Object} event
+			 */
+			itemClick: function (item, event) {
+				event.preventDefault();
+				event.stopPropagation();
+				if (this.selectable) {
+					this.itemSelect(item);
+				}
+				this.triggerEvent('onItemClick');
+			},
+			/**
+			 * Item dblclick event handler function
+			 * @param {Object} item
+			 * @param {Object} event
+			 */
+			itemDblClick: function (/*item, event*/) {
+				this.triggerEvent('onItemDblClick');
+			},
+			/**
 			 * Check item is selected function
 			 * @param {Object} item
 			 * @return {Boolean}
 			 */
-			isSelectedItem: function (item) {
+			isItemSelected: function (item) {
 				if (this.selected) {
 					if (this.multiSelect) {
 						if (angular.isArray(this.selected) && this.selected.length > 0) {
@@ -323,12 +353,12 @@ grid.controller('gridTableCtrl', [
 			 * Select item function
 			 * @param {Object} item
 			 */
-			selectItem: function (item) {
+			itemSelect: function (item) {
 				if (!item) {
 					this.selected = null;
 					return;
 				}
-				var selected = this.isSelectedItem(item);
+				var selected = this.isItemSelected(item);
 				if (this.multiSelect) {
 					if (selected) {
 						this.selected.splice(this.selected.indexOf(item), 1);
@@ -354,7 +384,7 @@ grid.controller('gridTableCtrl', [
 			 * @param {Object} item
 			 * @param {Object} event
 			 */
-			callItemAction: function (fn, item, event) {
+			itemActionCall: function (fn, item, event) {
 				event.preventDefault();
 				event.stopPropagation();
 				fn(item);
@@ -374,6 +404,7 @@ grid.controller('gridTableCtrl', [
 			 */
 			setPage: function (index, event) {
 				event.preventDefault();
+				event.stopPropagation();
 				if (this.pager.current == index) {
 					return;
 				}
@@ -398,6 +429,7 @@ grid.controller('gridTableCtrl', [
 			 */
 			setViewBy: function (count, event) {
 				event.preventDefault();
+				event.stopPropagation();
 				if (this.viewBy == count) {
 					return;
 				}
@@ -437,6 +469,7 @@ grid.controller('gridTableCtrl', [
 			 */
 			setSortBy: function (column, dir, event) {
 				event.preventDefault();
+				event.stopPropagation();
 				if (this.sort.column === column) {
 					this.sort.dir = this.sort.dir === 'asc' ? 'desc' : 'asc';
 				} else {
@@ -610,6 +643,9 @@ grid.controller('gridTableCtrl', [
 			 * Item click event function
 			 */
 			onItemClick: function () {
+				if (this.debug) {
+					console.info('grid-table: item click event handler');
+				}
 				if (this.events.onItemClick !== null && angular.isFunction(this.events.onItemClick)) {
 					this.events.onItemClick(this.selected);
 				}
@@ -618,6 +654,9 @@ grid.controller('gridTableCtrl', [
 			 * Item dbl click function
 			 */
 			onItemDblClick: function () {
+				if (this.debug) {
+					console.info('grid-table: item dbl click event handler');
+				}
 				if (this.events.onItemDblClick !== null && angular.isFunction(this.events.onItemDblClick)) {
 					this.events.onItemDblClick(this.selected);
 				}
@@ -703,6 +742,9 @@ grid.controller('gridTableCtrl', [
 			if (attrs.ngModel) {
 				$scope.$grid.ngModelVar = attrs.ngModel;
 			}
+			if (attrs.selectable) {
+				$scope.$grid.selectable = attrs.selectable;
+			}
 			if (attrs.rowNumbers) {
 				$scope.$grid.rowNumbers = attrs.rowNumbers;
 			}
@@ -734,6 +776,12 @@ grid.controller('gridTableCtrl', [
 			
 		};
 		/**
+		 * Parse settings function
+		 */
+		ctrl.parseSetting = function () {
+			
+		};
+		/**
 		 * Render template function
 		 * @param {Object} element
 		 * @param {Object} attrs
@@ -741,11 +789,14 @@ grid.controller('gridTableCtrl', [
 		 */
 		ctrl.renderTpl = function (element, attrs) {
 			var template = attrs.template || $scope.$grid.defaults.template,
-				matches = template.match(/\{[a-z\:]+\}/g);
+				matches = template.match(/\{[a-z\:]+\}/g),
+				i,
+				fn,
+				params;
 			if (matches && matches.length > 0) {
-				for (var i in matches) {
-					var fn = matches[i].replace(/\{|\}/g, ''),
-						params = null;
+				for (i in matches) {
+					fn = matches[i].replace(/\{|\}/g, ''),
+					params = null;
 					if (fn.indexOf(':') !== -1) {
 						params = fn.split(':');
 						fn = params.splice(0, 1)[0];
@@ -862,6 +913,12 @@ grid.controller('gridTableCtrl', [
 				} else {
 					ctrl[key] = value;
 				}
+			} else if ($scope.$grid[key]) {
+				if (angular.isFunction($scope.$grid[key])) {
+					$scope.$grid[key](value);
+				} else {
+					$scope.$grid[key] = value;
+				}
 			} else if (ctrl[fnName]) {
 				if (angular.isFunction(ctrl[fnName])) {
 					ctrl[fnName](value);
@@ -881,6 +938,12 @@ grid.controller('gridTableCtrl', [
 					return ctrl[key];
 				} else {
 					return ctrl[key];
+				}
+			} else if ($scope.$grid[key]) {
+				if (angular.isFunction($scope.$grid[key])) {
+					return $scope.$grid[key]();
+				} else {
+					return $scope.$grid[key];
 				}
 			} else if (ctrl[fnName]) {
 				if (angular.isFunction(ctrl[fnName])) {
