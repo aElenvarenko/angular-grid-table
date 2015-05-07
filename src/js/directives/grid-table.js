@@ -3,13 +3,13 @@
  */
 grid.directive('gridTable', [
 	'$parse',
-	'gridTableConfig',
-	function ($parse, config) {
+	'gridTableGlobals',
+	function ($parse, cGlobals) {
 		return {
 			restrict: 'EA',
 			require: ['^gridTable', 'ngModel'],
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table.html';
+				return cGlobals.tplUrl + 'grid-table.html';
 			},
 			controller: 'gridTableCtrl',
 			controllerAs: '$gridCtrl',
@@ -33,34 +33,34 @@ grid.directive('gridTable', [
 					}
 					/* Columns */
 					if (attrs.columns) {
-						$grid.setColumns($parse(attrs.columns)(scope));
+						$grid.set('columns', $parse(attrs.columns)(scope));
 						scope.$watchCollection(attrs.columns, function (newValue, oldValue) {
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
-							$grid.setColumns(newValue);
+							$grid.set('columns', newValue);
 						});
 					} else {
 						var items = $parse(attrs.ngModel)(scope);
 						if (items && items.length > 0) {
-							$grid.setColumnsByModel(items[0]);
+							$grid.set('columnsByModel', items[0]);
 						}
 						scope.$watchCollection(attrs.ngModel, function (newValue, oldValue) {
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
 							if (newValue && newValue.length > 0) {
-								$grid.setColumnsByModel(newValue[0]);
+								$grid.set('columnsByModel', newValue[0]);
 							}
 						});
 					}
 					/* ngModel */
-					$grid.setItems($parse(attrs.ngModel)(scope));
+					$grid.set('items', $parse(attrs.ngModel)(scope));
 					scope.$watchCollection(attrs.ngModel, function (newValue, oldValue) {
 						if (angular.equals(newValue, oldValue)) {
 							return;
 						}
-						$grid.setItems(newValue);
+						$grid.set('items', newValue);
 					});
 					/* Loading */
 					if (attrs.loading) {
@@ -68,7 +68,7 @@ grid.directive('gridTable', [
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
-							$grid.setLoading(newValue);
+							$grid.set('loading', newValue);
 						});
 					}
 					/* Params */
@@ -77,7 +77,7 @@ grid.directive('gridTable', [
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
-							$grid.setParams(newValue);
+							$grid.set('params', newValue);
 						});
 					}
 				};

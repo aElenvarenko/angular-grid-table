@@ -6,10 +6,10 @@
 	ng-class="{'selectable': $grid.selectable, 'active': $grid.isItemSelected(item)}"
 	class="grid-table-item">
 	<td ng-repeat="column in $grid.getShowColumns()">
+		{{column.columnType == 'numbers' ? itemsIndex : ''}}
 		<span ng-if="column.columnType == 'checkbox'">
 			<input ng-click="$grid.selectItem(item)" ng-checked="$grid.isItemSelected(item)" type="checkbox"/>
 		</span>
-		{{column.columnType == 'numbers' ? itemsIndex : ''}}
 		{{$grid.getValue(item, column.name) | gridTableFormatter:column.type}}
 		<span ng-if="column.columnType == 'actions' && $grid.itemActions">
 			<span

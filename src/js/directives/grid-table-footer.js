@@ -2,13 +2,13 @@
  * Directive gridTableFooter
  */
 grid.directive('gridTableFooter', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-footer.html';
+				return cGlobals.tplUrl + 'grid-table-footer.html';
 			}
 		};
 	}

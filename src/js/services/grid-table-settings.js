@@ -4,21 +4,7 @@
 grid.factory('gridTableSettings', [
 	function () {
 		var defaults = {
-			template: '{toolbar}{header}{items}{footer}',
-				sorted: false,
-				multiSort: false,
-				sortParams: {
-					asc: 'asc',
-					desc: 'desc'
-				},
-				pageParams: {
-					page: 'page',
-					perPage: 'per-page'
-				},
-				filtered: false,
-				filterTimeout: 500,
-				multiSelect: false,
-				viewByList: [10, 25, 50],
+				template: '{toolbar}{header}{items}{footer}',
 				text: {
 					viewBy: 'View by: ',
 					numbers: '#',
@@ -27,8 +13,22 @@ grid.factory('gridTableSettings', [
 					desc: '⇡',
 					empty: 'Empty',
 					total: 'Total: '
-				}
-		};
+				},
+				pageParams: {
+					page: 'page',
+					perPage: 'per-page'
+				},
+				viewByList: [10, 25, 50],
+				sorted: false,
+				multiSort: false,
+				sortParams: {
+					asc: 'asc',
+					desc: 'desc'
+				},
+				filtered: false,
+				filterTimeout: 500,
+				multiSelect: false
+			};
 		return {
 			get: function () {
 				return defaults;

@@ -2,13 +2,13 @@
  * Directive gridTableItems
  */
 grid.directive('gridTableItems', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-items.html';
+				return cGlobals.tplUrl + 'grid-table-items.html';
 			}
 		};
 	}

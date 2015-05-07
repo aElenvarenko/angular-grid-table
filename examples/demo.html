@@ -18,8 +18,7 @@
 				 grid-table=""
 				 debug="true"
 				 selectable="grid.selectable"
-				 loading="loading"
-				 template="{toolbar}{header}{items}{footer}"
+				 loading="grid.loading"
 				 ng-model="data"
 				 columns="{{columnsVar}}"
 				 filters="filters"
@@ -44,21 +43,28 @@
 					</div>
 				</div>
 				<button ng-click="grid.selectable = !grid.selectable" class="btn btn-primary">Set selectable {{grid.selectable}}</button>
-				<button ng-click="loading = !loading" class="btn btn-primary">Set loading {{loading}}</button>
+				<button ng-click="grid.loading = !grid.loading" class="btn btn-primary">Set loading {{grid.loading}}</button>
 			</form>
 		</div>
 	</div>
 	<script type="text/javascript">
 		var app = angular.module('demo', ['gridTable']);
 		app.config([
-			function () {
-				
+			'gridTableGlobals',
+			function (gridTableGlobals) {
+				gridTableGlobals.set('text', {
+					viewBy: 'Показывать по: ',
+					empty: 'Список пуст',
+					actions: 'Действия',
+					total: 'Всего: '
+				});
 			}
 		]);
 		app.controller('demoCtrl', [
 			'$scope',
 			function ($scope) {
 				$scope.grid = {
+					loading: false,
 					selectable: false
 				};
 				$scope.columnsVar = 'columns';

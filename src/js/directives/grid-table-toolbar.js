@@ -2,13 +2,13 @@
  * Directive gridTableToolbar
  */
 grid.directive('gridTableToolbar', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-toolbar.html';
+				return cGlobals.tplUrl + 'grid-table-toolbar.html';
 			}
 		};
 	}

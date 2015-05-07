@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-06T14:02:33.306Z
+ * @version: 0.0.1 - 2015-05-07T09:01:59.605Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -12,8 +12,14 @@ var grid = angular.module('gridTable', []);
 /**
  * Constant gridTableConfig
  */
-grid.constant('gridTableConfig', {
+grid.constant('gridTableGlobals', {
+	/**/
 	tplUrl: '',
+	/**/
+	template: '{toolbar}{header}{items}{footer}',
+	/**/
+	theme: '',
+	/**/
 	text: {
 		viewBy: 'View by: ',
 		numbers: '#',
@@ -23,6 +29,7 @@ grid.constant('gridTableConfig', {
 		empty: 'Empty',
 		total: 'Total: '
 	},
+	/**/
 	formatters: {
 		boolean: {
 			'true': 'Yes',
@@ -37,6 +44,18 @@ grid.constant('gridTableConfig', {
 		datetime: {
 			format: 'd.m.Y H:i:s'
 		}
+	},
+	/* Setter function */
+	set: function (key, value) {
+		if (angular.isObject(this[key])) {
+			this[key] = angular.extend(this[key], value);
+		} else {
+			this[key] = value;
+		}
+	},
+	/* Getter function */
+	get: function (key) {
+		return this[key] || null;
 	}
 });
 /**
@@ -48,39 +67,35 @@ grid.controller('gridTableCtrl', [
 	'$parse',
 	'$filter',
 	'$interval',
+	'gridTableGlobals',
 	'gridTableSettings',
 	'gridTablePager',
-	function ($scope, $compile, $parse, $filter, $interval, fSettings, fPager) {
+	function ($scope, $compile, $parse, $filter, $interval, cGlobals, fSettings, fPager) {
 		var ctrl = this;
 		$scope.$grid = {
+			/* Variables */
 			/* Enable or disable debug mode */
 			debug: false,
 			/* Remote data store */
 			remote: false,
+			/* Template */
+			template: null,
+			/* Text */
+			text: {},
 			/* Loading status */
 			loading: false,
 			/* ngModel variable */
 			ngModelVar: '',
+			/* Show or hide row numbers */
+			rowNumbers: false,
+			/**/
+			checkboxes: false,
 			/* Columns */
 			columns: [],
 			/* Columns count */
 			columnsCount: 0,
 			/* Hidden columns */
 			hiddenColumns: [],
-			/* Items */
-			items: [],
-			/* Items count */
-			itemsCount: 0,
-			/* Items actions */
-			itemActions: null,
-			/* Show or hide row numbers */
-			rowNumbers: false,
-			/* Enable or disable select item */
-			selectable: true,
-			/* Enable or disable multi items select */
-			multiSelect: false,
-			/* Selectted item or items */
-			selected: null,
 			/* Enable or disable sorting */
 			sorted: false,
 			/* Enable or disable multi sorting */
@@ -114,6 +129,18 @@ grid.controller('gridTableCtrl', [
 				/* Pager items */
 				items: []
 			},
+			/* Enable or disable select item */
+			selectable: true,
+			/* Enable or disable multi items select */
+			multiSelect: false,
+			/* Selectted item or items */
+			selected: null,
+			/* Items */
+			items: [],
+			/* Items count */
+			itemsCount: 0,
+			/* Items actions */
+			itemActions: null,
 			/* Request params */
 			params: {},
 			/* Request params variables */
@@ -147,8 +174,7 @@ grid.controller('gridTableCtrl', [
 				/* On error update event callback */
 				onError: null
 			},
-			/* Text */
-			text: {},
+			/* Methods */
 			/**
 			 * Generate id function
 			 * @param {String} name
@@ -777,37 +803,57 @@ grid.controller('gridTableCtrl', [
 		 * Init function
 		 */
 		ctrl.init = function (element, attrs) {
-			var defaults = fSettings.get();
+			var globals = cGlobals;
+			/**/
 			if (attrs.settings) {
-				
+				// TODO
 			}
+			/**/
 			if (attrs.debug) {
 				$scope.$grid.debug = attrs.debug;
 			}
+			/**/
 			if (attrs.remote) {
 				$scope.$grid.remote = $parse(attrs.remote)($scope);
 			}
+			/**/
+			if (attrs.template) {
+				$scope.$grid.template = $parse(attrs.template)($scope);
+			} else {
+				$scope.$grid.template = globals.template;
+			}
+			/**/
+			if (attrs.text) {
+				var text = $parse(attrs.text)($scope);
+				$scope.$grid.text = angular.extend(globals.text, text);
+			} else {
+				$scope.$grid.text = globals.text;
+			}
+			/**/
 			if (attrs.ngModel) {
 				$scope.$grid.ngModelVar = attrs.ngModel;
 			}
-			if (attrs.selectable) {
-				$scope.$grid.selectable = attrs.selectable;
-			}
+			/**/
 			if (attrs.rowNumbers) {
 				$scope.$grid.rowNumbers = attrs.rowNumbers;
 			}
+			/**/
+			if (attrs.checkboxes) {
+				$scope.$grid.checkboxes = attrs.checkboxes;
+			}
+			/**/
 			if (attrs.filters) {
 				$scope.$grid.filters = $parse(attrs.filters)($scope);
 			}
+			/**/
+			if (attrs.selectable) {
+				$scope.$grid.selectable = $parse(attrs.selectable)($scope);
+			}
+			/**/
 			if (attrs.actions) {
 				$scope.$grid.itemActions = $parse(attrs.actions)($scope);
 			}
-			if (attrs.text) {
-				var text = $parse(attrs.text)($scope);
-				$scope.$grid.text = angular.extend(defaults.text, text);
-			} else {
-				$scope.$grid.text = defaults.text;
-			}
+			/**/
 			for (var eventName in $scope.$grid.events) {
 				if (attrs[eventName] && $scope.$grid.events[eventName] === null) {
 					var fn = $parse(attrs[eventName])($scope);
@@ -821,13 +867,13 @@ grid.controller('gridTableCtrl', [
 		 * Load settings function
 		 */
 		ctrl.loadSetting = function () {
-			
+			// TODO
 		};
 		/**
 		 * Parse settings function
 		 */
 		ctrl.parseSetting = function () {
-			
+			// TODO
 		};
 		/**
 		 * Render template function
@@ -836,8 +882,7 @@ grid.controller('gridTableCtrl', [
 		 * @return {Object}
 		 */
 		ctrl.renderTpl = function (element, attrs) {
-			var template = attrs.template, // || $scope.$grid.defaults.template,
-				matches = template.match(/\{[a-z\:]+\}/g),
+			var matches = $scope.$grid.template.match(/\{[a-z\:]+\}/g),
 				i,
 				fn,
 				params;
@@ -955,22 +1000,32 @@ grid.controller('gridTableCtrl', [
 		ctrl.set = function (key, value) {
 			var setter = 'set',
 				fnName = setter + key.substr(0, 1).toUpperCase() + key.substr(1);
-			if (ctrl[key]) {
+			if (ctrl[fnName]) {
+				if (angular.isFunction(ctrl[fnName])) {
+					ctrl[fnName](value);
+				} else {
+					throw new Error('Setter {' + fnName + '} must be a function');
+				}
+			} else if (ctrl[key] !== undefined) {
 				if (angular.isFunction(ctrl[key])) {
 					ctrl[key](value);
 				} else {
 					ctrl[key] = value;
 				}
-			} else if ($scope.$grid[key]) {
+			} else if ($scope.$grid[fnName]) {
+				if (angular.isFunction($scope.$grid[fnName])) {
+					$scope.$grid[fnName](value);
+				} else {
+					throw new Error('Setter {' + fnName + '} must be a function');
+				}
+			} else if ($scope.$grid[key] !== undefined) {
 				if (angular.isFunction($scope.$grid[key])) {
 					$scope.$grid[key](value);
 				} else {
 					$scope.$grid[key] = value;
 				}
-			} else if (ctrl[fnName]) {
-				if (angular.isFunction(ctrl[fnName])) {
-					ctrl[fnName](value);
-				}
+			} else {
+				throw new Error('Can set undefined variable {' + key + '}');
 			}
 		};
 		/**
@@ -981,135 +1036,33 @@ grid.controller('gridTableCtrl', [
 		ctrl.get = function (key) {
 			var getter = 'get',
 				fnName = getter + key.substr(0, 1).toUpperCase() + key.substr(1);
-			if (ctrl[key]) {
+			if (ctrl[fnName]) {
+				if (angular.isFunction(ctrl[fnName])) {
+					return ctrl[fnName]();
+				} else {
+					throw new Error('Getter {' + fnName + '} must be a function');
+				}
+			} else if (ctrl[key] !== undefined) {
 				if (angular.isFunction(ctrl[key])) {
-					return ctrl[key];
+					return ctrl[key]();
 				} else {
 					return ctrl[key];
 				}
-			} else if ($scope.$grid[key]) {
+			} else if ($scope.$grid[fnName]) {
+				if (angular.isFunction($scope.$grid[fnName])) {
+					return $scope.$grid[fnName]();
+				} else {
+					throw new Error('Getter {' + fnName + '} must be a function');
+				}
+			} else if ($scope.$grid[key] !== undefined) {
 				if (angular.isFunction($scope.$grid[key])) {
 					return $scope.$grid[key]();
 				} else {
 					return $scope.$grid[key];
 				}
-			} else if (ctrl[fnName]) {
-				if (angular.isFunction(ctrl[fnName])) {
-					return ctrl[fnName]();
-				}
+			} else {
+				return undefined;
 			}
-		};
-		/**
-		 * Set loading status function
-		 * @param {Boolean} status
-		 */
-		ctrl.setLoading = function (status) {
-			$scope.$grid.loading = status ? true : false;
-		};
-		/**
-		 * Columns setter function
-		 * @param {Array|Object} columns
-		 */
-		ctrl.setColumns = function (columns) {
-			$scope.$grid.setColumns(columns);
-		};
-		/**
-		 * Columns setter function
-		 * @param {Object} item
-		 */
-		ctrl.setColumnsByModel = function (item) {
-			$scope.$grid.setColumnsByModel(item);
-		};
-		/**
-		 * Columns getter function
-		 * @return {Array}
-		 */
-		ctrl.getColumns = function () {
-			return $scope.$grid.getColumns() || [];
-		};
-		/**
-		 * Items setter function
-		 * @param {Array} items
-		 */
-		ctrl.setItems = function (items) {
-			$scope.$grid.setItems(items);
-		};
-		/**
-		 * Items getter function
-		 * @return {Array}
-		 */
-		ctrl.getItems = function () {
-			return $scope.$grid.getItems();
-		};
-		/**
-		 * Pager setter function
-		 * @param {Object} pager
-		 */
-		ctrl.setPager = function (pager) {
-			$scope.$grid.pager = pager;
-		};
-		/**
-		 * Pager getter function
-		 * @return {Object}
-		 */
-		ctrl.getPager = function () {
-			return $scope.$grid.pager;
-		};
-		/**
-		 * View by setter function
-		 * @param {Number} viewBy
-		 */
-		ctrl.setViewBy = function (viewBy) {
-			$scope.$grid.viewBy = viewBy;
-		};
-		/**
-		 * View by getter function
-		 * @return {Number}
-		 */
-		ctrl.getViewBy = function () {
-			return $scope.$grid.viewBy;
-		};
-		/**
-		 * Sort setter function
-		 * @param {Object} sort
-		 */
-		ctrl.setSort = function (sort) {
-			$scope.$grid.sort = sort;
-		};
-		/**
-		 * Sort getter function
-		 * @return {Object}
-		 */
-		ctrl.getSort = function () {
-			return $scope.$grid.sort;
-		};
-		/**
-		 * Filter setter function
-		 * @param {Object} filter
-		 */
-		ctrl.setFilter = function (filter) {
-			$scope.$grid.filter = filter;
-		};
-		/**
-		 * Filter getter function
-		 * @return {Object}
-		 */
-		ctrl.getFilter = function () {
-			return $scope.$grid.filter;
-		};
-		/**
-		 * Params setter function
-		 * @param {Object} params
-		 */
-		ctrl.setParams = function (params) {
-			$scope.$grid.setParams(params);
-		};
-		/**
-		 * Params getter function
-		 * @return {Object}
-		 */
-		ctrl.getParams = function () {
-			return $scope.$grid.params;
 		};
 	}
 ]);
@@ -1251,21 +1204,7 @@ grid.factory('gridTableRemote', [
 grid.factory('gridTableSettings', [
 	function () {
 		var defaults = {
-			template: '{toolbar}{header}{items}{footer}',
-				sorted: false,
-				multiSort: false,
-				sortParams: {
-					asc: 'asc',
-					desc: 'desc'
-				},
-				pageParams: {
-					page: 'page',
-					perPage: 'per-page'
-				},
-				filtered: false,
-				filterTimeout: 500,
-				multiSelect: false,
-				viewByList: [10, 25, 50],
+				template: '{toolbar}{header}{items}{footer}',
 				text: {
 					viewBy: 'View by: ',
 					numbers: '#',
@@ -1274,8 +1213,22 @@ grid.factory('gridTableSettings', [
 					desc: '⇡',
 					empty: 'Empty',
 					total: 'Total: '
-				}
-		};
+				},
+				pageParams: {
+					page: 'page',
+					perPage: 'per-page'
+				},
+				viewByList: [10, 25, 50],
+				sorted: false,
+				multiSort: false,
+				sortParams: {
+					asc: 'asc',
+					desc: 'desc'
+				},
+				filtered: false,
+				filterTimeout: 500,
+				multiSelect: false
+			};
 		return {
 			get: function () {
 				return defaults;
@@ -1290,11 +1243,11 @@ grid.factory('gridTableSettings', [
  * Filter gridTableFormatter
  */
 grid.filter('gridTableFormatter', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		var formatters = {
 				'boolean': function (input) {
-					return (input == 1 || input == 'true' || input === true) ? config.formatters.boolean['true'] : config.formatters.boolean['false'];
+					return (input == 1 || input == 'true' || input === true) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;
@@ -1344,13 +1297,13 @@ grid.filter('gridTableFormatter', [
  * Directive gridTableColumns
  */
 grid.directive('gridTableColumns', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-columns.html';
+				return cGlobals.tplUrl + 'grid-table-columns.html';
 			}
 		};
 	}
@@ -1359,13 +1312,13 @@ grid.directive('gridTableColumns', [
  * Directive gridTableFooter
  */
 grid.directive('gridTableFooter', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-footer.html';
+				return cGlobals.tplUrl + 'grid-table-footer.html';
 			}
 		};
 	}
@@ -1374,13 +1327,13 @@ grid.directive('gridTableFooter', [
  * Directive gridTableHeader
  */
 grid.directive('gridTableHeader', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-header.html';
+				return cGlobals.tplUrl + 'grid-table-header.html';
 			}
 		};
 	}
@@ -1405,13 +1358,13 @@ grid.directive('gridTableItemAction', [
  * Directive gridTableItems
  */
 grid.directive('gridTableItems', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-items.html';
+				return cGlobals.tplUrl + 'grid-table-items.html';
 			}
 		};
 	}
@@ -1420,13 +1373,13 @@ grid.directive('gridTableItems', [
  * Directive gridTableToolbar
  */
 grid.directive('gridTableToolbar', [
-	'gridTableConfig',
-	function (config) {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			restrict: 'EA',
 			require: '^gridTable',
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table-toolbar.html';
+				return cGlobals.tplUrl + 'grid-table-toolbar.html';
 			}
 		};
 	}
@@ -1436,13 +1389,13 @@ grid.directive('gridTableToolbar', [
  */
 grid.directive('gridTable', [
 	'$parse',
-	'gridTableConfig',
-	function ($parse, config) {
+	'gridTableGlobals',
+	function ($parse, cGlobals) {
 		return {
 			restrict: 'EA',
 			require: ['^gridTable', 'ngModel'],
 			templateUrl: function () {
-				return config.tplUrl + 'grid-table.html';
+				return cGlobals.tplUrl + 'grid-table.html';
 			},
 			controller: 'gridTableCtrl',
 			controllerAs: '$gridCtrl',
@@ -1466,34 +1419,34 @@ grid.directive('gridTable', [
 					}
 					/* Columns */
 					if (attrs.columns) {
-						$grid.setColumns($parse(attrs.columns)(scope));
+						$grid.set('columns', $parse(attrs.columns)(scope));
 						scope.$watchCollection(attrs.columns, function (newValue, oldValue) {
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
-							$grid.setColumns(newValue);
+							$grid.set('columns', newValue);
 						});
 					} else {
 						var items = $parse(attrs.ngModel)(scope);
 						if (items && items.length > 0) {
-							$grid.setColumnsByModel(items[0]);
+							$grid.set('columnsByModel', items[0]);
 						}
 						scope.$watchCollection(attrs.ngModel, function (newValue, oldValue) {
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
 							if (newValue && newValue.length > 0) {
-								$grid.setColumnsByModel(newValue[0]);
+								$grid.set('columnsByModel', newValue[0]);
 							}
 						});
 					}
 					/* ngModel */
-					$grid.setItems($parse(attrs.ngModel)(scope));
+					$grid.set('items', $parse(attrs.ngModel)(scope));
 					scope.$watchCollection(attrs.ngModel, function (newValue, oldValue) {
 						if (angular.equals(newValue, oldValue)) {
 							return;
 						}
-						$grid.setItems(newValue);
+						$grid.set('items', newValue);
 					});
 					/* Loading */
 					if (attrs.loading) {
@@ -1501,7 +1454,7 @@ grid.directive('gridTable', [
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
-							$grid.setLoading(newValue);
+							$grid.set('loading', newValue);
 						});
 					}
 					/* Params */
@@ -1510,7 +1463,7 @@ grid.directive('gridTable', [
 							if (angular.equals(newValue, oldValue)) {
 								return;
 							}
-							$grid.setParams(newValue);
+							$grid.set('params', newValue);
 						});
 					}
 				};
@@ -1522,7 +1475,7 @@ grid.run(["$templateCache", function($templateCache) {
 $templateCache.put("grid-table-columns.html","<col ng-repeat=\"column in $grid.getShowColumns()\" class=\"{{\'grid-table-column-\' + column.columnType}}\">");
 $templateCache.put("grid-table-footer.html","<tr><td colspan=\"{{$grid.columnsCount}}\">{{$grid.text.total}}{{$grid.itemsCount}}</td></tr>");
 $templateCache.put("grid-table-header.html","<tr class=\"grid-table-headers\"><th ng-repeat=\"column in $grid.getShowColumns()\" ng-class=\"{\'sorted\': column.name === $grid.getSortColumn()}\"><span ng-if=\"column.columnType === \'data\'\"><a ng-click=\"$grid.setSortBy(column.name, null, $event)\" href=\"#\">{{column.label}} <i>{{column.name === $grid.getSortColumn() ? ($grid.getSortDir() === \'asc\' ? $grid.text.asc : $grid.text.desc) : \'\'}}</i></a></span> <span ng-if=\"column.columnType === \'checkbox\'\">{{$grid.text.checkbox}}</span> <span ng-if=\"column.columnType === \'numbers\'\">{{$grid.text.numbers}}</span> <span ng-if=\"column.columnType === \'actions\'\">{{$grid.text.actions}}</span></th></tr><tr class=\"grid-table-filter\"><td ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType === \'data\'\"><span ng-if=\"$grid.filters[column.name]\"><span ng-if=\"$grid.filters[column.name].name\"><select ng-model=\"$grid.filter[$grid.filters[column.name].name]\" ng-change=\"$grid.setFilterBy()\" id=\"{{$grid.genId($grid.filters[column.name].name)}}\"><option value=\"\"></option><option ng-repeat=\"val in $grid.filters[column.name].values\" value=\"{{val[$grid.filters[column.name].value]}}\">{{val[$grid.filters[column.name].label]}}</option></select></span> <span ng-if=\"!$grid.filters[column.name].name\"><select ng-model=\"$grid.filter[column.name]\" ng-change=\"$grid.setFilterBy()\" id=\"{{$grid.genId($grid.filters[column.name].name)}}\"><option value=\"\"></option><option ng-repeat=\"val in $grid.filters[column.name].values\" value=\"{{val[$grid.filters[column.name].value]}}\">{{val[$grid.filters[column.name].label]}}</option></select></span></span> <span ng-if=\"!$grid.filters[column.name]\"><input ng-model=\"$grid.filter[column.name]\" ng-change=\"$grid.setFilterBy()\" id=\"{{$grid.genId(column.name)}}\"></span></span></td></tr>");
-$templateCache.put("grid-table-items.html","<tr ng-init=\"itemsIndex = $index + 1\" ng-repeat=\"item in $grid.getItems()\" ng-click=\"$grid.itemClick(item, $event)\" ng-dblclick=\"$grid.itemDblClick(item, $event)\" ng-class=\"{\'selectable\': $grid.selectable, \'active\': $grid.isItemSelected(item)}\" class=\"grid-table-item\"><td ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType == \'checkbox\'\"><input ng-click=\"$grid.selectItem(item)\" ng-checked=\"$grid.isItemSelected(item)\" type=\"checkbox\"></span> {{column.columnType == \'numbers\' ? itemsIndex : \'\'}} {{$grid.getValue(item, column.name) | gridTableFormatter:column.type}} <span ng-if=\"column.columnType == \'actions\' && $grid.itemActions\"><span ng-repeat=\"action in $grid.itemActions\" ng-click=\"$grid.itemActionCall(action.fn, item, $event)\">{{action.text}} <span grid-table-item-action=\"\" html=\"action.html\"></span></span></span></td></tr><tr><td ng-show=\"$grid.itemsCount <= 0\" colspan=\"{{$grid.columnsCount}}\">{{$grid.text.empty}}</td></tr>");
+$templateCache.put("grid-table-items.html","<tr ng-init=\"itemsIndex = $index + 1\" ng-repeat=\"item in $grid.getItems()\" ng-click=\"$grid.itemClick(item, $event)\" ng-dblclick=\"$grid.itemDblClick(item, $event)\" ng-class=\"{\'selectable\': $grid.selectable, \'active\': $grid.isItemSelected(item)}\" class=\"grid-table-item\"><td ng-repeat=\"column in $grid.getShowColumns()\">{{column.columnType == \'numbers\' ? itemsIndex : \'\'}} <span ng-if=\"column.columnType == \'checkbox\'\"><input ng-click=\"$grid.selectItem(item)\" ng-checked=\"$grid.isItemSelected(item)\" type=\"checkbox\"></span> {{$grid.getValue(item, column.name) | gridTableFormatter:column.type}} <span ng-if=\"column.columnType == \'actions\' && $grid.itemActions\"><span ng-repeat=\"action in $grid.itemActions\" ng-click=\"$grid.itemActionCall(action.fn, item, $event)\">{{action.text}} <span grid-table-item-action=\"\" html=\"action.html\"></span></span></span></td></tr><tr><td ng-show=\"$grid.itemsCount <= 0\" colspan=\"{{$grid.columnsCount}}\">{{$grid.text.empty}}</td></tr>");
 $templateCache.put("grid-table-toolbar.html","<div class=\"grid-table-pager\"><ul class=\"pager\"><li ng-repeat=\"page in $grid.pager.items\" ng-click=\"$grid.setPage(page.index, $event)\" ng-class=\"{\'active\': page.index == $grid.getPage()}\" ng-disabled=\"page.disable\"><a href=\"#\">{{page.label}}</a></li></ul></div><div class=\"grid-table-view-by\"><span class=\"view-by-label\">{{$grid.text.viewBy}}</span><ul class=\"view-by\"><li ng-repeat=\"item in $grid.viewByList\" ng-click=\"$grid.setViewBy(item, $event)\" ng-class=\"{\'active\': item == $grid.viewBy}\"><a href=\"#\">{{item}}</a></li></ul></div><div class=\"grid-table-clear\"></div>");
 $templateCache.put("grid-table.html","<div class=\"grid-table-wrapper\"></div>");
 }]);
