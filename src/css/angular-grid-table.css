@@ -104,10 +104,6 @@
 .grid-table-wrapper .grid-table-table tfoot > tr > th,
 .grid-table-wrapper .grid-table-table tfoot > tr > td {
   padding: 6px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .grid-table-wrapper .grid-table-table thead > tr > th,
 .grid-table-wrapper .grid-table-table tbody > tr > th {

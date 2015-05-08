@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-07T09:01:59.605Z
+ * @version: 0.0.1 - 2015-05-08T05:18:01.939Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */

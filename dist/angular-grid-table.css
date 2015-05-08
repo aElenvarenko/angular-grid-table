@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-07T09:01:59.722Z
+ * @version: 0.0.1 - 2015-05-08T05:18:02.053Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -112,10 +112,6 @@
 .grid-table-wrapper .grid-table-table tfoot > tr > th,
 .grid-table-wrapper .grid-table-table tfoot > tr > td {
   padding: 6px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .grid-table-wrapper .grid-table-table thead > tr > th,
 .grid-table-wrapper .grid-table-table tbody > tr > th {
