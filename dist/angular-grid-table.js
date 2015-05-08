@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-08T06:12:20.300Z
+ * @version: 0.0.1 - 2015-05-08T06:14:55.507Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1026,7 +1026,7 @@ grid.controller('gridTableCtrl', [
 				if (angular.isFunction(ctrl[key])) {
 					ctrl[key].apply(this, arguments);
 				} else {
-					ctrl[key] = value;
+					ctrl[key] = arguments[0];
 				}
 			} else if ($scope.$grid[fnName]) {
 				if (angular.isFunction($scope.$grid[fnName])) {
@@ -1038,7 +1038,7 @@ grid.controller('gridTableCtrl', [
 				if (angular.isFunction($scope.$grid[key])) {
 					$scope.$grid[key].apply($scope.$grid, arguments);
 				} else {
-					$scope.$grid[key] = value;
+					$scope.$grid[key] = arguments[0];
 				}
 			} else {
 				throw new Error('Can set undefined variable {' + key + '}');
