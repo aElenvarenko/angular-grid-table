@@ -22,7 +22,7 @@
 						ng-model="$grid.filter[$grid.filters[column.name].name]"
 						ng-change="$grid.setFilterBy()"
 						id="{{$grid.genId($grid.filters[column.name].name)}}"
-						style="width: {{$grid.filter[$grid.filters[column.name] ? $grid.filter[$grid.filters[column.name] : '100%'}};">
+						style="width: {{$grid.filters[column.name].width ? $grid.filters[column.name].width : '100%'}};">
 						<option value=""></option>
 						<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
 					</select>
