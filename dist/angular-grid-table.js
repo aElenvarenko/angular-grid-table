@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-08T06:59:16.879Z
+ * @version: 0.0.1 - 2015-05-08T07:06:41.525Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1340,10 +1340,10 @@ grid.directive('gridTableHeader', [
 			link: function (scope, element, attrs, ctrl) {
 				var activeFilter;
 				element.on('focusin', '.grid-table-filter input, .grid-table-filter select', function () {
-					activeFilter = $(this);
+					activeFilter = $(this).attr('id');
 				});
 				ctrl.set('addEvent', 'onFilter', function () {
-					activeFilter.focus();
+					element.find('.grid-table-filter #' + activeFilter).focus();
 				});
 			}
 		};

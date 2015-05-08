@@ -13,10 +13,10 @@ grid.directive('gridTableHeader', [
 			link: function (scope, element, attrs, ctrl) {
 				var activeFilter;
 				element.on('focusin', '.grid-table-filter input, .grid-table-filter select', function () {
-					activeFilter = $(this);
+					activeFilter = $(this).attr('id');
 				});
 				ctrl.set('addEvent', 'onFilter', function () {
-					activeFilter.focus();
+					element.find('.grid-table-filter #' + activeFilter).focus();
 				});
 			}
 		};
