@@ -597,12 +597,8 @@ grid.controller('gridTableCtrl', [
 				if (!event) {
 					return;
 				}
-				if (this.listeners[event] && angular.isArray(this.listeners[event])) {
-					for(var i in this.listeners[event]) {
-						if (angular.isFunction(this.listeners[event][i])) {
-							this.listeners[event][i](params);
-						}
-					}
+				if (this.events.indexOf(event) !== -1) {
+					this[event](params);
 				}
 			},
 			/**
@@ -617,6 +613,20 @@ grid.controller('gridTableCtrl', [
 					this.listeners[event] = null;
 				}
 			},
+			/* Listeners call */
+			listenersCall: function (event, args) {
+				if (this.listeners[event] !== null && angular.isArray(this.listeners[event])) {
+					for (var i in this.listeners[event]) {
+						var fn = this.listeners[event][i];
+						if (angular.isFunction(fn)) {
+							if (!angular.isArray(args)) {
+								args = [args];
+							}
+							fn.apply(this, args);
+						}
+					}
+				}
+			},
 			/**
 			 * Columns update event function
 			 */
@@ -624,9 +634,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: columns update event handler');
 				}
-				if (this.events.onColumnsUpdate !== null && angular.isFunction(this.events.onColumnsUpdate)) {
-					this.events.onColumnsUpdate(this.columns);
-				}
+				this.listenersCall('onColumnsUpdate', this.columns);
 			},
 			/**
 			 * Items update event function
@@ -635,9 +643,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: items update event handler');
 				}
-				if (this.events.onItemsUpdate !== null && angular.isFunction(this.events.onItemsUpdate)) {
-					this.events.onItemsUpdate(this.items);
-				}
+				this.listenersCall('onItemsUpdate', this.items);
 			},
 			/**
 			 * Item click event function
@@ -646,9 +652,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: item click event handler');
 				}
-				if (this.events.onItemClick !== null && angular.isFunction(this.events.onItemClick)) {
-					this.events.onItemClick(this.selected);
-				}
+				this.listenersCall('onItemClick', this.selected);
 			},
 			/**
 			 * Item dbl click function
@@ -657,9 +661,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: item dbl click event handler');
 				}
-				if (this.events.onItemDblClick !== null && angular.isFunction(this.events.onItemDblClick)) {
-					this.events.onItemDblClick(this.selected);
-				}
+				this.listenersCall('onItemDblClick', this.selected);
 			},
 			/**
 			 * Item select event function
@@ -668,9 +670,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: item select event handler');
 				}
-				if (this.events.onSelect !== null && angular.isFunction(this.events.onSelect)) {
-					this.events.onSelect(this.selected);
-				}
+				this.listenersCall('onSelect', this.selected);
 			},
 			/**
 			 * View by event function
@@ -679,9 +679,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: view by count event handler');
 				}
-				if (this.events.onViewBy !== null && angular.isFunction(this.events.onViewBy)) {
-					this.events.onViewBy(this.viewBy);
-				}
+				this.listenersCall('onViewBy', this.viewBy);
 			},
 			/**
 			 * Page event function
@@ -690,9 +688,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: page update event handler');
 				}
-				if (this.events.onPage !== null && angular.isFunction(this.events.onPage)) {
-					this.events.onPage(this.pager);
-				}
+				this.listenersCall('onPage', this.pager);
 			},
 			/**
 			 * Sort event function
@@ -701,9 +697,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: sort update event handler');
 				}
-				if (this.events.onSort !== null && angular.isFunction(this.events.onSort)) {
-					this.events.onSort(this.sort);
-				}
+				this.listenersCall('onSort', this.sort);
 			},
 			/**
 			 * Filter event function
@@ -712,9 +706,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: filter update handler');
 				}
-				if (this.events.onFilter !== null && angular.isFunction(this.events.onFilter)) {
-					this.events.onFilter(this.filter);
-				}
+				this.listenersCall('onFilter', this.filter);
 			},
 			/**
 			 * Params event function
@@ -723,9 +715,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: params update event handler');
 				}
-				if (this.events.onParams !== null && angular.isFunction(this.events.onParams)) {
-					this.events.onParams(this.params);
-				}
+				this.listenersCall('onParams', this.params);
 			},
 			/**
 			 * Update event function
@@ -734,9 +724,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: update event handler');
 				}
-				if (this.events.onUpdate !== null && angular.isFunction(this.events.onUpdate)) {
-					this.events.onUpdate(this.items, this.columns, this.pager, this.viewBy, this.sort, this.filter);
-				}	
+				this.listenersCall('onUpdate', [this.items, this.columns, this.pager, this.viewBy, this.sort, this.filter]);
 			},
 			/**
 			 * Error event function
@@ -745,9 +733,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: error event handler');
 				}
-				if (this.events.onError !== null && angular.isFunction(this.events.onError)) {
-					this.events.onError(this.errors);
-				}
+				this.listenersCall('onError', this.errors);
 			}
 		};
 		/**
