@@ -31,7 +31,7 @@
 				 on-sort="sort"
 				 on-filter="filter"
 				 on-select="onSelect"
-				 on-params="params"
+				 on-params="onParams"
 				 on-update="update">
 			</div>
 			<hr/>
@@ -136,7 +136,11 @@
 				}
 				
 				$scope.onSelect = function (item) {
-					console.log(item);
+					
+				};
+				
+				$scope.onParams = function (params) {
+					
 				};
 			}
 		]);

@@ -793,7 +793,7 @@ grid.controller('gridTableCtrl', [
 			/**/
 			for (var i in $scope.$grid.events) {
 				var eventName = $scope.$grid.events[i];
-				if (attrs[eventName] && $scope.$grid.events[eventName] === null) {
+				if (attrs[eventName]) {
 					var fn = $parse(attrs[eventName])($scope);
 					if (fn && angular.isFunction(fn)) {
 						$scope.$grid.addEvent(eventName, fn);

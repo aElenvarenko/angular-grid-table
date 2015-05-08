@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-08T06:37:22.511Z
+ * @version: 0.0.1 - 2015-05-08T06:59:16.879Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -853,7 +853,7 @@ grid.controller('gridTableCtrl', [
 			/**/
 			for (var i in $scope.$grid.events) {
 				var eventName = $scope.$grid.events[i];
-				if (attrs[eventName] && $scope.$grid.events[eventName] === null) {
+				if (attrs[eventName]) {
 					var fn = $parse(attrs[eventName])($scope);
 					if (fn && angular.isFunction(fn)) {
 						$scope.$grid.addEvent(eventName, fn);
