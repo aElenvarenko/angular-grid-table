@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-08T05:18:01.939Z
+ * @version: 0.0.1 - 2015-05-08T06:12:20.300Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -148,32 +148,34 @@ grid.controller('gridTableCtrl', [
 			/* Errors */
 			errors: null,
 			/* Events */
-			events: {
+			events: [
 				/* On columns update event callback */
-				onColumnsUpdate: null,
+				'onColumnsUpdate',
 				/* On item click event callback */
-				onItemClick: null,
+				'onItemClick',
 				/* On item dbl click callback */
-				onItemDblClick: null,
+				'onItemDblClick',
 				/* On items update event callback */
-				onItemsUpdate: null,
+				'onItemsUpdate',
 				/* On current page update event callback */
-				onPage: null,
+				'onPage',
 				/* On view by update event callback */
-				onViewBy: null,
+				'onViewBy',
 				/* On sort update event callback */
-				onSort: null,
+				'onSort',
 				/* On filter update event callback */
-				onFilter: null,
+				'onFilter',
 				/* On select update event callback */
-				onSelect: null,
+				'onSelect',
 				/* On params update event callback */
-				onParams: null,
+				'onParams',
 				/* On update event callback */
-				onUpdate: null,
+				'onUpdate',
 				/* On error update event callback */
-				onError: null
-			},
+				'onError'
+			],
+			/* Event listeners */
+			listeners: {},
 			/* Methods */
 			/**
 			 * Generate id function
@@ -637,8 +639,13 @@ grid.controller('gridTableCtrl', [
 				if (!event && !callback) {
 					return;
 				}
-				if (this.events[event] === null) {
-					this.events[event] = callback;
+				if (this.events.indexOf(event) !== -1) {
+					if (this.listeners[event] === undefined) {
+						this.listeners[event] = [];
+					}
+					if (this.listeners[event].indexOf(callback) === -1) {
+						this.listeners[event].push(callback);
+					}
 				}
 			},
 			/**
@@ -650,8 +657,12 @@ grid.controller('gridTableCtrl', [
 				if (!event) {
 					return;
 				}
-				if (angular.isFunction(this[event])) {
-					this[event](params);
+				if (this.listeners[event] && angular.isArray(this.listeners[event])) {
+					for(var i in this.listeners[event]) {
+						if (angular.isFunction(this.listeners[event][i])) {
+							this.listeners[event][i](params);
+						}
+					}
 				}
 			},
 			/**
@@ -662,8 +673,8 @@ grid.controller('gridTableCtrl', [
 				if (!event) {
 					return;
 				}
-				if (this.events[event]) {
-					this.events[event] = null;
+				if (this.events[event] && this.listeners[event]) {
+					this.listeners[event] = null;
 				}
 			},
 			/**
@@ -854,11 +865,12 @@ grid.controller('gridTableCtrl', [
 				$scope.$grid.itemActions = $parse(attrs.actions)($scope);
 			}
 			/**/
-			for (var eventName in $scope.$grid.events) {
+			for (var i in $scope.$grid.events) {
+				var eventName = $scope.$grid.events[i];
 				if (attrs[eventName] && $scope.$grid.events[eventName] === null) {
 					var fn = $parse(attrs[eventName])($scope);
 					if (fn && angular.isFunction(fn)) {
-						$scope.$grid.events[eventName] = fn;
+						$scope.$grid.addEvent(eventName, fn);
 					}
 				}
 			}
@@ -997,30 +1009,34 @@ grid.controller('gridTableCtrl', [
 		 * @param {String} key
 		 * @param {Object} value
 		 */
-		ctrl.set = function (key, value) {
-			var setter = 'set',
+		ctrl.set = function () {
+			if (!angular.isString(arguments[0])) {
+				throw new Error('First argument must be a string');
+			}
+			var key = Array.prototype.splice.call(arguments, 0, 1) + '',
+				setter = 'set',
 				fnName = setter + key.substr(0, 1).toUpperCase() + key.substr(1);
 			if (ctrl[fnName]) {
 				if (angular.isFunction(ctrl[fnName])) {
-					ctrl[fnName](value);
+					ctrl[fnName].apply(this, arguments);
 				} else {
 					throw new Error('Setter {' + fnName + '} must be a function');
 				}
 			} else if (ctrl[key] !== undefined) {
 				if (angular.isFunction(ctrl[key])) {
-					ctrl[key](value);
+					ctrl[key].apply(this, arguments);
 				} else {
 					ctrl[key] = value;
 				}
 			} else if ($scope.$grid[fnName]) {
 				if (angular.isFunction($scope.$grid[fnName])) {
-					$scope.$grid[fnName](value);
+					$scope.$grid[fnName].apply($scope.$grid, arguments);
 				} else {
 					throw new Error('Setter {' + fnName + '} must be a function');
 				}
 			} else if ($scope.$grid[key] !== undefined) {
 				if (angular.isFunction($scope.$grid[key])) {
-					$scope.$grid[key](value);
+					$scope.$grid[key].apply($scope.$grid, arguments);
 				} else {
 					$scope.$grid[key] = value;
 				}
@@ -1334,6 +1350,15 @@ grid.directive('gridTableHeader', [
 			require: '^gridTable',
 			templateUrl: function () {
 				return cGlobals.tplUrl + 'grid-table-header.html';
+			},
+			link: function (scope, element, attrs, ctrl) {
+				var activeFilter;
+				element.on('focusin', '.grid-table-filter input, .grid-table-filter select', function () {
+					activeFilter = $(this);
+				});
+				ctrl.set('addEvent', 'onFilter', function () {
+					activeFilter.focus();
+				});
 			}
 		};
 	}
