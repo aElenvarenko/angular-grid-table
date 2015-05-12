@@ -17,15 +17,20 @@
 	<td ng-repeat="column in $grid.getShowColumns()">
 		<span ng-if="column.columnType === 'data'">
 			<span ng-if="$grid.filters[column.name]">
-				<span ng-if="$grid.filters[column.name].name">
-					<select
-						ng-model="$grid.filter[$grid.filters[column.name].name]"
-						ng-change="$grid.setFilterBy()"
-						id="{{$grid.genId($grid.filters[column.name].name)}}"
-						style="width: {{$grid.filters[column.name].width ? $grid.filters[column.name].width : '100%'}};">
-						<option value=""></option>
-						<option ng-repeat="val in $grid.filters[column.name].values" value="{{val[$grid.filters[column.name].value]}}">{{val[$grid.filters[column.name].label]}}</option>
-					</select>
+				<span ng-init="gridFilter = $grid.filters[column.name]">
+					<span ng-if="gridFilter.html">
+						<span grid-table-filter=""></span>
+					</span>
+					<span ng-if="!gridFilter.html">
+						<select
+							ng-model="$grid.filter[gridFilter.name]"
+							ng-change="$grid.setFilterBy()"
+							id="{{$grid.genId(gridFilter.name)}}"
+							style="width: {{gridFilter.width ? gridFilter.width : '100%'}};">
+							<option value=""></option>
+							<option ng-repeat="val in gridFilter.values" value="{{val[gridFilter.value]}}">{{val[gridFilter.label]}}</option>
+						</select>
+					</span>
 				</span>
 			</span>
 			<span ng-if="!$grid.filters[column.name]">
