@@ -10,14 +10,19 @@ grid.constant('gridTableGlobals', {
 	/**/
 	theme: '',
 	/**/
+	pager: {
+		pagesMaxCount: 5,
+	},
+	/**/
 	text: {
-		viewBy: 'View by: ',
+		viewBy: 'View by:',
 		numbers: '#',
 		actions: 'Actions',
 		asc: '⇣',
 		desc: '⇡',
 		empty: 'Empty',
-		total: 'Total: '
+		viewed: 'Viewed:',
+		total: 'total:'
 	},
 	/**/
 	formatters: {

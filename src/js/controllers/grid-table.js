@@ -66,6 +66,8 @@ grid.controller('gridTableCtrl', [
 				limit: 0,
 				/* Items offset */
 				offset: 0,
+				/* Pages max view count */
+				pagesMaxCount: null,
 				/* Pager items */
 				items: []
 			},
@@ -284,7 +286,7 @@ grid.controller('gridTableCtrl', [
 				if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
 					this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
 				}
-				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
+				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total, this.pager.pagesMaxCount);
 				if (!this.remote) {
 					this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
 				} else {
@@ -789,6 +791,10 @@ grid.controller('gridTableCtrl', [
 			/**/
 			if (attrs.actions) {
 				$scope.$grid.itemActions = $parse(attrs.actions)($scope);
+			}
+			/**/
+			if (attrs.pagesMaxCount) {
+				$scope.$grid.pager.pagesMaxCount = parseInt(attrs.pagesMaxCount);
 			}
 			/**/
 			for (var i in $scope.$grid.events) {

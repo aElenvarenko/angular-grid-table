@@ -16,7 +16,6 @@
 		<div class="container">
 			<div
 				 grid-table=""
-				 debug="true"
 				 selectable="grid.selectable"
 				 loading="grid.loading"
 				 ng-model="data"
@@ -51,12 +50,16 @@
 		var app = angular.module('demo', ['gridTable']);
 		app.config([
 			'gridTableGlobals',
-			function (gridTableGlobals) {
-				gridTableGlobals.set('text', {
-					viewBy: 'Показывать по: ',
+			function (cGlobals) {
+				cGlobals.set('pager', {
+					pagesMaxCount: 10
+				});
+				cGlobals.set('text', {
+					viewBy: 'Показывать по:',
 					empty: 'Список пуст',
 					actions: 'Действия',
-					total: 'Всего: '
+					viewed: 'Показано:',
+					total: 'всего:'
 				});
 			}
 		]);

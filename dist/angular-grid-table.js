@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-12T11:32:03.107Z
+ * @version: 0.0.1 - 2015-05-14T13:29:03.566Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -20,14 +20,19 @@ grid.constant('gridTableGlobals', {
 	/**/
 	theme: '',
 	/**/
+	pager: {
+		pagesMaxCount: 5,
+	},
+	/**/
 	text: {
-		viewBy: 'View by: ',
+		viewBy: 'View by:',
 		numbers: '#',
 		actions: 'Actions',
 		asc: '⇣',
 		desc: '⇡',
 		empty: 'Empty',
-		total: 'Total: '
+		viewed: 'Viewed:',
+		total: 'total:'
 	},
 	/**/
 	formatters: {
@@ -126,6 +131,8 @@ grid.controller('gridTableCtrl', [
 				limit: 0,
 				/* Items offset */
 				offset: 0,
+				/* Pages max view count */
+				pagesMaxCount: null,
 				/* Pager items */
 				items: []
 			},
@@ -344,7 +351,7 @@ grid.controller('gridTableCtrl', [
 				if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
 					this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
 				}
-				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total);
+				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total, this.pager.pagesMaxCount);
 				if (!this.remote) {
 					this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
 				} else {
@@ -851,6 +858,10 @@ grid.controller('gridTableCtrl', [
 				$scope.$grid.itemActions = $parse(attrs.actions)($scope);
 			}
 			/**/
+			if (attrs.pagesMaxCount) {
+				$scope.$grid.pager.pagesMaxCount = parseInt(attrs.pagesMaxCount);
+			}
+			/**/
 			for (var i in $scope.$grid.events) {
 				var eventName = $scope.$grid.events[i];
 				if (attrs[eventName]) {
@@ -1082,7 +1093,8 @@ grid.factory('gridTableColumn', [
  * Factory gridTablePager
  */
 grid.factory('gridTablePager', [
-	function () {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			createItems: function (current, viewBy, itemsTotal, viewCount) {
 				if (itemsTotal && itemsTotal <= 0) {
@@ -1090,9 +1102,15 @@ grid.factory('gridTablePager', [
 				}
 				var items = [],
 					pagesCount = Math.ceil(itemsTotal / viewBy),
+					step,
 					start = 0,
 					end = 0;
-				if (pagesCount > 5 && current > 0) {
+				viewCount = viewCount || cGlobals.pager.pagesMaxCount;
+				if (viewCount % 2 === 0) {
+					viewCount++;
+				}
+				step = Math.round(viewCount / 2);
+				if (pagesCount > viewCount && current > 0) {
 					items.push({
 						label: '<<',
 						index: 0,
@@ -1104,23 +1122,23 @@ grid.factory('gridTablePager', [
 						disable: current === 0
 					});
 				}
-				if (current < 3) {
+				if ((current + 1) <= step) {
 					start = 0;
-					end = 5;
+					end = viewCount;
 				}
 				if (current > pagesCount - 1) {
-					start = current - 2;
-					end = start + 5;
+					start = current - step;
+					end = start + viewCount;
 				}
-				if (current > pagesCount - 4) {
-					start = pagesCount - 5;
+				if ((current + 1) > pagesCount - step) {
+					start = pagesCount - viewCount;
 					end = pagesCount;
 				}
-				if (current < pagesCount - 2 && current > 2) {
-					start = current - 2;
-					end = current + 3;
+				if ((current + 1) < (pagesCount - step + 1) && (current + 1) > step) {
+					start = (current + 1) - step;
+					end = current + step;
 				}
-				if (pagesCount < 5) {
+				if (pagesCount < viewCount) {
 					start = 0;
 					end = pagesCount;
 				}
@@ -1133,7 +1151,7 @@ grid.factory('gridTablePager', [
 						index: i
 					});
 				}
-				if (pagesCount > 5 && current < pagesCount - 1) {
+				if (pagesCount > viewCount && current < pagesCount - 1) {
 					items.push({
 						label: '>',
 						index: current < pagesCount - 1 ? current + 1 : current,
@@ -1249,7 +1267,7 @@ grid.filter('gridTableFormatter', [
 	function (cGlobals) {
 		var formatters = {
 				'boolean': function (input) {
-					return (input == 1 || input == 'true' || input === true) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
+					return (input == 1 || input == 'true' || input === true || input !== undefined) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;
@@ -1495,7 +1513,7 @@ grid.directive('gridTable', [
 ]);
 grid.run(["$templateCache", function($templateCache) {
 $templateCache.put("grid-table-columns.html","<col ng-repeat=\"column in $grid.getShowColumns()\" class=\"{{\'grid-table-column-\' + column.columnType}}\">");
-$templateCache.put("grid-table-footer.html","<tr><td colspan=\"{{$grid.columnsCount}}\">{{$grid.text.total}}{{$grid.itemsCount}}</td></tr>");
+$templateCache.put("grid-table-footer.html","<tr><td colspan=\"{{$grid.columnsCount}}\">{{$grid.text.viewed}} {{$grid.itemsCount}}, {{$grid.text.total}} {{$grid.pager.total}}</td></tr>");
 $templateCache.put("grid-table-header.html","<tr class=\"grid-table-headers\"><th ng-repeat=\"column in $grid.getShowColumns()\" ng-class=\"{\'sorted\': column.name === $grid.getSortColumn()}\"><span ng-if=\"column.columnType === \'data\'\"><a ng-click=\"$grid.setSortBy(column.name, null, $event)\" href=\"#\">{{column.label}} <i>{{column.name === $grid.getSortColumn() ? ($grid.getSortDir() === \'asc\' ? $grid.text.asc : $grid.text.desc) : \'\'}}</i></a></span> <span ng-if=\"column.columnType === \'checkbox\'\">{{$grid.text.checkbox}}</span> <span ng-if=\"column.columnType === \'numbers\'\">{{$grid.text.numbers}}</span> <span ng-if=\"column.columnType === \'actions\'\">{{$grid.text.actions}}</span></th></tr><tr class=\"grid-table-filter\"><td ng-repeat=\"column in $grid.getShowColumns()\"><span ng-if=\"column.columnType === \'data\'\"><span ng-if=\"$grid.filters[column.name]\"><span ng-init=\"gridFilter = $grid.filters[column.name]\"><span ng-if=\"gridFilter.html\"><span grid-table-filter=\"\"></span></span> <span ng-if=\"!gridFilter.html\"><select ng-model=\"$grid.filter[gridFilter.name]\" ng-change=\"$grid.setFilterBy()\" id=\"{{$grid.genId(gridFilter.name)}}\" style=\"width: {{gridFilter.width ? gridFilter.width : \'100%\'}};\"><option value=\"\"></option><option ng-repeat=\"val in gridFilter.values\" value=\"{{val[gridFilter.value]}}\">{{val[gridFilter.label]}}</option></select></span></span></span> <span ng-if=\"!$grid.filters[column.name]\"><input ng-model=\"$grid.filter[column.name]\" ng-change=\"$grid.setFilterBy()\" id=\"{{$grid.genId(column.name)}}\"></span></span></td></tr>");
 $templateCache.put("grid-table-items.html","<tr ng-init=\"itemsIndex = $index + 1\" ng-repeat=\"item in $grid.getItems()\" ng-click=\"$grid.itemClick(item, $event)\" ng-dblclick=\"$grid.itemDblClick(item, $event)\" ng-class=\"{\'selectable\': $grid.selectable, \'active\': $grid.isItemSelected(item)}\" class=\"grid-table-item\"><td ng-repeat=\"column in $grid.getShowColumns()\">{{column.columnType == \'numbers\' ? itemsIndex : \'\'}} <span ng-if=\"column.columnType == \'checkbox\'\"><input ng-click=\"$grid.selectItem(item)\" ng-checked=\"$grid.isItemSelected(item)\" type=\"checkbox\"></span> {{$grid.getValue(item, column.name) | gridTableFormatter:column.type}} <span ng-if=\"column.columnType == \'actions\' && $grid.itemActions\"><span ng-repeat=\"action in $grid.itemActions\" ng-click=\"$grid.itemActionCall(action.fn, item, $event)\">{{action.text}} <span grid-table-item-action=\"\" html=\"action.html\"></span></span></span></td></tr><tr><td ng-show=\"$grid.itemsCount <= 0\" colspan=\"{{$grid.columnsCount}}\">{{$grid.text.empty}}</td></tr>");
 $templateCache.put("grid-table-toolbar.html","<div class=\"grid-table-pager\"><ul class=\"pager\"><li ng-repeat=\"page in $grid.pager.items\" ng-click=\"$grid.setPage(page.index, $event)\" ng-class=\"{\'active\': page.index == $grid.getPage()}\" ng-disabled=\"page.disable\"><a href=\"#\">{{page.label}}</a></li></ul></div><div class=\"grid-table-view-by\"><span class=\"view-by-label\">{{$grid.text.viewBy}}</span><ul class=\"view-by\"><li ng-repeat=\"item in $grid.viewByList\" ng-click=\"$grid.setViewBy(item, $event)\" ng-class=\"{\'active\': item == $grid.viewBy}\"><a href=\"#\">{{item}}</a></li></ul></div><div class=\"grid-table-clear\"></div>");

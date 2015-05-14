@@ -6,7 +6,7 @@ grid.filter('gridTableFormatter', [
 	function (cGlobals) {
 		var formatters = {
 				'boolean': function (input) {
-					return (input == 1 || input == 'true' || input === true) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
+					return (input == 1 || input == 'true' || input === true || input !== undefined) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;

@@ -2,7 +2,8 @@
  * Factory gridTablePager
  */
 grid.factory('gridTablePager', [
-	function () {
+	'gridTableGlobals',
+	function (cGlobals) {
 		return {
 			createItems: function (current, viewBy, itemsTotal, viewCount) {
 				if (itemsTotal && itemsTotal <= 0) {
@@ -10,9 +11,15 @@ grid.factory('gridTablePager', [
 				}
 				var items = [],
 					pagesCount = Math.ceil(itemsTotal / viewBy),
+					step,
 					start = 0,
 					end = 0;
-				if (pagesCount > 5 && current > 0) {
+				viewCount = viewCount || cGlobals.pager.pagesMaxCount;
+				if (viewCount % 2 === 0) {
+					viewCount++;
+				}
+				step = Math.round(viewCount / 2);
+				if (pagesCount > viewCount && current > 0) {
 					items.push({
 						label: '<<',
 						index: 0,
@@ -24,23 +31,23 @@ grid.factory('gridTablePager', [
 						disable: current === 0
 					});
 				}
-				if (current < 3) {
+				if ((current + 1) <= step) {
 					start = 0;
-					end = 5;
+					end = viewCount;
 				}
 				if (current > pagesCount - 1) {
-					start = current - 2;
-					end = start + 5;
+					start = current - step;
+					end = start + viewCount;
 				}
-				if (current > pagesCount - 4) {
-					start = pagesCount - 5;
+				if ((current + 1) > pagesCount - step) {
+					start = pagesCount - viewCount;
 					end = pagesCount;
 				}
-				if (current < pagesCount - 2 && current > 2) {
-					start = current - 2;
-					end = current + 3;
+				if ((current + 1) < (pagesCount - step + 1) && (current + 1) > step) {
+					start = (current + 1) - step;
+					end = current + step;
 				}
-				if (pagesCount < 5) {
+				if (pagesCount < viewCount) {
 					start = 0;
 					end = pagesCount;
 				}
@@ -53,7 +60,7 @@ grid.factory('gridTablePager', [
 						index: i
 					});
 				}
-				if (pagesCount > 5 && current < pagesCount - 1) {
+				if (pagesCount > viewCount && current < pagesCount - 1) {
 					items.push({
 						label: '>',
 						index: current < pagesCount - 1 ? current + 1 : current,
