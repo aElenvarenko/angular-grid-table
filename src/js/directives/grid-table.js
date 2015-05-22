@@ -8,6 +8,7 @@ grid.directive('gridTable', [
 		return {
 			restrict: 'EA',
 			require: ['^gridTable', 'ngModel'],
+			scope: true,
 			templateUrl: function () {
 				return cGlobals.tplUrl + 'grid-table.html';
 			},

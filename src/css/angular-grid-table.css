@@ -61,7 +61,6 @@
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li.active > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li.active > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li.active > a {
-  border: none;
   border-radius: 0px;
   background: #e0e0e0;
   text-decoration: underline;
