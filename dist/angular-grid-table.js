@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-14T13:39:44.240Z
+ * @version: 0.0.1 - 2015-05-22T09:33:41.493Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1434,6 +1434,7 @@ grid.directive('gridTable', [
 		return {
 			restrict: 'EA',
 			require: ['^gridTable', 'ngModel'],
+			scope: true,
 			templateUrl: function () {
 				return cGlobals.tplUrl + 'grid-table.html';
 			},
