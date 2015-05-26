@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-05-22T09:33:41.493Z
+ * @version: 0.0.1 - 2015-05-26T11:02:32.474Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1267,7 +1267,7 @@ grid.filter('gridTableFormatter', [
 	function (cGlobals) {
 		var formatters = {
 				'boolean': function (input) {
-					return (input == 1 || input == 'true' || input === true || input !== undefined) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
+					return (input === true || input === 'true' || input === '1' || input === 1) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;
