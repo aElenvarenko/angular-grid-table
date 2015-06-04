@@ -83,6 +83,8 @@ grid.controller('gridTableCtrl', [
 			itemsCount: 0,
 			/* Items actions */
 			itemActions: null,
+			/* Items actions show expression */
+			itemActionsExp: null,
 			/* Request params */
 			params: {},
 			/* Request params variables */
@@ -371,6 +373,19 @@ grid.controller('gridTableCtrl', [
 					}
 				}
 				this.triggerEvent('onSelect');
+			},
+			/**
+			 * 
+			 * @param {Object} item
+			 */
+			itemActionsShow: function (item) {
+				var value = true;
+				try {
+					value = eval(this.itemActionsExp);
+				} catch (e) {
+					value = false;
+				}
+				return value;
 			},
 			/**
 			 * Call item action function
@@ -791,6 +806,11 @@ grid.controller('gridTableCtrl', [
 			/**/
 			if (attrs.actions) {
 				$scope.$grid.itemActions = $parse(attrs.actions)($scope);
+			}
+			/**/
+			if (attrs.actionsExp) {
+				// $scope.$grid.itemActionsExp = $parse(attrs.actionsExp)($scope);
+				$scope.$grid.itemActionsExp = attrs.actionsExp;
 			}
 			/**/
 			if (attrs.pagesMaxCount) {

@@ -11,7 +11,7 @@
 			<input ng-click="$grid.selectItem(item)" ng-checked="$grid.isItemSelected(item)" type="checkbox"/>
 		</span>
 		{{$grid.getValue(item, column.name) | gridTableFormatter:column.type}}
-		<span ng-if="column.columnType == 'actions' && $grid.itemActions">
+		<span ng-if="column.columnType === 'actions' && $grid.itemActions && $grid.itemActionsShow(item)">
 			<span
 				  ng-repeat="action in $grid.itemActions"
 				  ng-click="$grid.itemActionCall(action.fn, item, $event)">

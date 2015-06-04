@@ -22,6 +22,7 @@
 				 columns="{{columnsVar}}"
 				 filters="filters"
 				 actions="actions"
+				 actions-exp="item.active === true && item.active === false"
 				 row-numbers="true"
 				 on-columns-update=""
 				 on-items-update=""
@@ -102,8 +103,8 @@
 						value: 'id',
 						label: 'label',
 						values: [
-							{id: 1, label: 'Yes'},
-							{id: 0, label: 'No'}
+							{id: true, label: 'Yes'},
+							{id: false, label: 'No'}
 						]
 					},
 					d1: {
