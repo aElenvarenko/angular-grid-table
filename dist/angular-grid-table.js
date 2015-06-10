@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-06-10T07:58:10.378Z
+ * @version: 0.0.1 - 2015-06-10T09:30:35.146Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -150,6 +150,8 @@ grid.controller('gridTableCtrl', [
 			itemActions: null,
 			/* Items actions show expression */
 			itemActionsExp: null,
+			/* Items actions column width */
+			itemActionsWidth: null,
 			/* Request params */
 			params: {},
 			/* Request params variables */
@@ -885,8 +887,11 @@ grid.controller('gridTableCtrl', [
 			}
 			/**/
 			if (attrs.actionsExp) {
-				// $scope.$grid.itemActionsExp = $parse(attrs.actionsExp)($scope);
 				$scope.$grid.itemActionsExp = attrs.actionsExp;
+			}
+			/**/
+			if (attrs.actionsWidth) {
+				$scope.$grid.itemActionsWidth = attrs.actionsWidth;
 			}
 			/**/
 			if (attrs.pagesMaxCount) {
@@ -1298,7 +1303,7 @@ grid.filter('gridTableFormatter', [
 	function (cGlobals) {
 		var formatters = {
 				'boolean': function (input) {
-					return (input === true || input === 'true' || input === '1' || input === 1) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
+					return (input === true || input === 'true' || input === '1' || input === 1 || input !== '' || input !== null) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;

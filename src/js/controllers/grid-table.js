@@ -85,6 +85,8 @@ grid.controller('gridTableCtrl', [
 			itemActions: null,
 			/* Items actions show expression */
 			itemActionsExp: null,
+			/* Items actions column width */
+			itemActionsWidth: null,
 			/* Request params */
 			params: {},
 			/* Request params variables */
@@ -820,8 +822,11 @@ grid.controller('gridTableCtrl', [
 			}
 			/**/
 			if (attrs.actionsExp) {
-				// $scope.$grid.itemActionsExp = $parse(attrs.actionsExp)($scope);
 				$scope.$grid.itemActionsExp = attrs.actionsExp;
+			}
+			/**/
+			if (attrs.actionsWidth) {
+				$scope.$grid.itemActionsWidth = attrs.actionsWidth;
 			}
 			/**/
 			if (attrs.pagesMaxCount) {
