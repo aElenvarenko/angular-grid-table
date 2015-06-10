@@ -2,18 +2,21 @@
 	<th
 		ng-repeat="column in $grid.getShowColumns()"
 		ng-class="{'sorted': column.name === $grid.getSortColumn()}">
-		<span ng-if="column.columnType === 'data'">
+		<span ng-if="column.columnType === 'data' && $grid.sorted">
 			<a ng-click="$grid.setSortBy(column.name, null, $event)" href="#">
 				{{column.label}}
 				<i>{{column.name === $grid.getSortColumn() ? ($grid.getSortDir() === 'asc' ? $grid.text.asc : $grid.text.desc) : ''}}</i>
 			</a>
+		</span>
+		<span ng-if="column.columnType === 'data' && !$grid.sorted">
+			{{column.label}}
 		</span>
 		<span ng-if="column.columnType === 'checkbox'">{{$grid.text.checkbox}}</span>
 		<span ng-if="column.columnType === 'numbers'">{{$grid.text.numbers}}</span>
 		<span ng-if="column.columnType === 'actions'">{{$grid.text.actions}}</span>
 	</th>
 </tr>
-<tr class="grid-table-filter">
+<tr ng-if="$grid.filtered" class="grid-table-filter">
 	<td ng-repeat="column in $grid.getShowColumns()">
 		<span ng-if="column.columnType === 'data'">
 			<span ng-if="$grid.filters[column.name]">

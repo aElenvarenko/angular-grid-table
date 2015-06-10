@@ -791,12 +791,20 @@ grid.controller('gridTableCtrl', [
 				$scope.$grid.ngModelVar = attrs.ngModel;
 			}
 			/**/
+			if (attrs.sorted) {
+				$scope.$grid.sorted = attrs.sorted;
+			}
+			/**/
 			if (attrs.rowNumbers) {
 				$scope.$grid.rowNumbers = attrs.rowNumbers;
 			}
 			/**/
 			if (attrs.checkboxes) {
 				$scope.$grid.checkboxes = attrs.checkboxes;
+			}
+			/**/
+			if (attrs.filtered) {
+				$scope.$grid.filtered = attrs.filtered;
 			}
 			/**/
 			if (attrs.filters) {
