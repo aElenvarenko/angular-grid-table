@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-06-03T09:21:47.334Z
+ * @version: 0.0.1 - 2015-06-10T07:37:56.581Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -444,6 +444,9 @@ grid.controller('gridTableCtrl', [
 			 * @param {Object} item
 			 */
 			itemActionsShow: function (item) {
+				if (!this.itemActionsExp) {
+					return true;
+				}
 				var value = true;
 				try {
 					value = eval(this.itemActionsExp);

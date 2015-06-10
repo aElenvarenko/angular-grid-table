@@ -379,6 +379,9 @@ grid.controller('gridTableCtrl', [
 			 * @param {Object} item
 			 */
 			itemActionsShow: function (item) {
+				if (!this.itemActionsExp) {
+					return true;
+				}
 				var value = true;
 				try {
 					value = eval(this.itemActionsExp);
