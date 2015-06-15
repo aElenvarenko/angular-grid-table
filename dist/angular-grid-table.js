@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-06-10T09:38:58.100Z
+ * @version: 0.0.1 - 2015-06-15T13:10:43.053Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1303,7 +1303,18 @@ grid.filter('gridTableFormatter', [
 	function (cGlobals) {
 		var formatters = {
 				'boolean': function (input) {
-					return (input === true || input === 'true' || input === '1' || input === 1 || input !== '' || input !== null || input !== undefined) ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
+					var t = [true, 'true', '1', 1],
+						f = [null, undefined, '', false, 'false', '0', 0];
+
+					if (t.indexOf(input) !== -1) {
+						input = true;
+					}
+
+					if (f.indexOf(input) !== -1) {
+						input = false;
+					}
+
+					return input ? cGlobals.formatters.boolean['true'] : cGlobals.formatters.boolean['false'];
 				},
 				'integer': function (input) {
 					return input;
@@ -1312,13 +1323,22 @@ grid.filter('gridTableFormatter', [
 					return input;
 				},
 				'currency': function (input) {
+					if (input === undefined || input === null) {
+						return input;
+					}
+					
 					input += '';
 					if (input.indexOf('.') === -1) {
 						input += '.00';
 					}
+					
 					return input;
 				},
 				'date': function (input) {
+					if (input === undefined || input === null) {
+						return input;
+					}
+					
 					var exp = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/;
 					input += '';
 					if (exp.test(input)) {
@@ -1327,6 +1347,10 @@ grid.filter('gridTableFormatter', [
 					return input;
 				},
 				'datetime': function (input) {
+					if (input === undefined || input === null) {
+						return input;
+					}
+					
 					var exp = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})\s(([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}))(.*)/;
 					input += '';
 					if (exp.test(input)) {
@@ -1339,9 +1363,6 @@ grid.filter('gridTableFormatter', [
 				}
 			};
 		return function (input, type, format) {
-			if (input === undefined || input === null) {
-				return input;
-			}
 			if (formatters[type] && angular.isFunction(formatters[type])) {
 				input = formatters[type](input, format);
 			}
