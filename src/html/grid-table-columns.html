@@ -1,1 +1,1 @@
-<col ng-repeat="column in $grid.getShowColumns()" class="{{'grid-table-column-' + column.columnType}}"/>
+<col ng-repeat="column in $grid.getShowColumns()" class="{{'grid-table-column-' + column.columnType}}"{{column.width ? (' width="' + column.width + '"') : ''}}/>

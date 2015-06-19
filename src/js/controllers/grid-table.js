@@ -184,7 +184,8 @@ grid.controller('gridTableCtrl', [
 				}
 				if (this.itemActions) {
 					this.columns.push({
-						columnType: 'actions'
+						columnType: 'actions',
+						width: this.itemActionsWidth ? this.itemActionsWidth : null
 					});
 				}
 				this.columnsCount = this.columns.length;
