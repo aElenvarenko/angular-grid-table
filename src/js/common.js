@@ -11,7 +11,7 @@ grid.constant('gridTableGlobals', {
 	theme: '',
 	/**/
 	pager: {
-		pagesMaxCount: 5,
+		pagesMaxCount: 5
 	},
 	/**/
 	text: {

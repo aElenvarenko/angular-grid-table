@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-06-19T10:08:00.173Z
+ * @version: 0.0.1 - 2015-08-10T08:06:03.938Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -21,7 +21,7 @@ grid.constant('gridTableGlobals', {
 	theme: '',
 	/**/
 	pager: {
-		pagesMaxCount: 5,
+		pagesMaxCount: 5
 	},
 	/**/
 	text: {
@@ -140,7 +140,7 @@ grid.controller('gridTableCtrl', [
 			selectable: true,
 			/* Enable or disable multi items select */
 			multiSelect: false,
-			/* Selectted item or items */
+			/* Selected item or items */
 			selected: null,
 			/* Items */
 			items: [],
@@ -584,8 +584,6 @@ grid.controller('gridTableCtrl', [
 			},
 			/**
 			 * Set filter function
-			 * @param {String} column
-			 * @param {String} value
 			 */
 			setFilterBy: function () {
 				var self = this;
@@ -679,7 +677,7 @@ grid.controller('gridTableCtrl', [
 			/**
 			 * Trigger event function
 			 * @param {String} event
-			 * @param {Object} params
+			 * @param {Object} [params]
 			 */
 			triggerEvent: function (event, params) {
 				if (!event) {

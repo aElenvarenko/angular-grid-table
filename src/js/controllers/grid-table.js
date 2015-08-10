@@ -75,7 +75,7 @@ grid.controller('gridTableCtrl', [
 			selectable: true,
 			/* Enable or disable multi items select */
 			multiSelect: false,
-			/* Selectted item or items */
+			/* Selected item or items */
 			selected: null,
 			/* Items */
 			items: [],
@@ -519,8 +519,6 @@ grid.controller('gridTableCtrl', [
 			},
 			/**
 			 * Set filter function
-			 * @param {String} column
-			 * @param {String} value
 			 */
 			setFilterBy: function () {
 				var self = this;
@@ -614,7 +612,7 @@ grid.controller('gridTableCtrl', [
 			/**
 			 * Trigger event function
 			 * @param {String} event
-			 * @param {Object} params
+			 * @param {Object} [params]
 			 */
 			triggerEvent: function (event, params) {
 				if (!event) {
