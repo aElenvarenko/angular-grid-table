@@ -283,9 +283,11 @@ grid.controller('gridTableCtrl', [
 				if (!this.remote) {
 					if (this.sort.column && this.sort.dir) {
 						var sort = this.sort;
+
 						items = items.sort(function (a, b) {
 							var v1 = a[sort.column],
 								v2 = b[sort.column];
+
 							if (sort.dir === 'asc') {
 								return (v1 < v2) ? -1 : (v1 > v2) ? 1 : 0;
 							} else {
@@ -366,6 +368,7 @@ grid.controller('gridTableCtrl', [
 						return this.selected === item;
 					}
 				}
+				
 				return false;
 			},
 			/**
