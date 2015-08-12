@@ -427,8 +427,30 @@ grid.controller('gridTableCtrl', [
 				fn(item);
 			},
 			/**
+			 * Refresh
+			 * @param {Object} event
+			 */
+			refresh: function (event) {
+				event.preventDefault();
+				event.stopPropagation();
+
+				this.update();
+			},
+			/**
+			 * Clear filter
+			 * @param {Object} event
+			 */
+			clearFilter: function (event) {
+				event.preventDefault();
+				event.stopPropagation();
+
+				this.setFilter({});
+				this.update();
+			},
+			/**
 			 * Set current page function
-			 * @param {Number} page
+			 * @param {Number} index
+			 * @param {Object} event
 			 */
 			setPage: function (index, event) {
 				event.preventDefault();
