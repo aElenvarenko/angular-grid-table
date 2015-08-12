@@ -35,8 +35,28 @@
 	}
 	.grid-table-toolbar {
 		margin: 5px 0;
-		.grid-table-pager {
+		.grid-table-tools {
+			span.tools-label {
+				padding: 6px;
+				float: left;
+				display: block;
+			}
+			ul.tools {
+				float: left;
+			}
 			float: left;
+		}
+		.grid-table-pager {
+			span.pager-label {
+				padding: 6px;
+				float: left;
+				display: block;
+			}
+			ul.tools {
+				float: left;
+			}
+			float: left;
+			margin-left: 20px;
 		}
 		.grid-table-view-by {
 			span.view-by-label {
@@ -49,8 +69,8 @@
 			}
 			float: right;
 		}
-		.grid-table-pager, .grid-table-view-by {
-			ul.pager, ul.view-by {
+		.grid-table-tools, .grid-table-pager, .grid-table-view-by {
+			ul.tools, ul.pager, ul.view-by {
 				.reset-ul();
 				display: table;
 				li {
@@ -62,8 +82,8 @@
 				}
 			}
 		}
-		.grid-table-pager, .grid-table-view-by {
-			ul.pager, ul.view-by {
+		.grid-table-pager, .grid-table-tools, .grid-table-view-by {
+			ul.tools, ul.pager, ul.view-by {
 				li {
 					background: #f9f9f9;
 					&.active > a {

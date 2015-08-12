@@ -15,6 +15,12 @@ grid.constant('gridTableGlobals', {
 	},
 	/**/
 	text: {
+		tools: 'Tools:',
+		refresh: '↻',
+		refreshTitle: 'Refresh',
+		clearFilter: 'X',
+		clearFilterTitle: 'Clear filter',
+		pager: 'Pages:',
 		viewBy: 'View by:',
 		numbers: '#',
 		actions: 'Actions',
