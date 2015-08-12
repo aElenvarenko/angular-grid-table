@@ -75,7 +75,7 @@ grid.controller('gridTableCtrl', [
 			selectable: true,
 			/* Enable or disable multi items select */
 			multiSelect: false,
-			/* Selectted item or items */
+			/* Selected item or items */
 			selected: null,
 			/* Items */
 			items: [],
@@ -127,7 +127,7 @@ grid.controller('gridTableCtrl', [
 			 * @return {String}
 			 */
 			genId: function (name) {
-				return name.replace(/\.|\_/g, '-');
+				return name.replace(/\.|_/g, '-');
 			},
 			/**
 			 * Get item value function
@@ -147,13 +147,16 @@ grid.controller('gridTableCtrl', [
 				var column,
 					i,
 					prop;
+
 				this.columns = [];
 				this.columnsCount = 0;
+
 				if (this.rowNumbers) {
 					this.columns.push({
 						columnType: 'numbers'
 					});
 				}
+
 				if (columns) {
 					if (angular.isArray(columns) && columns.length > 0) {
 						for (i in columns) {
@@ -169,6 +172,7 @@ grid.controller('gridTableCtrl', [
 						}
 					}
 				}
+
 				if (item) {
 					for (prop in item) {
 						if (prop !== '$$hashKey') {
@@ -180,11 +184,13 @@ grid.controller('gridTableCtrl', [
 						}
 					}
 				}
+
 				if (this.itemActions) {
 					this.columns.push({
 						columnType: 'actions'
 					});
 				}
+
 				this.columnsCount = this.columns.length;
 			},
 			/**
@@ -195,6 +201,7 @@ grid.controller('gridTableCtrl', [
 				if (!columns) {
 					return;
 				}
+
 				this.buildColumns(columns);
 				this.triggerEvent('onColumnsUpdate');
 			},
@@ -206,6 +213,7 @@ grid.controller('gridTableCtrl', [
 				if (!item) {
 					return;
 				}
+
 				this.buildColumns(null, item);
 				this.triggerEvent('onColumnsUpdate');
 			},
@@ -231,6 +239,7 @@ grid.controller('gridTableCtrl', [
 			 */
 			showHideColumn: function (name, event) {
 				event.preventDefault();
+
 				if (!name) {
 					this.hiddenColumns = [];
 				} else {
@@ -248,11 +257,13 @@ grid.controller('gridTableCtrl', [
 			getShowColumns: function () {
 				var columns = [],
 					i;
+
 				for (i in this.columns) {
 					if (!this.isColumnHidden(this.columns[i].name) || this.columns[i].columnType !== 'data') {
 						columns.push(this.columns[i]);
 					}
 				}
+
 				return columns;
 			},
 			/**
@@ -263,10 +274,12 @@ grid.controller('gridTableCtrl', [
 				if (!this.remote) {
 					this.loading = true;
 				}
+
 				if (!items) {
 					this.items = [];
 					return;
 				}
+
 				if (!this.remote) {
 					if (this.sort.column && this.sort.dir) {
 						var sort = this.sort;
@@ -280,24 +293,32 @@ grid.controller('gridTableCtrl', [
 							}
 						});
 					}
+
 					if (this.filter) {
 						items = $filter('filter')(items, this.filter);
 					}
+
 					this.pager.total = items.length;
 				}
+
 				if (this.pager.current > Math.ceil(this.pager.total / this.viewBy)) {
 					this.pager.current = Math.ceil(this.pager.total / this.viewBy) - 1;
 				}
+
 				this.pager.items = fPager.createItems(this.pager.current, this.viewBy, this.pager.total, this.pager.pagesMaxCount);
+
 				if (!this.remote) {
 					this.items = items.slice(this.pager.current * this.viewBy, (this.pager.current + 1) * this.viewBy);
 				} else {
 					this.items = items;
 				}
+
 				this.itemsCount = this.items.length || 0;
+
 				if (!this.remote) {
 					this.loading = false;
 				}
+
 				this.triggerEvent('onItemsUpdate');
 			},
 			/**
@@ -315,9 +336,11 @@ grid.controller('gridTableCtrl', [
 			itemClick: function (item, event) {
 				event.preventDefault();
 				event.stopPropagation();
+
 				if (this.selectable) {
 					this.itemSelect(item);
 				}
+
 				this.triggerEvent('onItemClick');
 			},
 			/**
@@ -354,7 +377,9 @@ grid.controller('gridTableCtrl', [
 					this.selected = null;
 					return;
 				}
+
 				var selected = this.isItemSelected(item);
+
 				if (this.multiSelect) {
 					if (selected) {
 						this.selected.splice(this.selected.indexOf(item), 1);
@@ -372,6 +397,7 @@ grid.controller('gridTableCtrl', [
 						this.selected = item;
 					}
 				}
+
 				this.triggerEvent('onSelect');
 			},
 			/**
@@ -380,11 +406,13 @@ grid.controller('gridTableCtrl', [
 			 */
 			itemActionsShow: function (item) {
 				var value = true;
+
 				try {
 					value = eval(this.itemActionsExp);
 				} catch (e) {
 					value = false;
 				}
+
 				return value;
 			},
 			/**
@@ -405,9 +433,11 @@ grid.controller('gridTableCtrl', [
 			setPage: function (index, event) {
 				event.preventDefault();
 				event.stopPropagation();
+
 				if (this.pager.current == index) {
 					return;
 				}
+
 				this.pager.current = index;
 				this.pager.limit = this.viewBy;
 				this.pager.offset = this.pager.current * this.pager.limit;
@@ -430,9 +460,11 @@ grid.controller('gridTableCtrl', [
 			setViewBy: function (count, event) {
 				event.preventDefault();
 				event.stopPropagation();
+
 				if (this.viewBy == count) {
 					return;
 				}
+
 				this.viewBy = count;
 				this.updateParams();
 				this.triggerEvent('onViewBy');
@@ -470,6 +502,7 @@ grid.controller('gridTableCtrl', [
 			setSortBy: function (column, dir, event) {
 				event.preventDefault();
 				event.stopPropagation();
+
 				if (this.sort.column === column) {
 					this.sort.dir = this.sort.dir === 'asc' ? 'desc' : 'asc';
 				} else {
@@ -478,6 +511,7 @@ grid.controller('gridTableCtrl', [
 						dir: dir ? dir : 'asc'
 					};
 				}
+
 				this.updateParams();
 				this.triggerEvent('onSort');
 				this.update();
@@ -518,6 +552,7 @@ grid.controller('gridTableCtrl', [
 			 */
 			setFilterBy: function () {
 				var self = this;
+
 				if (this.filterTimeoutId) {
 					
 				} else {
@@ -547,14 +582,17 @@ grid.controller('gridTableCtrl', [
 				if (params.viewBy) {
 					this.viewBy = params.viewBy;
 				}
+
 				if (params.pager) {
 					this.pager.current = params.pager.current;
 					this.pager.total = params.pager.total;
 				}
+
 				if (params.sort) {
 					this.sort.column = params.sort.column;
 					this.sort.dir = params.sort.dir;
 				}
+
 				this.update();
 			},
 			/**
@@ -569,9 +607,11 @@ grid.controller('gridTableCtrl', [
 			 */
 			updateParams: function () {
 				this.params = {};
+
 				if (this.sort.column) {
 					this.params.sort = (this.sort.dir == 'asc' ? '' : '-') + (this.sort.column ? this.sort.column : '');
 				}
+
 				this.params.page = this.pager.current + 1;
 				this.params.perPage = this.viewBy;
 				this.params = angular.extend(this.params, this.filter);
@@ -585,6 +625,7 @@ grid.controller('gridTableCtrl', [
 					$interval.cancel(this.filterTimeoutId);
 					this.filterTimeoutId = null;
 				}
+
 				this.setItems($parse($scope.$grid.ngModelVar)($scope));
 			},
 			/**
@@ -596,10 +637,12 @@ grid.controller('gridTableCtrl', [
 				if (!event && !callback) {
 					return;
 				}
+
 				if (this.events.indexOf(event) !== -1) {
 					if (this.listeners[event] === undefined) {
 						this.listeners[event] = [];
 					}
+
 					if (this.listeners[event].indexOf(callback) === -1) {
 						this.listeners[event].push(callback);
 					}
@@ -608,12 +651,13 @@ grid.controller('gridTableCtrl', [
 			/**
 			 * Trigger event function
 			 * @param {String} event
-			 * @param {Object} params
+			 * @param {Object} [params]
 			 */
 			triggerEvent: function (event, params) {
 				if (!event) {
 					return;
 				}
+
 				if (this.events.indexOf(event) !== -1) {
 					this[event](params);
 				}
@@ -626,6 +670,7 @@ grid.controller('gridTableCtrl', [
 				if (!event) {
 					return;
 				}
+
 				if (this.events[event] && this.listeners[event]) {
 					this.listeners[event] = null;
 				}
@@ -635,10 +680,12 @@ grid.controller('gridTableCtrl', [
 				if (this.listeners[event] !== null && angular.isArray(this.listeners[event])) {
 					for (var i in this.listeners[event]) {
 						var fn = this.listeners[event][i];
+
 						if (angular.isFunction(fn)) {
 							if (!angular.isArray(args)) {
 								args = [args];
 							}
+
 							fn.apply(this, args);
 						}
 					}
@@ -651,6 +698,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: columns update event handler');
 				}
+
 				this.listenersCall('onColumnsUpdate', this.columns);
 			},
 			/**
@@ -660,6 +708,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: items update event handler');
 				}
+
 				this.listenersCall('onItemsUpdate', this.items);
 			},
 			/**
@@ -669,6 +718,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: item click event handler');
 				}
+
 				this.listenersCall('onItemClick', this.selected);
 			},
 			/**
@@ -678,6 +728,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: item dbl click event handler');
 				}
+
 				this.listenersCall('onItemDblClick', this.selected);
 			},
 			/**
@@ -687,6 +738,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: item select event handler');
 				}
+
 				this.listenersCall('onSelect', this.selected);
 			},
 			/**
@@ -696,6 +748,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: view by count event handler');
 				}
+
 				this.listenersCall('onViewBy', this.viewBy);
 			},
 			/**
@@ -705,6 +758,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: page update event handler');
 				}
+
 				this.listenersCall('onPage', this.pager);
 			},
 			/**
@@ -714,6 +768,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: sort update event handler');
 				}
+
 				this.listenersCall('onSort', this.sort);
 			},
 			/**
@@ -723,6 +778,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: filter update handler');
 				}
+
 				this.listenersCall('onFilter', this.filter);
 			},
 			/**
@@ -732,6 +788,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: params update event handler');
 				}
+
 				this.listenersCall('onParams', this.params);
 			},
 			/**
@@ -741,6 +798,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: update event handler');
 				}
+
 				this.listenersCall('onUpdate', [this.items, this.columns, this.pager, this.viewBy, this.sort, this.filter]);
 			},
 			/**
@@ -750,6 +808,7 @@ grid.controller('gridTableCtrl', [
 				if (this.debug) {
 					console.info('grid-table: error event handler');
 				}
+
 				this.listenersCall('onError', this.errors);
 			}
 		};
@@ -819,8 +878,10 @@ grid.controller('gridTableCtrl', [
 			/**/
 			for (var i in $scope.$grid.events) {
 				var eventName = $scope.$grid.events[i];
+
 				if (attrs[eventName]) {
 					var fn = $parse(attrs[eventName])($scope);
+
 					if (fn && angular.isFunction(fn)) {
 						$scope.$grid.addEvent(eventName, fn);
 					}
@@ -850,15 +911,19 @@ grid.controller('gridTableCtrl', [
 				i,
 				fn,
 				params;
+
 			if (matches && matches.length > 0) {
 				for (i in matches) {
 					fn = matches[i].replace(/\{|\}/g, '');
 					params = null;
+
 					if (fn.indexOf(':') !== -1) {
 						params = fn.split(':');
 						fn = params.splice(0, 1)[0];
 					}
+
 					fn = 'render' + fn[0].toUpperCase() + fn.substr(1);
+
 					if (ctrl[fn] && angular.isFunction(ctrl[fn])) {
 						element = ctrl[fn](element, attrs);
 					}
@@ -873,11 +938,13 @@ grid.controller('gridTableCtrl', [
 		 */
 		ctrl.renderToolbar = function (element) {
 			var toolbar = angular.element(document.createElement('div'));
+
 			toolbar.addClass('grid-table-toolbar');
 			toolbar.attr({
 				'grid-table-toolbar': ''
 			});
 			element.find('.grid-table-wrapper').append(toolbar);
+
 			return element;
 		};
 		/**
@@ -889,12 +956,15 @@ grid.controller('gridTableCtrl', [
 			if (element.find('table').length > 0) {
 				return element;
 			}
+
 			var table = angular.element(document.createElement('table'));
+
 			table.addClass('grid-table-table');
 			table.attr({
 				'ng-class': "{'loading': $grid.loading !== false}"
 			});
 			element.find('.grid-table-wrapper').append(table);
+
 			return element;
 		};
 		/**
@@ -905,6 +975,7 @@ grid.controller('gridTableCtrl', [
 		ctrl.renderHeader = function (element) {
 			var columns = angular.element(document.createElement('colgroup')),
 				header = angular.element(document.createElement('thead'));
+
 			columns.attr({
 				'grid-table-columns': ''
 			});
@@ -916,6 +987,7 @@ grid.controller('gridTableCtrl', [
 			element = this.renderTable(element);
 			element.find('table').append(columns);
 			element.find('table').append(header);
+
 			return element;
 		};
 		/**
@@ -925,12 +997,14 @@ grid.controller('gridTableCtrl', [
 		 */
 		ctrl.renderItems = function (element) {
 			var items = angular.element(document.createElement('tbody'));
+
 			items.attr({
 				'grid-table-items': ''
 			});
 			items.addClass('grid-table-items');
 			element = this.renderTable(element);
 			element.find('table').append(items);
+
 			return element;
 		};
 		/**
@@ -940,12 +1014,14 @@ grid.controller('gridTableCtrl', [
 		 */
 		ctrl.renderFooter = function (element) {
 			var footer = angular.element(document.createElement('tfoot'));
+
 			footer.attr({
 				'grid-table-footer': ''
 			});
 			footer.addClass('grid-table-footer');
 			element = this.renderTable(element);
 			element.find('table').append(footer);
+
 			return element;
 		};
 		/**
@@ -958,16 +1034,18 @@ grid.controller('gridTableCtrl', [
 		};
 		/**
 		 * Setter function
-		 * @param {String} key
-		 * @param {Object} value
+		 * @param {String} [key]
+		 * @param {Object} [value]
 		 */
 		ctrl.set = function () {
 			if (!angular.isString(arguments[0])) {
 				throw new Error('First argument must be a string');
 			}
+
 			var key = Array.prototype.splice.call(arguments, 0, 1) + '',
 				setter = 'set',
 				fnName = setter + key.substr(0, 1).toUpperCase() + key.substr(1);
+
 			if (ctrl[fnName]) {
 				if (angular.isFunction(ctrl[fnName])) {
 					ctrl[fnName].apply(this, arguments);
@@ -1004,6 +1082,7 @@ grid.controller('gridTableCtrl', [
 		ctrl.get = function (key) {
 			var getter = 'get',
 				fnName = getter + key.substr(0, 1).toUpperCase() + key.substr(1);
+
 			if (ctrl[fnName]) {
 				if (angular.isFunction(ctrl[fnName])) {
 					return ctrl[fnName]();

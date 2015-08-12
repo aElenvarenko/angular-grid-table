@@ -11,10 +11,16 @@ grid.constant('gridTableGlobals', {
 	theme: '',
 	/**/
 	pager: {
-		pagesMaxCount: 5,
+		pagesMaxCount: 5
 	},
 	/**/
 	text: {
+		tools: 'Tools:',
+		refresh: '↻',
+		refreshTitle: 'Refresh',
+		clearFilter: 'X',
+		clearFilterTitle: 'Clear filter',
+		pager: 'Pages:',
 		viewBy: 'View by:',
 		numbers: '#',
 		actions: 'Actions',

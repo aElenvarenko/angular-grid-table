@@ -1,4 +1,18 @@
+<div class="grid-table-tools">
+	<span class="tools-label">{{$grid.text.tools}}</span>
+	<ul class="tools">
+		<li><a
+			ng-click="$grid.update()"
+			href="#"
+			title="{{$grid.text.refreshTitle}}">{{$grid.text.refresh}}</a></li>
+		<li><a
+			ng-click="$grid.setFilter({}); $grid.setFilterBy()"
+			href="#"
+			title="{{$grid.text.clearFilterTitle}}">{{$grid.text.clearFilter}}</a></li>
+	</ul>
+</div>
 <div class="grid-table-pager">
+	<span class="pager-label">{{$grid.text.pager}}</span>
 	<ul class="pager">
 		<li
 			ng-repeat="page in $grid.pager.items"

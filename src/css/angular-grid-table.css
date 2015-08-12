@@ -11,7 +11,27 @@
 .grid-table-wrapper .grid-table-toolbar {
   margin: 5px 0;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools {
+  float: left;
+}
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools span.tools-label {
+  padding: 6px;
+  float: left;
+  display: block;
+}
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools {
+  float: left;
+}
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager {
+  float: left;
+  margin-left: 20px;
+}
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager span.pager-label {
+  padding: 6px;
+  float: left;
+  display: block;
+}
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools {
   float: left;
 }
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by {
@@ -25,8 +45,13 @@
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by {
   float: left;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools,
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by {
   margin: 0;
@@ -35,8 +60,13 @@
   list-style: none;
   display: table;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li {
   margin: 0;
@@ -45,35 +75,60 @@
   list-style: none;
   float: left;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools li:disabled,
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools li:disabled,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools li:disabled,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager li:disabled,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager li:disabled,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li:disabled,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by li:disabled,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li:disabled,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li:disabled {
   cursor: not-allowed;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by li,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li {
   background: #f9f9f9;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools li.active > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools li.active > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools li.active > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager li.active > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager li.active > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li.active > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li.active > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by li.active > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li.active > a {
   border-radius: 0px;
   background: #e0e0e0;
   text-decoration: underline;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools li.active > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools li.active > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools li.active > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager li.active > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager li.active > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li.active > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li.active > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by li.active > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li.active > a:hover {
   background: #e6e6e6;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools li > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools li > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools li > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager li > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager li > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li > a,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by li > a,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li > a {
   margin: 0;
   padding: 6px 8px;
@@ -84,9 +139,14 @@
   cursor: pointer;
   display: block;
 }
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools li > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.tools li > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.tools li > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager li > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.pager li > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.pager li > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.view-by li > a:hover,
+.grid-table-wrapper .grid-table-toolbar .grid-table-tools ul.view-by li > a:hover,
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by ul.view-by li > a:hover {
   border: none;
   border-radius: 0px;
