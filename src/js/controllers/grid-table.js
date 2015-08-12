@@ -437,6 +437,7 @@ grid.controller('gridTableCtrl', [
 				event.preventDefault();
 				event.stopPropagation();
 
+				this.updateParams();
 				this.update();
 			},
 			/**
@@ -448,6 +449,7 @@ grid.controller('gridTableCtrl', [
 				event.stopPropagation();
 
 				this.setFilter({});
+				this.updateParams();
 				this.update();
 			},
 			/**
