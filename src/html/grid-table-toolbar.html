@@ -2,11 +2,11 @@
 	<span class="tools-label">{{$grid.text.tools}}</span>
 	<ul class="tools">
 		<li><a
-			ng-click="$grid.update()"
+			ng-click="$grid.refresh($event)"
 			href="#"
 			title="{{$grid.text.refreshTitle}}">{{$grid.text.refresh}}</a></li>
 		<li><a
-			ng-click="$grid.setFilter({}); $grid.setFilterBy()"
+			ng-click="$grid.clearFilter($event)"
 			href="#"
 			title="{{$grid.text.clearFilterTitle}}">{{$grid.text.clearFilter}}</a></li>
 	</ul>
