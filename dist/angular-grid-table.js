@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-08-12T13:27:27.589Z
+ * @version: 0.0.1 - 2015-08-14T07:27:03.489Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -514,6 +514,7 @@ grid.controller('gridTableCtrl', [
 				event.preventDefault();
 				event.stopPropagation();
 
+				this.updateParams();
 				this.update();
 			},
 			/**
@@ -525,6 +526,7 @@ grid.controller('gridTableCtrl', [
 				event.stopPropagation();
 
 				this.setFilter({});
+				this.updateParams();
 				this.update();
 			},
 			/**
