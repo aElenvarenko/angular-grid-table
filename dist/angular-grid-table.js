@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-08-12T13:17:20.495Z
+ * @version: 0.0.1 - 2015-08-14T07:21:38.893Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -354,9 +354,11 @@ grid.controller('gridTableCtrl', [
 				if (!this.remote) {
 					if (this.sort.column && this.sort.dir) {
 						var sort = this.sort;
+
 						items = items.sort(function (a, b) {
 							var v1 = a[sort.column],
 								v2 = b[sort.column];
+
 							if (sort.dir === 'asc') {
 								return (v1 < v2) ? -1 : (v1 > v2) ? 1 : 0;
 							} else {
@@ -437,6 +439,7 @@ grid.controller('gridTableCtrl', [
 						return this.selected === item;
 					}
 				}
+				
 				return false;
 			},
 			/**
@@ -505,6 +508,7 @@ grid.controller('gridTableCtrl', [
 				event.preventDefault();
 				event.stopPropagation();
 
+				this.updateParams();
 				this.update();
 			},
 			/**
@@ -516,6 +520,7 @@ grid.controller('gridTableCtrl', [
 				event.stopPropagation();
 
 				this.setFilter({});
+				this.updateParams();
 				this.update();
 			},
 			/**
