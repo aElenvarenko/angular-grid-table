@@ -31,7 +31,7 @@
   float: left;
   display: block;
 }
-.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools {
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager {
   float: left;
 }
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by {

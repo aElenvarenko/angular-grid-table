@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2015-08-14T07:27:03.736Z
+ * @version: 0.0.1 - 2015-08-14T07:33:17.518Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -39,7 +39,7 @@
   float: left;
   display: block;
 }
-.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.tools {
+.grid-table-wrapper .grid-table-toolbar .grid-table-pager ul.pager {
   float: left;
 }
 .grid-table-wrapper .grid-table-toolbar .grid-table-view-by {
