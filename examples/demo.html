@@ -16,11 +16,13 @@
 		<div class="container">
 			<div
 				 grid-table=""
+				 debug="true"
 				 selectable="grid.selectable"
 				 sorted="true"
 				 loading="grid.loading"
 				 ng-model="data"
 				 columns="{{columnsVar}}"
+				 link-columns="linkColumns"
 				 filtered="true"
 				 filters="filters"
 				 actions-width="200"
@@ -118,7 +120,9 @@
 						html: '<span>2</span>'
 					}
 				};
-				
+
+				$scope.linkColumns = ['category.name'];
+
 				$scope.actions = [
 					{
 						html: '<button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>',

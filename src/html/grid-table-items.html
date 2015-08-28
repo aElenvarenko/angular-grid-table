@@ -1,16 +1,25 @@
 <tr
 	ng-init="itemsIndex = $index + 1"
 	ng-repeat="item in $grid.getItems()"
-	ng-click="$grid.itemClick(item, $event)"
-	ng-dblclick="$grid.itemDblClick(item, $event)"
+	ng-click="$grid.rowClick(item, $event)"
+	ng-dblclick="$grid.rowDblClick(item, $event)"
 	ng-class="{'selectable': $grid.selectable, 'active': $grid.isItemSelected(item)}"
 	class="grid-table-item">
-	<td ng-repeat="column in $grid.getShowColumns()">
+	<td
+		ng-repeat="column in $grid.getShowColumns()">
 		{{column.columnType == 'numbers' ? itemsIndex : ''}}
 		<span ng-if="column.columnType == 'checkbox'">
-			<input ng-click="$grid.selectItem(item)" ng-checked="$grid.isItemSelected(item)" type="checkbox"/>
+			<input
+				ng-click="$grid.itemSelect(item)"
+				ng-checked="$grid.isItemSelected(item)"
+				type="checkbox"/>
 		</span>
-		{{$grid.getValue(item, column.name) | gridTableFormatter:column.type}}
+		<span ng-if="$grid.isLinkColumn(column.name)">
+			<a ng-click="$grid.rowColumnClick(item, column, $event)" href="#">{{$grid.getValue(item, column.name) | gridTableFormatter:column.type}}</a>
+		</span>
+		<span ng-if="!$grid.isLinkColumn(column.name)">
+			{{$grid.getValue(item, column.name) | gridTableFormatter:column.type}}
+		</span>
 		<span ng-if="column.columnType === 'actions' && $grid.itemActions && $grid.itemActionsShow(item)">
 			<span
 				  ng-repeat="action in $grid.itemActions"

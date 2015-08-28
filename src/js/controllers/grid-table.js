@@ -26,9 +26,9 @@ grid.controller('gridTableCtrl', [
 			loading: false,
 			/* ngModel variable */
 			ngModelVar: '',
-			/* Show or hide row numbers */
+			/* Show or hide row numbers column */
 			rowNumbers: false,
-			/**/
+			/* Show or hide checkbox column */
 			checkboxes: false,
 			/* Columns */
 			columns: [],
@@ -36,6 +36,8 @@ grid.controller('gridTableCtrl', [
 			columnsCount: 0,
 			/* Hidden columns */
 			hiddenColumns: [],
+			/* Link columns */
+			linkColumns: [],
 			/* Enable or disable sorting */
 			sorted: false,
 			/* Enable or disable multi sorting */
@@ -50,7 +52,7 @@ grid.controller('gridTableCtrl', [
 			filter: {},
 			/* Filter timeout id */
 			filterTimeoutId: null,
-			/* Filter timeout in miliseconds */
+			/* Filter timeout in milliseconds */
 			filterTimeout: 500,
 			/* View by count */
 			viewBy: 10,
@@ -93,31 +95,33 @@ grid.controller('gridTableCtrl', [
 			paramsVars: {},
 			/* Errors */
 			errors: null,
-			/* Events */
+			/* Supported events */
 			events: [
-				/* On columns update event callback */
-				'onColumnsUpdate',
-				/* On item click event callback */
-				'onItemClick',
-				/* On item dbl click callback */
-				'onItemDblClick',
-				/* On items update event callback */
-				'onItemsUpdate',
-				/* On current page update event callback */
+				/* On current page update */
 				'onPage',
-				/* On view by update event callback */
+				/* On view by update */
 				'onViewBy',
-				/* On sort update event callback */
+				/* On sort update */
 				'onSort',
-				/* On filter update event callback */
+				/* On filter update */
 				'onFilter',
-				/* On select update event callback */
+				/* On row click */
+				'onRowClick',
+				/* On row dbl click */
+				'onRowDblClick',
+				/* On row column click */
+				'onRowColumnClick',
+				/* On select update */
 				'onSelect',
-				/* On params update event callback */
+				/* On params update */
 				'onParams',
-				/* On update event callback */
+				/* On columns update */
+				'onColumnsUpdate',
+				/* On items update */
+				'onItemsUpdate',
+				/* On update */
 				'onUpdate',
-				/* On error update event callback */
+				/* On error */
 				'onError'
 			],
 			/* Event listeners */
@@ -236,6 +240,14 @@ grid.controller('gridTableCtrl', [
 				return this.hiddenColumns.indexOf(name) !== -1;
 			},
 			/**
+			 * Check column is linked function
+			 * @param {String} name
+			 * @return {Boolean}
+			 */
+			isLinkColumn: function (name) {
+				return this.linkColumns.indexOf(name) !== -1;
+			},
+			/**
 			 * Show or hide column function
 			 * @param {String} name
 			 * @param {Object} event
@@ -334,11 +346,11 @@ grid.controller('gridTableCtrl', [
 				return this.items || [];
 			},
 			/**
-			 * Item click event handler function
+			 * Row click event handler function
 			 * @param {Object} item
 			 * @param {Object} event
 			 */
-			itemClick: function (item, event) {
+			rowClick: function (item, event) {
 				event.preventDefault();
 				event.stopPropagation();
 
@@ -346,15 +358,27 @@ grid.controller('gridTableCtrl', [
 					this.itemSelect(item);
 				}
 
-				this.triggerEvent('onItemClick');
+				this.triggerEvent('onRowClick');
 			},
 			/**
-			 * Item dblclick event handler function
+			 * Row dbl click event handler function
 			 * @param {Object} item
 			 * @param {Object} event
 			 */
-			itemDblClick: function (/*item, event*/) {
-				this.triggerEvent('onItemDblClick');
+			rowDblClick: function (item, event) {
+				event.preventDefault();
+				event.stopPropagation();
+
+				this.triggerEvent('onRowDblClick');
+			},
+			/**
+			 * Row column click event handler function
+			 * @param {Object} item
+			 * @param {Object} column
+			 * @param {Object} event
+			 */
+			rowColumnClick: function (item, column, event) {
+				this.triggerEvent('onRowColumnClick', column);
 			},
 			/**
 			 * Check item is selected function
@@ -436,7 +460,7 @@ grid.controller('gridTableCtrl', [
 				fn(item);
 			},
 			/**
-			 * Refresh
+			 * Refresh grid
 			 * @param {Object} event
 			 */
 			refresh: function (event) {
@@ -743,24 +767,34 @@ grid.controller('gridTableCtrl', [
 				this.listenersCall('onItemsUpdate', this.items);
 			},
 			/**
-			 * Item click event function
+			 * Row click event function
 			 */
-			onItemClick: function () {
+			onRowClick: function () {
 				if (this.debug) {
-					console.info('grid-table: item click event handler');
+					console.info('grid-table: row click event handler');
 				}
 
-				this.listenersCall('onItemClick', this.selected);
+				this.listenersCall('onRowClick', this.selected);
 			},
 			/**
-			 * Item dbl click function
+			 * Row dbl click function
 			 */
-			onItemDblClick: function () {
+			onRowDblClick: function () {
 				if (this.debug) {
-					console.info('grid-table: item dbl click event handler');
+					console.info('grid-table: row dbl click event handler');
 				}
 
 				this.listenersCall('onItemDblClick', this.selected);
+			},
+			/**
+			 * Row column click function
+			 */
+			onRowColumnClick: function (column) {
+				if (this.debug) {
+					console.info('grid-table: row column click event handler');
+				}
+
+				this.listenersCall('onRowColumnClick', [this.selected, column]);
 			},
 			/**
 			 * Item select event function
@@ -900,6 +934,10 @@ grid.controller('gridTableCtrl', [
 			/**/
 			if (attrs.selectable) {
 				$scope.$grid.selectable = $parse(attrs.selectable)($scope);
+			}
+			/**/
+			if (attrs.linkColumns) {
+				$scope.$grid.linkColumns = $parse(attrs.linkColumns)($scope);
 			}
 			/**/
 			if (attrs.actions) {
