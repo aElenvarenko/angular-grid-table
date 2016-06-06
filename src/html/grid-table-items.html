@@ -30,7 +30,7 @@
 			<span
 				ng-repeat="action in $grid.itemActions"
 				ng-click="$grid.itemActionCall(action.fn, item, $event)">
-				<span ng-if="eval(action.exp)">
+				<span ng-if="$grid.itemActionExp(item, action)">
 					<span
 						grid-table-item-action=""
 						html="action.html"></span>

@@ -171,7 +171,7 @@ grid.controller('gridTableCtrl', [
 							this.columns.push(column);
 						}
 					} else {
-						for(prop in columns) {
+						for (prop in columns) {
 							column = columns[prop];
 							column.columnType = 'data';
 							this.columns.push(column);
@@ -395,7 +395,7 @@ grid.controller('gridTableCtrl', [
 						return this.selected === item;
 					}
 				}
-				
+
 				return false;
 			},
 			/**
@@ -431,7 +431,7 @@ grid.controller('gridTableCtrl', [
 				this.triggerEvent('onSelect');
 			},
 			/**
-			 * 
+			 *
 			 * @param {Object} item
 			 */
 			itemActionsShow: function (item) {
@@ -447,6 +447,24 @@ grid.controller('gridTableCtrl', [
 				}
 
 				return value;
+			},
+			/**
+			 * @param item
+			 * @param action
+			 */
+			itemActionExp: function (item, action) {
+				if (action.exp) {
+					var result;
+
+					try {
+						result = eval(action.exp);
+						return result;
+					} catch (error) {
+						return false;
+					}
+				} else {
+					return true;
+				}
 			},
 			/**
 			 * Call item action function
@@ -609,7 +627,7 @@ grid.controller('gridTableCtrl', [
 				var self = this;
 
 				if (this.filterTimeoutId) {
-					
+
 				} else {
 					this.filterTimeoutId = $interval(function () {
 						self.updateParams();
