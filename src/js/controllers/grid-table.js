@@ -378,7 +378,7 @@ grid.controller('gridTableCtrl', [
 			 * @param {Object} event
 			 */
 			rowColumnClick: function (item, column, event) {
-				this.triggerEvent('onRowColumnClick', column);
+				this.triggerEvent('onRowColumnClick', [item, column]);
 			},
 			/**
 			 * Check item is selected function
@@ -789,12 +789,12 @@ grid.controller('gridTableCtrl', [
 			/**
 			 * Row column click function
 			 */
-			onRowColumnClick: function (column) {
+			onRowColumnClick: function (params) {
 				if (this.debug) {
 					console.info('grid-table: row column click event handler');
 				}
 
-				this.listenersCall('onRowColumnClick', [this.selected, column]);
+				this.listenersCall('onRowColumnClick', params);
 			},
 			/**
 			 * Item select event function
