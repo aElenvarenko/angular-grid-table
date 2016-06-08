@@ -1,6 +1,6 @@
 /*!
  * angular-grid-table
- * @version: 0.0.1 - 2016-06-06T10:32:39.695Z
+ * @version: 0.0.1 - 2016-06-08T10:22:00.929Z
  * @author: Alex Elenvarenko <alexelenvarenko@gmail.com>
  * @license: MIT
  */
@@ -1023,6 +1023,10 @@ grid.controller('gridTableCtrl', [
 			/**/
 			if (attrs.selectable) {
 				$scope.$grid.selectable = $parse(attrs.selectable)($scope);
+			}
+			/**/
+			if (attrs.multiSelect) {
+				$scope.$grid.multiSelect = $parse(attrs.multiSelect)($scope);
 			}
 			/**/
 			if (attrs.linkColumns) {

@@ -954,6 +954,10 @@ grid.controller('gridTableCtrl', [
 				$scope.$grid.selectable = $parse(attrs.selectable)($scope);
 			}
 			/**/
+			if (attrs.multiSelect) {
+				$scope.$grid.multiSelect = $parse(attrs.multiSelect)($scope);
+			}
+			/**/
 			if (attrs.linkColumns) {
 				$scope.$grid.linkColumns = $parse(attrs.linkColumns)($scope);
 			}
